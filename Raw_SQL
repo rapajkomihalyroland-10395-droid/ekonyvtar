@@ -1,0 +1,137 @@
+-- =============================
+--  ISKOLA
+-- =============================
+CREATE TABLE Iskola (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    neve VARCHAR(255) NOT NULL
+);
+
+-- =============================
+--  OSZTALY
+-- =============================
+CREATE TABLE Osztaly (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nev VARCHAR(50) NOT NULL,     -- pl. '10.A'
+    evfolyam INT,
+    tagozat VARCHAR(100),
+    iskola_id INT,
+    FOREIGN KEY (iskola_id) REFERENCES Iskola(id)
+);
+
+-- =============================
+--  FELHASZNALOTIPUS
+-- =============================
+CREATE TABLE FelhasznaloTipus (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    megnevezes VARCHAR(100) NOT NULL UNIQUE,
+    leiras TEXT,
+    max_kolcsonzes INT DEFAULT 5,
+    max_idotartam_nap INT DEFAULT 30
+);
+
+-- =============================
+--  FELHASZNALO
+-- =============================
+CREATE TABLE Felhasznalo (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nev VARCHAR(100) NOT NULL,
+    belepesi_azonosito_hash VARCHAR(255) NOT NULL UNIQUE,
+    telefonszam VARCHAR(20),
+    szuletesi_datum DATE,
+    lakcim VARCHAR(255),
+    admin BOOLEAN DEFAULT FALSE,
+    iskola_id INT,
+    osztaly_id INT,
+    felhasznalo_tipus_id INT,
+    FOREIGN KEY (iskola_id) REFERENCES Iskola(id),
+    FOREIGN KEY (osztaly_id) REFERENCES Osztaly(id),
+    FOREIGN KEY (felhasznalo_tipus_id) REFERENCES FelhasznaloTipus(id)
+);
+
+-- =============================
+--  SZERZO
+-- =============================
+CREATE TABLE Szerzo (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nev VARCHAR(255) NOT NULL
+);
+
+-- =============================
+--  KIADO
+-- =============================
+CREATE TABLE Kiado (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nev VARCHAR(255) NOT NULL,
+    szekhely VARCHAR(255)
+);
+
+-- =============================
+--  KATEGORIA
+-- =============================
+CREATE TABLE Kategoria (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nev VARCHAR(100) NOT NULL
+);
+
+-- =============================
+--  KONYV
+-- =============================
+CREATE TABLE Konyv (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cim VARCHAR(255) NOT NULL,
+    kep VARCHAR(255),
+    leiras VARCHAR(255),
+    szerzo_id INT,
+    kiado_id INT,
+    kategoria_id INT,
+    ISBN VARCHAR(13) UNIQUE,
+    konyvtar_nyilvantartasi_szam VARCHAR(50),
+    keszlet INT DEFAULT 1,
+    kolcsonozheto BOOLEAN DEFAULT TRUE,
+    beszerzesi_ar DECIMAL(10,2),
+    kiadas_ev SMALLINT,
+    magassag_cm DECIMAL(5,2),
+    FOREIGN KEY (szerzo_id) REFERENCES Szerzo(id),
+    FOREIGN KEY (kiado_id) REFERENCES Kiado(id),
+    FOREIGN KEY (kategoria_id) REFERENCES Kategoria(id)
+);
+
+-- =============================
+--  BERLES
+-- =============================
+CREATE TABLE Berles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    felhasznalo_id INT NOT NULL,
+    konyv_id INT NOT NULL,
+    berles_kezdete DATE,
+    berles_vege DATE,
+    visszahozva BOOLEAN DEFAULT NULL,
+    FOREIGN KEY (felhasznalo_id) REFERENCES Felhasznalo(id),
+    FOREIGN KEY (konyv_id) REFERENCES Konyv(id)
+);
+
+-- =============================
+--  KIVANSAGLISTA
+-- =============================
+CREATE TABLE KivansagLista (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    felhasznalo_id INT NOT NULL,
+    konyv_id INT NOT NULL,
+    hozzaadas_datuma TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (felhasznalo_id) REFERENCES Felhasznalo(id),
+    FOREIGN KEY (konyv_id) REFERENCES Konyv(id)
+);
+
+-- =============================
+--  VELEMENY
+-- =============================
+CREATE TABLE Velemeny (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    velemeny_erteke INT CHECK (velemeny_erteke BETWEEN 1 AND 5),
+    velemeny_szovege TEXT,
+    felhasznalo_id INT NOT NULL,
+    konyv_id INT NOT NULL,
+    UNIQUE (felhasznalo_id, konyv_id),
+    FOREIGN KEY (felhasznalo_id) REFERENCES Felhasznalo(id),
+    FOREIGN KEY (konyv_id) REFERENCES Konyv(id)
+);
