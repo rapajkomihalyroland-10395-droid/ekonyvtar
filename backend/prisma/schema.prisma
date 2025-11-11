@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model berles {
+  id             Int         @id @default(autoincrement())
+  felhasznalo_id Int
+  konyv_id       Int
+  berles_kezdete DateTime?   @db.Date
+  berles_vege    DateTime?   @db.Date
+  visszahozva    Boolean?
+  felhasznalo    felhasznalo @relation(fields: [felhasznalo_id], references: [id], onUpdate: Restrict, map: "berles_ibfk_1")
+  konyv          konyv       @relation(fields: [konyv_id], references: [id], onUpdate: Restrict, map: "berles_ibfk_2")
+
+  @@index([felhasznalo_id], map: "felhasznalo_id")
+  @@index([konyv_id], map: "konyv_id")
+}
+
+model felhasznalo {
+  id                      Int               @id @default(autoincrement())
+  nev                     String            @db.VarChar(100)
+  belepesi_azonosito_hash String            @unique(map: "belepesi_azonosito_hash") @db.VarChar(255)
+  telefonszam             String?           @db.VarChar(20)
+  szuletesi_datum         DateTime?         @db.Date
+  lakcim                  String?           @db.VarChar(255)
+  admin                   Boolean?          @default(false)
+  iskola_id               Int?
+  osztaly_id              Int?
+  felhasznalo_tipus_id    Int?
+  berles                  berles[]
+  iskola                  iskola?           @relation(fields: [iskola_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "felhasznalo_ibfk_1")
+  osztaly                 osztaly?          @relation(fields: [osztaly_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "felhasznalo_ibfk_2")
+  felhasznalotipus        felhasznalotipus? @relation(fields: [felhasznalo_tipus_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "felhasznalo_ibfk_3")
+  kivansaglista           kivansaglista[]
+  velemeny                velemeny[]
+
+  @@index([felhasznalo_tipus_id], map: "felhasznalo_tipus_id")
+  @@index([iskola_id], map: "iskola_id")
+  @@index([osztaly_id], map: "osztaly_id")
+}
+
+model felhasznalotipus {
+  id                Int           @id @default(autoincrement())
+  megnevezes        String        @unique(map: "megnevezes") @db.VarChar(100)
+  leiras            String?       @db.Text
+  max_kolcsonzes    Int?          @default(5)
+  max_idotartam_nap Int?          @default(30)
+  felhasznalo       felhasznalo[]
+}
+
+model iskola {
+  id          Int           @id @default(autoincrement())
+  neve        String        @db.VarChar(255)
+  felhasznalo felhasznalo[]
+  osztaly     osztaly[]
+}
+
+model kategoria {
+  id    Int     @id @default(autoincrement())
+  nev   String  @db.VarChar(100)
+  konyv konyv[]
+}
+
+model kiado {
+  id       Int     @id @default(autoincrement())
+  nev      String  @db.VarChar(255)
+  szekhely String? @db.VarChar(255)
+  konyv    konyv[]
+}
+
+model kivansaglista {
+  id               Int         @id @default(autoincrement())
+  felhasznalo_id   Int
+  konyv_id         Int
+  hozzaadas_datuma DateTime    @default(now()) @db.Timestamp(0)
+  felhasznalo      felhasznalo @relation(fields: [felhasznalo_id], references: [id], onUpdate: Restrict, map: "kivansaglista_ibfk_1")
+  konyv            konyv       @relation(fields: [konyv_id], references: [id], onUpdate: Restrict, map: "kivansaglista_ibfk_2")
+
+  @@index([felhasznalo_id], map: "felhasznalo_id")
+  @@index([konyv_id], map: "konyv_id")
+}
+
+model konyv {
+  id                           Int             @id @default(autoincrement())
+  cim                          String          @db.VarChar(255)
+  kep                          String?         @db.VarChar(255)
+  leiras                       String?         @db.VarChar(255)
+  szerzo_id                    Int?
+  kiado_id                     Int?
+  kategoria_id                 Int?
+  ISBN                         String?         @unique(map: "ISBN") @db.VarChar(13)
+  konyvtar_nyilvantartasi_szam String?         @db.VarChar(50)
+  keszlet                      Int?            @default(1)
+  kolcsonozheto                Boolean?        @default(true)
+  beszerzesi_ar                Decimal?        @db.Decimal(10, 2)
+  kiadas_ev                    Int?            @db.SmallInt
+  magassag_cm                  Decimal?        @db.Decimal(5, 2)
+  berles                       berles[]
+  kivansaglista                kivansaglista[]
+  szerzo                       szerzo?         @relation(fields: [szerzo_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "konyv_ibfk_1")
+  kiado                        kiado?          @relation(fields: [kiado_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "konyv_ibfk_2")
+  kategoria                    kategoria?      @relation(fields: [kategoria_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "konyv_ibfk_3")
+  velemeny                     velemeny[]
+
+  @@index([kategoria_id], map: "kategoria_id")
+  @@index([kiado_id], map: "kiado_id")
+  @@index([szerzo_id], map: "szerzo_id")
+}
+
+model osztaly {
+  id          Int           @id @default(autoincrement())
+  nev         String        @db.VarChar(50)
+  evfolyam    Int?
+  tagozat     String?       @db.VarChar(100)
+  iskola_id   Int?
+  felhasznalo felhasznalo[]
+  iskola      iskola?       @relation(fields: [iskola_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "osztaly_ibfk_1")
+
+  @@index([iskola_id], map: "iskola_id")
+}
+
+model szerzo {
+  id    Int     @id @default(autoincrement())
+  nev   String  @db.VarChar(255)
+  konyv konyv[]
+}
+
+model velemeny {
+  id               Int         @id @default(autoincrement())
+  velemeny_erteke  Int?
+  velemeny_szovege String?     @db.Text
+  felhasznalo_id   Int
+  konyv_id         Int
+  felhasznalo      felhasznalo @relation(fields: [felhasznalo_id], references: [id], onUpdate: Restrict, map: "velemeny_ibfk_1")
+  konyv            konyv       @relation(fields: [konyv_id], references: [id], onUpdate: Restrict, map: "velemeny_ibfk_2")
+
+  @@unique([felhasznalo_id, konyv_id], map: "felhasznalo_id")
+  @@index([konyv_id], map: "konyv_id")
+}
