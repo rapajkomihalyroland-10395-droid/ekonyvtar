@@ -33,6 +33,7 @@ model felhasznalo {
   iskola_id               Int?
   osztaly_id              Int?
   felhasznalo_tipus_id    Int?
+  jwt_token_expires_at    DateTime?         @db.DateTime(0)
   berles                  berles[]
   iskola                  iskola?           @relation(fields: [iskola_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "felhasznalo_ibfk_1")
   osztaly                 osztaly?          @relation(fields: [osztaly_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "felhasznalo_ibfk_2")
@@ -111,6 +112,17 @@ model konyv {
   @@index([kategoria_id], map: "kategoria_id")
   @@index([kiado_id], map: "kiado_id")
   @@index([szerzo_id], map: "szerzo_id")
+}
+
+model login_attempts {
+  id           Int      @id @default(autoincrement())
+  username     String   @db.VarChar(255)
+  device_id    String?  @db.VarChar(255)
+  attempt_time DateTime @default(now()) @db.Timestamp(0)
+  success      Boolean  @default(false)
+
+  @@index([device_id], map: "device_id")
+  @@index([username], map: "username")
 }
 
 model osztaly {
