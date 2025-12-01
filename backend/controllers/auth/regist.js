@@ -49,8 +49,8 @@ export const Regist = async (req, res) => {
         szuletesi_datum: new Date(szuletesi_datum),
         lakcim: lakcim,
         admin: Boolean(admin),
-        iskola: { connect: { id: Number(iskola_id) } }, // ✅ ide kell
-        felhasznalotipus: { connect: { id: Number(felhasznalo_tipus) } }, // ✅ ide kell
+        iskola: { connect: { id: Number(iskola_id) } },
+        felhasznalotipus: { connect: { id: Number(felhasznalo_tipus) } }, 
         jwt_token_expires_at: expiresAt,
       },
     });
