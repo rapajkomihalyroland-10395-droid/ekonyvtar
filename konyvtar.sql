@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 06, 2025 at 01:35 PM
+-- Generation Time: Dec 06, 2025 at 08:19 PM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.26
 
@@ -73,7 +73,10 @@ CREATE TABLE `felhasznalo` (
 
 INSERT INTO `felhasznalo` (`id`, `nev`, `belepesi_azonosito_hash`, `telefonszam`, `szuletesi_datum`, `lakcim`, `admin`, `iskola_id`, `osztaly_id`, `felhasznalo_tipus_id`, `email`, `jwt_token_expires_at`) VALUES
 (8, 'Kiss Péter', '$2b$10$Nzse1i2W6hZpxTzWSRRcaOLjYASYxRvm2vdF1aFevMWGZbjXZgxy6', '+36123456789', '2004-05-15', 'Budapest, Petőfi utca 12.', 0, 1, NULL, 1, 'kispeter@gmail.com', '2025-12-13 12:16:34'),
-(10, 'Kovács Péter', '$2b$10$/dIkM5Kxk1rOiWPmnH5HDeMqopje0xp5d1J5sdd3S.kSDG1zMevSu', '+36123456789', '1990-05-15', 'Budapest, Fő utca 12', 0, 1, NULL, 2, 'peter.kovacs@example.com', '2025-12-13 13:28:33');
+(10, 'Kovács Péter', '$2b$10$/dIkM5Kxk1rOiWPmnH5HDeMqopje0xp5d1J5sdd3S.kSDG1zMevSu', '+36123456789', '1990-05-15', 'Budapest, Fő utca 12', 0, 1, NULL, 2, 'peter.kovacs@example.com', '2025-12-13 13:28:33'),
+(14, 'Kovács Péter', 'hash_123456789abcdef', '06201234567', '2004-05-12', 'Budapest, Fő utca 10.', 0, 1, 3, 2, 'peter.kovacs@test.com', '2025-12-31 23:59:59'),
+(15, 'Nagy Anna', 'hash_abcdef987654321', '06203334455', '2006-11-02', 'Debrecen, Kossuth tér 5.', 0, 1, 2, 1, 'anna.nagy@example.com', '2025-10-15 18:30:00'),
+(16, 'Tóth Márton', 'hash_fakedata112233', '06301239876', '1990-07-21', 'Szeged, Rózsa utca 8.', 1, 1, NULL, 3, 'marton.toth@example.com', '2026-01-01 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -229,20 +232,20 @@ INSERT INTO `konyv` (`id`, `cim`, `kep`, `leiras`, `szerzo_id`, `kiado_id`, `kat
 
 CREATE TABLE `login_attempts` (
   `id` int NOT NULL,
-  `username` varchar(255) COLLATE utf8mb4_hungarian_ci NOT NULL,
-  `device_id` varchar(255) COLLATE utf8mb4_hungarian_ci DEFAULT NULL,
-  `attempt_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `success` tinyint(1) NOT NULL DEFAULT '0'
+  `device_id` varchar(255) COLLATE utf8mb4_hungarian_ci NOT NULL,
+  `success` tinyint(1) NOT NULL DEFAULT '0',
+  `lockout_until` datetime DEFAULT NULL,
+  `attempts_count` int NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
 -- Dumping data for table `login_attempts`
 --
 
-INSERT INTO `login_attempts` (`id`, `username`, `device_id`, `attempt_time`, `success`) VALUES
-(1, 'Kiss Gábor', 'device_001', '2024-02-14 07:30:00', 1),
-(2, 'Kiss Gábor', 'device_001', '2024-02-14 07:29:00', 0),
-(3, 'Kovács Eszter', 'device_admin', '2024-02-14 08:15:00', 1);
+INSERT INTO `login_attempts` (`id`, `device_id`, `success`, `lockout_until`, `attempts_count`) VALUES
+(1, 'device_001', 1, '2025-12-06 19:34:21', 3),
+(3, 'device_admin', 1, '2025-12-06 19:19:48', 0),
+(4, 'device_id123', 1, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -388,7 +391,7 @@ ALTER TABLE `konyv`
 --
 ALTER TABLE `login_attempts`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `username` (`username`),
+  ADD UNIQUE KEY `device_id_2` (`device_id`),
   ADD KEY `device_id` (`device_id`);
 
 --
@@ -426,7 +429,7 @@ ALTER TABLE `berles`
 -- AUTO_INCREMENT for table `felhasznalo`
 --
 ALTER TABLE `felhasznalo`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `felhasznalotipus`
@@ -468,7 +471,7 @@ ALTER TABLE `konyv`
 -- AUTO_INCREMENT for table `login_attempts`
 --
 ALTER TABLE `login_attempts`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `osztaly`
