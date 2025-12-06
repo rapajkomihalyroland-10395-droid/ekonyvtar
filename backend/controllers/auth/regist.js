@@ -4,13 +4,15 @@ import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 const jwt_secret = process.env.JWT_SECRET;
-const salt = process.env.SALT;
+const SALT_ROUNDS = process.env.SALT ? parseInt(process.env.SALT) : 10;
+const REFRESH_TOKEN_LIFETIME_MS = 7 * 24 * 60 * 60 * 1000; // 7 nap
 
 export const Regist = async (req, res) => {
   try {
     const {
       nev,
-      belepesi_azonosito_hash,
+      email,
+      password,
       telefonszam,
       szuletesi_datum,
       lakcim,
@@ -20,51 +22,35 @@ export const Regist = async (req, res) => {
     } = req.body;
 
     const isUserExist = await prisma.felhasznalo.findFirst({
-      where: { nev },
+      where: { email },
     });
-
     if (isUserExist)
-      return res.status(409).json({ error: "Ez a név már foglalt" });
+      return res.status(409).json({ error: "Ez az email már foglalt" });
 
-    const password_hash = await bcrypt.hash(
-      belepesi_azonosito_hash,
-      parseInt(salt)
-    );
-    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); //7 nap
+    const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+    const expiresAt = new Date(Date.now() + REFRESH_TOKEN_LIFETIME_MS);
 
-    /**nev,
-      belepesi_azonosito_hash,
-      telefonszam,
-      szuletesi_datum,
-      lakcim,
-      admin,
-      iskola_id,
-      felhasznalo_tipus, */
-
-    await prisma.felhasznalo.create({
+    const createdUser = await prisma.felhasznalo.create({
       data: {
-        nev: nev,
-        belepesi_azonosito_hash: password_hash,
-        telefonszam: telefonszam,
+        nev,
+        email,
+        belepesi_azonosito_hash: passwordHash,
+        telefonszam,
         szuletesi_datum: new Date(szuletesi_datum),
-        lakcim: lakcim,
+        lakcim,
         admin: Boolean(admin),
-        iskola: { connect: { id: Number(iskola_id) } },
-        felhasznalotipus: { connect: { id: Number(felhasznalo_tipus) } }, 
+        iskola_id: Number(iskola_id),
+        felhasznalo_tipus_id: Number(felhasznalo_tipus),
         jwt_token_expires_at: expiresAt,
       },
     });
 
-    const payload = {
-      name: nev,
-      role: felhasznalo_tipus,
-    };
-
+    const payload = { id: createdUser.id, email: createdUser.email };
     const token = jwt.sign(payload, jwt_secret, { expiresIn: "7d" });
 
     res.cookie("refresh_token", token, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       expires: expiresAt,
     });
