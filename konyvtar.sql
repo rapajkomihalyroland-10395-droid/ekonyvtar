@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.2
 -- https://www.phpmyadmin.net/
 --
--- Gép: 127.0.0.1
--- Létrehozás ideje: 2025. Nov 29. 10:41
--- Kiszolgáló verziója: 10.4.32-MariaDB
--- PHP verzió: 8.2.11
+-- Host: localhost:3306
+-- Generation Time: Dec 06, 2025 at 01:35 PM
+-- Server version: 8.4.3
+-- PHP Version: 8.3.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,26 +18,26 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Adatbázis: `konyvtar`
+-- Database: `konyvtar`
 --
 
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `berles`
+-- Table structure for table `berles`
 --
 
 CREATE TABLE `berles` (
-  `id` int(11) NOT NULL,
-  `felhasznalo_id` int(11) NOT NULL,
-  `konyv_id` int(11) NOT NULL,
+  `id` int NOT NULL,
+  `felhasznalo_id` int NOT NULL,
+  `konyv_id` int NOT NULL,
   `berles_kezdete` date DEFAULT NULL,
   `berles_vege` date DEFAULT NULL,
   `visszahozva` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
--- A tábla adatainak kiíratása `berles`
+-- Dumping data for table `berles`
 --
 
 INSERT INTO `berles` (`id`, `felhasznalo_id`, `konyv_id`, `berles_kezdete`, `berles_vege`, `visszahozva`) VALUES
@@ -49,50 +49,48 @@ INSERT INTO `berles` (`id`, `felhasznalo_id`, `konyv_id`, `berles_kezdete`, `ber
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `felhasznalo`
+-- Table structure for table `felhasznalo`
 --
 
 CREATE TABLE `felhasznalo` (
-  `id` int(11) NOT NULL,
-  `nev` varchar(100) NOT NULL,
-  `belepesi_azonosito_hash` varchar(255) NOT NULL,
-  `telefonszam` varchar(20) DEFAULT NULL,
+  `id` int NOT NULL,
+  `nev` varchar(100) COLLATE utf8mb4_hungarian_ci NOT NULL,
+  `belepesi_azonosito_hash` varchar(255) COLLATE utf8mb4_hungarian_ci NOT NULL,
+  `telefonszam` varchar(20) COLLATE utf8mb4_hungarian_ci DEFAULT NULL,
   `szuletesi_datum` date DEFAULT NULL,
-  `lakcim` varchar(255) DEFAULT NULL,
-  `admin` tinyint(1) DEFAULT 0,
-  `iskola_id` int(11) DEFAULT NULL,
-  `osztaly_id` int(11) DEFAULT NULL,
-  `felhasznalo_tipus_id` int(11) DEFAULT NULL
+  `lakcim` varchar(255) COLLATE utf8mb4_hungarian_ci DEFAULT NULL,
+  `admin` tinyint(1) DEFAULT '0',
+  `iskola_id` int DEFAULT NULL,
+  `osztaly_id` int DEFAULT NULL,
+  `felhasznalo_tipus_id` int DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_hungarian_ci NOT NULL,
+  `jwt_token_expires_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
--- A tábla adatainak kiíratása `felhasznalo`
+-- Dumping data for table `felhasznalo`
 --
 
-INSERT INTO `felhasznalo` (`id`, `nev`, `belepesi_azonosito_hash`, `telefonszam`, `szuletesi_datum`, `lakcim`, `admin`, `iskola_id`, `osztaly_id`, `felhasznalo_tipus_id`) VALUES
-(1, 'Kovács Eszter', '$2b$10$8dGdFdGdFdGdFdGdFdGdFdGdFdGdFdGdFdGdFdGdFdGdFdGdFdGdFdGd', '+3612345678', '1985-03-15', 'Budapest, Fő utca 1.', 1, 1, NULL, 2),
-(2, 'Nagy Péter', '$2b$10$AbCdEfGhIjKlMnOpQrStUvWxYzAbCdEfGhIjKlMnOpQrStUvWxYz', '+3623456789', '1978-11-20', 'Budapest, Kossuth tér 5.', 0, 1, NULL, 1),
-(3, 'Szabó Anna', '$2b$10$XyZaBcDeFgHiJkLmNoPqRsTuVwXyZaBcDeFgHiJkLmNoPqRsTuVw', '+3634567890', '1982-07-30', 'Budapest, Petőfi sétány 10.', 0, 1, NULL, 1),
-(4, 'Kiss Gábor', '$2b$10$MnOpQrStUvWxYzAbCdEfGhIjKlMnOpQrStUvWxYzAbCdEfGhIjKl', '+3645678901', '2007-05-10', 'Budapest, Rózsa utca 15.', 0, 1, 1, 3),
-(5, 'Tóth Éva', '$2b$10$DeFgHiJkLmNoPqRsTuVwXyZaBcDeFgHiJkLmNoPqRsTuVwXyZaBc', '+3656789012', '2006-12-03', 'Budapest, Margit körút 20.', 0, 1, 2, 3),
-(6, 'Molnár Bence', '$2b$10$HiJkLmNoPqRsTuVwXyZaBcDeFgHiJkLmNoPqRsTuVwXyZaBcDeFg', '+3667890123', '2005-08-25', 'Budapest, Andrássy út 30.', 0, 1, 3, 3);
+INSERT INTO `felhasznalo` (`id`, `nev`, `belepesi_azonosito_hash`, `telefonszam`, `szuletesi_datum`, `lakcim`, `admin`, `iskola_id`, `osztaly_id`, `felhasznalo_tipus_id`, `email`, `jwt_token_expires_at`) VALUES
+(8, 'Kiss Péter', '$2b$10$Nzse1i2W6hZpxTzWSRRcaOLjYASYxRvm2vdF1aFevMWGZbjXZgxy6', '+36123456789', '2004-05-15', 'Budapest, Petőfi utca 12.', 0, 1, NULL, 1, 'kispeter@gmail.com', '2025-12-13 12:16:34'),
+(10, 'Kovács Péter', '$2b$10$/dIkM5Kxk1rOiWPmnH5HDeMqopje0xp5d1J5sdd3S.kSDG1zMevSu', '+36123456789', '1990-05-15', 'Budapest, Fő utca 12', 0, 1, NULL, 2, 'peter.kovacs@example.com', '2025-12-13 13:28:33');
 
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `felhasznalotipus`
+-- Table structure for table `felhasznalotipus`
 --
 
 CREATE TABLE `felhasznalotipus` (
-  `id` int(11) NOT NULL,
-  `megnevezes` varchar(100) NOT NULL,
-  `leiras` text DEFAULT NULL,
-  `max_kolcsonzes` int(11) DEFAULT 5,
-  `max_idotartam_nap` int(11) DEFAULT 30
+  `id` int NOT NULL,
+  `megnevezes` varchar(100) COLLATE utf8mb4_hungarian_ci NOT NULL,
+  `leiras` text COLLATE utf8mb4_hungarian_ci,
+  `max_kolcsonzes` int DEFAULT '5',
+  `max_idotartam_nap` int DEFAULT '30'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
--- A tábla adatainak kiíratása `felhasznalotipus`
+-- Dumping data for table `felhasznalotipus`
 --
 
 INSERT INTO `felhasznalotipus` (`id`, `megnevezes`, `leiras`, `max_kolcsonzes`, `max_idotartam_nap`) VALUES
@@ -103,16 +101,16 @@ INSERT INTO `felhasznalotipus` (`id`, `megnevezes`, `leiras`, `max_kolcsonzes`, 
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `iskola`
+-- Table structure for table `iskola`
 --
 
 CREATE TABLE `iskola` (
-  `id` int(11) NOT NULL,
-  `neve` varchar(255) NOT NULL
+  `id` int NOT NULL,
+  `neve` varchar(255) COLLATE utf8mb4_hungarian_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
--- A tábla adatainak kiíratása `iskola`
+-- Dumping data for table `iskola`
 --
 
 INSERT INTO `iskola` (`id`, `neve`) VALUES
@@ -121,16 +119,16 @@ INSERT INTO `iskola` (`id`, `neve`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `kategoria`
+-- Table structure for table `kategoria`
 --
 
 CREATE TABLE `kategoria` (
-  `id` int(11) NOT NULL,
-  `nev` varchar(100) NOT NULL
+  `id` int NOT NULL,
+  `nev` varchar(100) COLLATE utf8mb4_hungarian_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
--- A tábla adatainak kiíratása `kategoria`
+-- Dumping data for table `kategoria`
 --
 
 INSERT INTO `kategoria` (`id`, `nev`) VALUES
@@ -146,17 +144,17 @@ INSERT INTO `kategoria` (`id`, `nev`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `kiado`
+-- Table structure for table `kiado`
 --
 
 CREATE TABLE `kiado` (
-  `id` int(11) NOT NULL,
-  `nev` varchar(255) NOT NULL,
-  `szekhely` varchar(255) DEFAULT NULL
+  `id` int NOT NULL,
+  `nev` varchar(255) COLLATE utf8mb4_hungarian_ci NOT NULL,
+  `szekhely` varchar(255) COLLATE utf8mb4_hungarian_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
--- A tábla adatainak kiíratása `kiado`
+-- Dumping data for table `kiado`
 --
 
 INSERT INTO `kiado` (`id`, `nev`, `szekhely`) VALUES
@@ -169,18 +167,18 @@ INSERT INTO `kiado` (`id`, `nev`, `szekhely`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `kivansaglista`
+-- Table structure for table `kivansaglista`
 --
 
 CREATE TABLE `kivansaglista` (
-  `id` int(11) NOT NULL,
-  `felhasznalo_id` int(11) NOT NULL,
-  `konyv_id` int(11) NOT NULL,
-  `hozzaadas_datuma` timestamp NOT NULL DEFAULT current_timestamp()
+  `id` int NOT NULL,
+  `felhasznalo_id` int NOT NULL,
+  `konyv_id` int NOT NULL,
+  `hozzaadas_datuma` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
--- A tábla adatainak kiíratása `kivansaglista`
+-- Dumping data for table `kivansaglista`
 --
 
 INSERT INTO `kivansaglista` (`id`, `felhasznalo_id`, `konyv_id`, `hozzaadas_datuma`) VALUES
@@ -191,28 +189,28 @@ INSERT INTO `kivansaglista` (`id`, `felhasznalo_id`, `konyv_id`, `hozzaadas_datu
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `konyv`
+-- Table structure for table `konyv`
 --
 
 CREATE TABLE `konyv` (
-  `id` int(11) NOT NULL,
-  `cim` varchar(255) NOT NULL,
-  `kep` varchar(255) DEFAULT NULL,
-  `leiras` varchar(255) DEFAULT NULL,
-  `szerzo_id` int(11) DEFAULT NULL,
-  `kiado_id` int(11) DEFAULT NULL,
-  `kategoria_id` int(11) DEFAULT NULL,
-  `ISBN` varchar(13) DEFAULT NULL,
-  `konyvtar_nyilvantartasi_szam` varchar(50) DEFAULT NULL,
-  `keszlet` int(11) DEFAULT 1,
-  `kolcsonozheto` tinyint(1) DEFAULT 1,
+  `id` int NOT NULL,
+  `cim` varchar(255) COLLATE utf8mb4_hungarian_ci NOT NULL,
+  `kep` varchar(255) COLLATE utf8mb4_hungarian_ci DEFAULT NULL,
+  `leiras` varchar(255) COLLATE utf8mb4_hungarian_ci DEFAULT NULL,
+  `szerzo_id` int DEFAULT NULL,
+  `kiado_id` int DEFAULT NULL,
+  `kategoria_id` int DEFAULT NULL,
+  `ISBN` varchar(13) COLLATE utf8mb4_hungarian_ci DEFAULT NULL,
+  `konyvtar_nyilvantartasi_szam` varchar(50) COLLATE utf8mb4_hungarian_ci DEFAULT NULL,
+  `keszlet` int DEFAULT '1',
+  `kolcsonozheto` tinyint(1) DEFAULT '1',
   `beszerzesi_ar` decimal(10,2) DEFAULT NULL,
-  `kiadas_ev` smallint(6) DEFAULT NULL,
+  `kiadas_ev` smallint DEFAULT NULL,
   `magassag_cm` decimal(5,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
--- A tábla adatainak kiíratása `konyv`
+-- Dumping data for table `konyv`
 --
 
 INSERT INTO `konyv` (`id`, `cim`, `kep`, `leiras`, `szerzo_id`, `kiado_id`, `kategoria_id`, `ISBN`, `konyvtar_nyilvantartasi_szam`, `keszlet`, `kolcsonozheto`, `beszerzesi_ar`, `kiadas_ev`, `magassag_cm`) VALUES
@@ -226,19 +224,19 @@ INSERT INTO `konyv` (`id`, `cim`, `kep`, `leiras`, `szerzo_id`, `kiado_id`, `kat
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `login_attempts`
+-- Table structure for table `login_attempts`
 --
 
 CREATE TABLE `login_attempts` (
-  `id` int(11) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `device_id` varchar(255) DEFAULT NULL,
-  `attempt_time` timestamp NOT NULL DEFAULT current_timestamp(),
-  `success` tinyint(1) NOT NULL DEFAULT 0
+  `id` int NOT NULL,
+  `username` varchar(255) COLLATE utf8mb4_hungarian_ci NOT NULL,
+  `device_id` varchar(255) COLLATE utf8mb4_hungarian_ci DEFAULT NULL,
+  `attempt_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `success` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
--- A tábla adatainak kiíratása `login_attempts`
+-- Dumping data for table `login_attempts`
 --
 
 INSERT INTO `login_attempts` (`id`, `username`, `device_id`, `attempt_time`, `success`) VALUES
@@ -249,19 +247,19 @@ INSERT INTO `login_attempts` (`id`, `username`, `device_id`, `attempt_time`, `su
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `osztaly`
+-- Table structure for table `osztaly`
 --
 
 CREATE TABLE `osztaly` (
-  `id` int(11) NOT NULL,
-  `nev` varchar(50) NOT NULL,
-  `evfolyam` int(11) DEFAULT NULL,
-  `tagozat` varchar(100) DEFAULT NULL,
-  `iskola_id` int(11) DEFAULT NULL
+  `id` int NOT NULL,
+  `nev` varchar(50) COLLATE utf8mb4_hungarian_ci NOT NULL,
+  `evfolyam` int DEFAULT NULL,
+  `tagozat` varchar(100) COLLATE utf8mb4_hungarian_ci DEFAULT NULL,
+  `iskola_id` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
--- A tábla adatainak kiíratása `osztaly`
+-- Dumping data for table `osztaly`
 --
 
 INSERT INTO `osztaly` (`id`, `nev`, `evfolyam`, `tagozat`, `iskola_id`) VALUES
@@ -273,16 +271,16 @@ INSERT INTO `osztaly` (`id`, `nev`, `evfolyam`, `tagozat`, `iskola_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `szerzo`
+-- Table structure for table `szerzo`
 --
 
 CREATE TABLE `szerzo` (
-  `id` int(11) NOT NULL,
-  `nev` varchar(255) NOT NULL
+  `id` int NOT NULL,
+  `nev` varchar(255) COLLATE utf8mb4_hungarian_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
--- A tábla adatainak kiíratása `szerzo`
+-- Dumping data for table `szerzo`
 --
 
 INSERT INTO `szerzo` (`id`, `nev`) VALUES
@@ -298,19 +296,19 @@ INSERT INTO `szerzo` (`id`, `nev`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `velemeny`
+-- Table structure for table `velemeny`
 --
 
 CREATE TABLE `velemeny` (
-  `id` int(11) NOT NULL,
-  `velemeny_erteke` int(11) DEFAULT NULL CHECK (`velemeny_erteke` between 1 and 5),
-  `velemeny_szovege` text DEFAULT NULL,
-  `felhasznalo_id` int(11) NOT NULL,
-  `konyv_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
+  `id` int NOT NULL,
+  `velemeny_erteke` int DEFAULT NULL,
+  `velemeny_szovege` text COLLATE utf8mb4_hungarian_ci,
+  `felhasznalo_id` int NOT NULL,
+  `konyv_id` int NOT NULL
+) ;
 
 --
--- A tábla adatainak kiíratása `velemeny`
+-- Dumping data for table `velemeny`
 --
 
 INSERT INTO `velemeny` (`id`, `velemeny_erteke`, `velemeny_szovege`, `felhasznalo_id`, `konyv_id`) VALUES
@@ -319,11 +317,11 @@ INSERT INTO `velemeny` (`id`, `velemeny_erteke`, `velemeny_szovege`, `felhasznal
 (3, 5, 'Legjobb könyv amit valaha olvastam', 6, 4);
 
 --
--- Indexek a kiírt táblákhoz
+-- Indexes for dumped tables
 --
 
 --
--- A tábla indexei `berles`
+-- Indexes for table `berles`
 --
 ALTER TABLE `berles`
   ADD PRIMARY KEY (`id`),
@@ -331,42 +329,44 @@ ALTER TABLE `berles`
   ADD KEY `konyv_id` (`konyv_id`);
 
 --
--- A tábla indexei `felhasznalo`
+-- Indexes for table `felhasznalo`
 --
 ALTER TABLE `felhasznalo`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `belepesi_azonosito_hash` (`belepesi_azonosito_hash`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `email_2` (`email`),
   ADD KEY `iskola_id` (`iskola_id`),
   ADD KEY `osztaly_id` (`osztaly_id`),
   ADD KEY `felhasznalo_tipus_id` (`felhasznalo_tipus_id`);
 
 --
--- A tábla indexei `felhasznalotipus`
+-- Indexes for table `felhasznalotipus`
 --
 ALTER TABLE `felhasznalotipus`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `megnevezes` (`megnevezes`);
 
 --
--- A tábla indexei `iskola`
+-- Indexes for table `iskola`
 --
 ALTER TABLE `iskola`
   ADD PRIMARY KEY (`id`);
 
 --
--- A tábla indexei `kategoria`
+-- Indexes for table `kategoria`
 --
 ALTER TABLE `kategoria`
   ADD PRIMARY KEY (`id`);
 
 --
--- A tábla indexei `kiado`
+-- Indexes for table `kiado`
 --
 ALTER TABLE `kiado`
   ADD PRIMARY KEY (`id`);
 
 --
--- A tábla indexei `kivansaglista`
+-- Indexes for table `kivansaglista`
 --
 ALTER TABLE `kivansaglista`
   ADD PRIMARY KEY (`id`),
@@ -374,7 +374,7 @@ ALTER TABLE `kivansaglista`
   ADD KEY `konyv_id` (`konyv_id`);
 
 --
--- A tábla indexei `konyv`
+-- Indexes for table `konyv`
 --
 ALTER TABLE `konyv`
   ADD PRIMARY KEY (`id`),
@@ -384,7 +384,7 @@ ALTER TABLE `konyv`
   ADD KEY `kategoria_id` (`kategoria_id`);
 
 --
--- A tábla indexei `login_attempts`
+-- Indexes for table `login_attempts`
 --
 ALTER TABLE `login_attempts`
   ADD PRIMARY KEY (`id`),
@@ -392,20 +392,20 @@ ALTER TABLE `login_attempts`
   ADD KEY `device_id` (`device_id`);
 
 --
--- A tábla indexei `osztaly`
+-- Indexes for table `osztaly`
 --
 ALTER TABLE `osztaly`
   ADD PRIMARY KEY (`id`),
   ADD KEY `iskola_id` (`iskola_id`);
 
 --
--- A tábla indexei `szerzo`
+-- Indexes for table `szerzo`
 --
 ALTER TABLE `szerzo`
   ADD PRIMARY KEY (`id`);
 
 --
--- A tábla indexei `velemeny`
+-- Indexes for table `velemeny`
 --
 ALTER TABLE `velemeny`
   ADD PRIMARY KEY (`id`),
@@ -413,94 +413,94 @@ ALTER TABLE `velemeny`
   ADD KEY `konyv_id` (`konyv_id`);
 
 --
--- A kiírt táblák AUTO_INCREMENT értéke
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT a táblához `berles`
+-- AUTO_INCREMENT for table `berles`
 --
 ALTER TABLE `berles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT a táblához `felhasznalo`
+-- AUTO_INCREMENT for table `felhasznalo`
 --
 ALTER TABLE `felhasznalo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT a táblához `felhasznalotipus`
+-- AUTO_INCREMENT for table `felhasznalotipus`
 --
 ALTER TABLE `felhasznalotipus`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT a táblához `iskola`
+-- AUTO_INCREMENT for table `iskola`
 --
 ALTER TABLE `iskola`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT a táblához `kategoria`
+-- AUTO_INCREMENT for table `kategoria`
 --
 ALTER TABLE `kategoria`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT a táblához `kiado`
+-- AUTO_INCREMENT for table `kiado`
 --
 ALTER TABLE `kiado`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT a táblához `kivansaglista`
+-- AUTO_INCREMENT for table `kivansaglista`
 --
 ALTER TABLE `kivansaglista`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT a táblához `konyv`
+-- AUTO_INCREMENT for table `konyv`
 --
 ALTER TABLE `konyv`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT a táblához `login_attempts`
+-- AUTO_INCREMENT for table `login_attempts`
 --
 ALTER TABLE `login_attempts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT a táblához `osztaly`
+-- AUTO_INCREMENT for table `osztaly`
 --
 ALTER TABLE `osztaly`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT a táblához `szerzo`
+-- AUTO_INCREMENT for table `szerzo`
 --
 ALTER TABLE `szerzo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT a táblához `velemeny`
+-- AUTO_INCREMENT for table `velemeny`
 --
 ALTER TABLE `velemeny`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- Megkötések a kiírt táblákhoz
+-- Constraints for dumped tables
 --
 
 --
--- Megkötések a táblához `berles`
+-- Constraints for table `berles`
 --
 ALTER TABLE `berles`
   ADD CONSTRAINT `berles_ibfk_1` FOREIGN KEY (`felhasznalo_id`) REFERENCES `felhasznalo` (`id`),
   ADD CONSTRAINT `berles_ibfk_2` FOREIGN KEY (`konyv_id`) REFERENCES `konyv` (`id`);
 
 --
--- Megkötések a táblához `felhasznalo`
+-- Constraints for table `felhasznalo`
 --
 ALTER TABLE `felhasznalo`
   ADD CONSTRAINT `felhasznalo_ibfk_1` FOREIGN KEY (`iskola_id`) REFERENCES `iskola` (`id`),
@@ -508,14 +508,14 @@ ALTER TABLE `felhasznalo`
   ADD CONSTRAINT `felhasznalo_ibfk_3` FOREIGN KEY (`felhasznalo_tipus_id`) REFERENCES `felhasznalotipus` (`id`);
 
 --
--- Megkötések a táblához `kivansaglista`
+-- Constraints for table `kivansaglista`
 --
 ALTER TABLE `kivansaglista`
   ADD CONSTRAINT `kivansaglista_ibfk_1` FOREIGN KEY (`felhasznalo_id`) REFERENCES `felhasznalo` (`id`),
   ADD CONSTRAINT `kivansaglista_ibfk_2` FOREIGN KEY (`konyv_id`) REFERENCES `konyv` (`id`);
 
 --
--- Megkötések a táblához `konyv`
+-- Constraints for table `konyv`
 --
 ALTER TABLE `konyv`
   ADD CONSTRAINT `konyv_ibfk_1` FOREIGN KEY (`szerzo_id`) REFERENCES `szerzo` (`id`),
@@ -523,13 +523,13 @@ ALTER TABLE `konyv`
   ADD CONSTRAINT `konyv_ibfk_3` FOREIGN KEY (`kategoria_id`) REFERENCES `kategoria` (`id`);
 
 --
--- Megkötések a táblához `osztaly`
+-- Constraints for table `osztaly`
 --
 ALTER TABLE `osztaly`
   ADD CONSTRAINT `osztaly_ibfk_1` FOREIGN KEY (`iskola_id`) REFERENCES `iskola` (`id`);
 
 --
--- Megkötések a táblához `velemeny`
+-- Constraints for table `velemeny`
 --
 ALTER TABLE `velemeny`
   ADD CONSTRAINT `velemeny_ibfk_1` FOREIGN KEY (`felhasznalo_id`) REFERENCES `felhasznalo` (`id`),

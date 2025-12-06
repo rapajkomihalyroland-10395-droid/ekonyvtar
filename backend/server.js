@@ -1,7 +1,8 @@
 import express from "express";
 import "dotenv/config";
 import cors from "cors";
-import router from "./routers/route.js";
+import router from "./routers/main.router.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -15,6 +16,7 @@ app.use(
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
+app.use(cookieParser());
 
 app.use("/api", router);
 
