@@ -115,14 +115,13 @@ model konyv {
 }
 
 model login_attempts {
-  id           Int      @id @default(autoincrement())
-  username     String   @db.VarChar(255)
-  device_id    String?  @db.VarChar(255)
-  attempt_time DateTime @default(now()) @db.Timestamp(0)
-  success      Boolean  @default(false)
+  id             Int       @id @default(autoincrement())
+  device_id      String    @unique(map: "device_id_2") @db.VarChar(255)
+  success        Boolean   @default(false)
+  lockout_until  DateTime? @db.DateTime(0)
+  attempts_count Int       @default(0)
 
   @@index([device_id], map: "device_id")
-  @@index([username], map: "username")
 }
 
 model osztaly {
