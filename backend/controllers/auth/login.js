@@ -25,18 +25,6 @@ const REFRESH_TOKEN_LIFETIME_MS = 7 * 24 * 60 * 60 * 1000;
   } 
 */
 
-const createRefreshToken = (user) => {
-  const token = jwt.sign(
-    { email: user.email },
-    process.env.REFRESH_TOKEN_SECRET,
-    {
-      expiresIn: "7d",
-    }
-  );
-  const expires_at = new Date(Date.now() + REFRESH_TOKEN_LIFETIME_MS);
-  return { token, expires_at };
-};
-
 export const Login = async (req, res) => {
   try {
     const { email, password, device_id } = req.body;
@@ -121,5 +109,3 @@ export const Login = async (req, res) => {
     res.status(500).json({ error: "Belépési hiba: " + err.message });
   }
 };
-
-// Segédfüggvények

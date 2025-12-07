@@ -24,7 +24,7 @@ const isRefreshTokenValid = (user) => {
 
 const createRefreshToken = (user) => {
   const token = jwt.sign(
-    { email: user.email },
+    { email: user.email, role: user.admin },
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: "7d" }
   );

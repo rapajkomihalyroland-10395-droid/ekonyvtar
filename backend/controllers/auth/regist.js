@@ -1,9 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import "dotenv/config";
 
 const prisma = new PrismaClient();
-const jwt_secret = process.env.JWT_SECRET;
+const jwt_secret = process.env.REFRESH_TOKEN_SECRET;
 const SALT_ROUNDS = process.env.SALT ? parseInt(process.env.SALT) : 10;
 const REFRESH_TOKEN_LIFETIME_MS = 7 * 24 * 60 * 60 * 1000; // 7 nap
 
@@ -45,7 +46,7 @@ export const Regist = async (req, res) => {
       },
     });
 
-    const payload = { id: createdUser.id, email: createdUser.email };
+    const payload = { email: createdUser.email, role: createdUser.admin };
     const token = jwt.sign(payload, jwt_secret, { expiresIn: "7d" });
 
     res.cookie("refresh_token", token, {
