@@ -3,7 +3,7 @@ import {
   GetAllUsers,
   GetUserByName,
   DeleteUser,
-} from "../controllers/admin/admin.controller.js";
+} from "../controllers/admin/admin.UserControl.js";
 
 const adminRouter = Router();
 

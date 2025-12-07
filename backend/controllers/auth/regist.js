@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
-const jwt_secret = process.env.JWT_SECRET;
+const jwt_secret = process.env.REFRESH_TOKEN_SECRET;
 const SALT_ROUNDS = process.env.SALT ? parseInt(process.env.SALT) : 10;
 const REFRESH_TOKEN_LIFETIME_MS = 7 * 24 * 60 * 60 * 1000; // 7 nap
 
