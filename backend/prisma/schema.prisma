@@ -90,7 +90,7 @@ model kivansaglista {
 model konyv {
   id                           Int             @id @default(autoincrement())
   cim                          String          @db.VarChar(255)
-  kep                          String?         @db.VarChar(255)
+  kep                          String?         @unique(map: "kep") @db.VarChar(255)
   leiras                       String?         @db.VarChar(255)
   szerzo_id                    Int?
   kiado_id                     Int?

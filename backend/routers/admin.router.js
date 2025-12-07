@@ -7,8 +7,11 @@ import {
 
 const adminRouter = Router();
 
+//FELHASZNÁLOK
 adminRouter.route("/users").get(GetAllUsers);
 adminRouter.route("/users/:name").get(GetUserByName);
 adminRouter.route("/user/:id").get(DeleteUser);
+
+//KÖNYVEK
 
 export default adminRouter;
