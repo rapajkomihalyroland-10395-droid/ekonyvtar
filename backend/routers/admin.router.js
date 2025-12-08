@@ -5,7 +5,10 @@ import {
   DeleteUser,
 } from "../controllers/admin/admin.UserControl.js";
 
-import { CreateNewBook } from "../controllers/admin/admin.BookControl.js";
+import {
+  CreateNewBook,
+  IncreaseStock,
+} from "../controllers/admin/admin.BookControl.js";
 
 const adminRouter = Router();
 
@@ -16,5 +19,6 @@ adminRouter.route("/user/:id").get(DeleteUser);
 
 //KÖNYVEK
 adminRouter.route("/new-book").post(CreateNewBook);
+adminRouter.route("/increase-stock").post(IncreaseStock);
 
 export default adminRouter;

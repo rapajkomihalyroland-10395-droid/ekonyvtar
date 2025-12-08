@@ -142,20 +142,27 @@ export const CreateNewBook = async (req, res) => {
 
 export const IncreaseStock = async (req, res) => {
   try {
-    const { isbn, ertek } = req.body;
+    const { ISBN, ertek } = req.body;
 
-    const result = await prisma.konyv.findUnique({
-      where: { ISBN: isbn },
+    let result;
+
+    const findBook = await prisma.konyv.findUnique({
+      where: { ISBN: ISBN },
     });
 
-    if (!result)
+    if (!findBook)
       return res.status(409).json({ message: "Nincs ilyen ISBN számú könyv" });
 
-    if (!ertek == undefined) {
-      await prisma.konyv.update({
-        data: { keszlet: { increment: 1 } },
+    if (!ertek == 0) {
+      result = await prisma.konyv.update({
+        where: { ISBN: ISBN },
+        data: { keszlet: { increment: ertek } },
       });
+    } else {
+      result = findBook;
     }
+
+    return res.status(200).json({ message: "Siker", result: result });
   } catch (error) {
     return res.status(404).json({ message: error.message });
   }
