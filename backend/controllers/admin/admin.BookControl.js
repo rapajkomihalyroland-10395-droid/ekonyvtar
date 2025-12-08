@@ -26,7 +26,12 @@ export const UploadNewBook = async (req, res) => {
       const image_url = await prisma.konyv.findUnique({
         where: { kep: kep },
       });
+
+      if (image_url) return error = {message: "Ez a fájl már foglalt"} 
     });
+
+    
+
   } catch (error) {
     return res.status(404).json({ message: error.message });
   }
