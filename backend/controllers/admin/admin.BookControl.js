@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const UploadNewBook = async (req, res) => {
+export const CreateNewBook = async (req, res) => {
   try {
     const {
       cim,
@@ -110,3 +110,29 @@ export const UploadNewBook = async (req, res) => {
     return res.status(404).json({ message: error.message });
   }
 };
+
+
+export const increaseStock = async (req, res) => {
+  try {
+    
+    const {isbn, ertek} = req.body
+
+    const result = await prisma.konyv.findUnique({
+      where: {ISBN: isbn}
+    })
+
+    if(!result) return res.status(409).json({message: "Nincs ilyen ISBN számú könyv"})
+    
+    if(!ertek == undefined){
+      
+      await prisma.konyv.update({
+        data: {keszlet: {increment: 1}}
+      })
+
+    }
+    
+
+  } catch (error) {
+     return res.status(404).json({ message: error.message });
+  }
+}
