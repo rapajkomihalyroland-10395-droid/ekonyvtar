@@ -9,6 +9,7 @@ import {
   CreateNewBook,
   IncreaseStock,
   GetBookByID,
+  UpdateBookDetail,
 } from "../controllers/admin/admin.BookControl.js";
 
 const adminRouter = Router();
@@ -22,5 +23,6 @@ adminRouter.route("/user/:id").get(DeleteUser);
 adminRouter.route("/new-book").post(CreateNewBook);
 adminRouter.route("/increase-stock").post(IncreaseStock);
 adminRouter.route("/get-a-book/:id").get(GetBookByID);
+adminRouter.route("/update-a-book/:id").patch(UpdateBookDetail);
 
 export default adminRouter;

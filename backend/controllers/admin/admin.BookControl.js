@@ -209,3 +209,51 @@ export const GetBookByID = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+export const UpdateBookDetail = async (req, res) => {
+  try {
+    const {
+      cim,
+      kep,
+      leiras,
+      szerzo,
+      kiado,
+      kategoria,
+      ISBN,
+      konyvtar_nyilvantartasi_szam,
+      keszlet,
+      kolcsonozheto,
+      beszerzesi_ar,
+      kiadas_ev,
+      magassag_cm,
+    } = req.body;
+
+    const { id } = req.params;
+
+    const result = await prisma.konyv.update({
+      where: { id: Number(id) },
+      data: {
+        cim: cim,
+        kep: kep,
+        leiras: leiras,
+        szerzo_id: szerzo,
+        kiado_id: kiado,
+        kategoria_id: kategoria,
+        ISBN: Number(kiadas_ev),
+        konyvtar_nyilvantartasi_szam: Number(konyvtar_nyilvantartasi_szam),
+        keszlet: Number(keszlet),
+        kolcsonozheto: kolcsonozheto,
+        beszerzesi_ar: Number(beszerzesi_ar),
+        kiadas_ev: Number(kiadas_ev),
+        magassag_cm: Number(magassag_cm),
+      },
+    });
+
+    return res
+      .status(200)
+      .json({ message: "Sikeres frissités", result: result });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
