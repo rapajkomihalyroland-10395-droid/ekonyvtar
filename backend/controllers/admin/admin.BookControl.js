@@ -167,3 +167,45 @@ export const IncreaseStock = async (req, res) => {
     return res.status(404).json({ message: error.message });
   }
 };
+
+export const GetBookByID = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    let book;
+
+    const result = await prisma.konyv.findUnique({
+      where: { id: Number(id) },
+      include: {
+        berles: {
+          include: {
+            felhasznalo: {
+              include: { osztaly: true },
+            },
+          },
+        },
+        szerzo: true,
+        kiado: true,
+        kategoria: true,
+      },
+    });
+
+    book = {
+      szerzo: result.szerzo.nev,
+      cim: result.cim,
+      kiado: result.kiado.nev,
+      kategoria: result.kategoria.nev,
+      berles: result.berles.map((x) => ({
+        nev: x.felhasznalo.nev,
+        lakcim: x.felhasznalo.lakcim,
+        osztaly: x.felhasznalo.osztaly.nev,
+        kikolcsozes_stat:
+          x.visszahozva != false ? x.berles_kezdete : "Visszahozott",
+      })),
+    };
+
+    return res.status(200).json({ book });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
