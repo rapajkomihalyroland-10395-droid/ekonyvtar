@@ -6,133 +6,157 @@ export const CreateNewBook = async (req, res) => {
   try {
     const {
       cim,
-      kep, 
+      kep,
       leiras,
       szerzo,
       kiado,
       kategoria,
-      ISBN, 
-      konyvtar_nyilvantartasi_szam, 
+      ISBN,
+      konyvtar_nyilvantartasi_szam,
       keszlet,
       kolcsonozheto,
       beszerzesi_ar,
-      kiadasi_ev,
+      kiadas_ev,
       magassag_cm,
     } = req.body;
 
     let error;
 
     const result = await prisma.$transaction(async (tx) => {
-  const image_url = await tx.konyv.findUnique({
-    where: { kep: kep },
-  });
-  if (image_url) throw new Error("Ez a fájl már foglalt");
+      const image_url = await tx.konyv.findUnique({
+        where: { kep: kep },
+      });
+      if (image_url) throw new Error("Ez a fájl már foglalt");
 
-  const existingISBN = await tx.konyv.findUnique({
-    where: { ISBN: ISBN },
-  });
-  if (existingISBN) throw new Error("Ez a ISBN szám már foglalt!");
+      const existingISBN = await tx.konyv.findUnique({
+        where: { ISBN: ISBN },
+      });
+      if (existingISBN) throw new Error("Ez a ISBN szám már foglalt!");
 
-  const existingKnyNySzam = await tx.konyv.findUnique({
-    where: { konyvtar_nyilvantartasi_szam: konyvtar_nyilvantartasi_szam },
-  });
-  if (existingKnyNySzam) throw new Error("Ez a könyvtári szám már foglalt!");
+      const existingKnyNySzam = await tx.konyv.findUnique({
+        where: { konyvtar_nyilvantartasi_szam: konyvtar_nyilvantartasi_szam },
+      });
+      if (existingKnyNySzam)
+        throw new Error("Ez a könyvtári szám már foglalt!");
 
-  let szerzoID;
-  const existingSzerzo = await tx.szerzo.findUnique({
-    where: { nev: szerzo }
-  });
+      let szerzoID;
+      const existingSzerzo = await tx.szerzo.findFirst({
+        where: { nev: szerzo },
+      });
 
-  if (existingSzerzo) {
-    szerzoID = existingSzerzo.id;
-  } else {
-    const newSzerzo = await tx.szerzo.create({
-      data: { nev: szerzo }
+      if (existingSzerzo) {
+        szerzoID = existingSzerzo.id;
+      } else {
+        const newSzerzo = await tx.szerzo.create({
+          data: { nev: szerzo },
+        });
+        szerzoID = newSzerzo.id;
+      }
+
+      let kiadoID;
+      const existingKiado = await tx.kiado.findFirst({
+        where: { nev: kiado },
+      });
+
+      if (existingKiado) {
+        kiadoID = existingKiado.id;
+      } else {
+        const newKiado = await tx.kiado.create({
+          data: { nev: kiado },
+        });
+        kiadoID = newKiado.id;
+      }
+
+      let kategoriaID;
+      const existingKategoria = await tx.kategoria.findFirst({
+        where: { nev: kategoria },
+      });
+
+      if (existingKategoria) {
+        kategoriaID = existingKategoria.id;
+      } else {
+        const newKategoria = await tx.kategoria.create({
+          data: { nev: kategoria },
+        });
+        kategoriaID = newKategoria.id;
+      }
+
+      const newBook = await tx.konyv.create({
+        data: {
+          cim: cim,
+          kep: kep,
+          leiras: leiras,
+          szerzo_id: szerzoID,
+          kiado_id: kiadoID,
+          kategoria_id: kategoriaID,
+          ISBN: ISBN,
+          konyvtar_nyilvantartasi_szam: konyvtar_nyilvantartasi_szam,
+          keszlet: keszlet,
+          kolcsonozheto: kolcsonozheto,
+          beszerzesi_ar: beszerzesi_ar,
+          kiadas_ev: kiadas_ev,
+          magassag_cm: magassag_cm,
+        },
+      });
+
+      /*const newBook = {
+        SZ_ID: szerzoID,
+        szerzo: szerzo,
+        KATE: kategoriaID,
+        kategoria: kategoria,
+        KIAD: kategoriaID,
+        kategoria: kategoria,
+      };*/
+
+      return newBook;
     });
-    szerzoID = newSzerzo.id;
-  }
-
-  let kiadoID;
-  const existingKiado = await tx.kiado.findUnique({
-    where: { nev: kiado }
-  });
-
-  if (existingKiado) {
-    kiadoID = existingKiado.id;
-  } else {
-    const newKiado = await tx.kiado.create({
-      data: { nev: kiado }
-    });
-    kiadoID = newKiado.id;
-  }
-
-  let kategoriaID;
-  const existingKategoria = await tx.kategoria.findUnique({
-    where: { nev: kategoria }
-  });
-
-  if (existingKategoria) {
-    kategoriaID = existingKategoria.id;
-  } else {
-    const newKategoria = await tx.kategoria.create({
-      data: { nev: kategoria }
-    });
-    kategoriaID = newKategoria.id;
-  }
-
-  const newBook = await tx.konyv.create({
-    data: {
-      cim: cim,
-      kep: kep,
-      leiras: leiras,
-      szerzo_id: szerzoID,
-      kiado_id: kiadoID,
-      kategoria_id: kategoriaID,
-      ISBN: ISBN,
-      konyvtar_nyilvantartasi_szam: konyvtar_nyilvantartasi_szam,
-      keszlet: keszlet,
-      kolcsonozheto: kolcsonozheto,
-      beszerzesi_ar: beszerzesi_ar,
-      kiadas_ev: kiadas_ev,
-      magassag_cm: magassag_cm
-    }
-  });
-
-  return newBook;
-});
 
     if (error != null || error != undefined) {
       return res.status(404).json(error);
     }
 
-    return res.status(200).json({ message: "Sikeres könyv felvitel" });
+    return res
+      .status(200)
+      .json({ message: "Sikeres könyvfelvitel", result: result });
   } catch (error) {
     return res.status(404).json({ message: error.message });
   }
 };
 
+/*{
+  "cim": "A kék hold legendája",
+  "kep": "https://example.com/kepek/kek_hold.jpg",
+  "leiras": "Egy misztikus kalandregény, amelyben egy fiatal hős egy elveszett civilizáció titkát kutatja.",
+  "szerzo": "Mikszáth Kálmán",
+  "kiado": "Móra Könyvkiadó",
+  "kategoria": "Fantasy",
+  "ISBN": "9786151234567", 
+  "konyvtar_nyilvantartasi_szam": "LIB-2025-00123",
+  "keszlet": 12,
+  "kolcsonozheto": true,
+  "beszerzesi_ar": 3490,
+  "kiadas_ev": 2021,
+  "magassag_cm": 21
+}
+ */
 
-export const increaseStock = async (req, res) => {
+export const IncreaseStock = async (req, res) => {
   try {
-    
-    const {isbn, ertek} = req.body
+    const { isbn, ertek } = req.body;
 
     const result = await prisma.konyv.findUnique({
-      where: {ISBN: isbn}
-    })
+      where: { ISBN: isbn },
+    });
 
-    if(!result) return res.status(409).json({message: "Nincs ilyen ISBN számú könyv"})
-    
-    if(!ertek == undefined){
-      
+    if (!result)
+      return res.status(409).json({ message: "Nincs ilyen ISBN számú könyv" });
+
+    if (!ertek == undefined) {
       await prisma.konyv.update({
-        data: {keszlet: {increment: 1}}
-      })
-
+        data: { keszlet: { increment: 1 } },
+      });
     }
-    
-
   } catch (error) {
-     return res.status(404).json({ message: error.message });
+    return res.status(404).json({ message: error.message });
   }
-}
+};

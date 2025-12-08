@@ -96,7 +96,7 @@ model konyv {
   kiado_id                     Int?
   kategoria_id                 Int?
   ISBN                         String?         @unique(map: "ISBN") @db.VarChar(13)
-  konyvtar_nyilvantartasi_szam String?         @db.VarChar(50)
+  konyvtar_nyilvantartasi_szam String?         @unique(map: "konyvtar_nyilvantartasi_szam") @db.VarChar(255)
   keszlet                      Int?            @default(1)
   kolcsonozheto                Boolean?        @default(true)
   beszerzesi_ar                Decimal?        @db.Decimal(10, 2)
