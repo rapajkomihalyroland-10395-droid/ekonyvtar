@@ -40,3 +40,24 @@ export const GetAllRentals = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+export const GetARentalByID = async (req, res) => {
+  try {
+    const { felhasznalo_id } = req.params;
+
+    console.log(Number(felhasznalo_id))
+
+    const IsUserHaveRental = await prisma.berles.findMany({
+      where: {felhasznalo_id : Number(felhasznalo_id)},
+      include: {
+        konyv: true
+      }
+    })
+
+    return res.json({IsUserHaveRental});
+
+
+  } catch (error) {
+    return res.status(200).json({ message: error.message });
+  }
+};
