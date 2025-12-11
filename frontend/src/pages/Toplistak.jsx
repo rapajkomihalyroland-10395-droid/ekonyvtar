@@ -106,8 +106,14 @@ export default function Toplistak() {
 
       {nyitottLista &&
         createPortal(
-          <div className={styles.modalOverlay}>
-            <div className={styles.modalCard}>
+          <div
+            className={styles.modalOverlay}
+            onClick={() => setNyitottLista(null)}
+          >
+            <div
+              className={styles.modalCard}
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className={styles.modalHeader}>
                 <div>
                   <p className={styles.modalEyebrow}>Toplista</p>
