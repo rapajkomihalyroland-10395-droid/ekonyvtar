@@ -1,0 +1,68 @@
+.header {
+  @apply sticky top-0 z-20 bg-background/80 backdrop-blur border-b border-slate-200;
+}
+
+.inner {
+  @apply mx-auto max-w-6xl px-6 py-3 flex items-center gap-6;
+}
+
+.logoWrap {
+  @apply flex items-center gap-2;
+}
+
+.logoMark {
+  @apply inline-flex h-8 w-8 items-center justify-center rounded-2xl bg-black text-white text-sm font-semibold tracking-tight;
+}
+
+.logoText {
+  @apply font-semibold tracking-tight text-lg;
+}
+
+.logoMuted {
+  @apply text-muted;
+}
+
+.category {
+  @apply hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white shadow-sm border border-slate-200;
+}
+
+.categoryLabel {
+  @apply text-xs uppercase tracking-wide text-muted;
+}
+
+.categorySelect {
+  @apply bg-transparent text-sm outline-none;
+}
+
+.searchWrap {
+  @apply flex-1 hidden md:flex;
+}
+
+.searchInner {
+  @apply w-full flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-full shadow-sm;
+}
+
+.searchInput {
+  @apply flex-1 bg-transparent text-sm outline-none placeholder:text-slate-400;
+}
+
+.searchButton {
+  @apply text-xs font-medium px-3 py-1 rounded-full bg-slate-900 text-white;
+}
+
+.auth {
+  @apply flex items-center gap-3 text-sm;
+}
+
+.authLink {
+  @apply text-slate-700 hover:text-slate-900;
+}
+
+.authPrimary {
+  @apply hidden sm:inline-flex px-4 py-1.5 rounded-full bg-black text-white text-sm font-medium;
+}
+
+.adminBadge {
+  @apply inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-300 text-xs font-semibold;
+}
+

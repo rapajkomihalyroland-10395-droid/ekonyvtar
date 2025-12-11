@@ -1,18 +1,20 @@
+import styles from './SectionTitle.module.css';
+
 export default function SectionTitle({ eyebrow, title, actionLabel }) {
   return (
-    <div className="flex items-end justify-between mb-4">
+    <div className={styles.wrapper}>
       <div>
         {eyebrow && (
-          <div className="text-xs font-medium uppercase tracking-wide text-muted">
+          <div className={styles.eyebrow}>
             {eyebrow}
           </div>
         )}
-        <h2 className="text-xl md:text-2xl font-semibold tracking-tight">
+        <h2 className={styles.title}>
           {title}
         </h2>
       </div>
       {actionLabel && (
-        <button className="text-sm text-slate-700 px-4 py-1.5 bg-white border border-slate-200 rounded-full hover:bg-slate-50">
+        <button className={styles.action}>
           {actionLabel}
         </button>
       )}
