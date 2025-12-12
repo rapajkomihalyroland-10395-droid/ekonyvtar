@@ -22,7 +22,6 @@ export const Login = async (req, res) => {
   try {
     const { email, password, device_id } = req.body;
 
-    console.log(email, password, device_id)
 
     if (!device_id) {
       return res.status(401).json({ message: "Nincs elérhető azonosító ID" });
