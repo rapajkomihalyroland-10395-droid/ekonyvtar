@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import {
   UpdateAttempts,
   CreateAttemptsByDeviceId,
@@ -8,6 +7,8 @@ import {
   IsLockedOut,
   LockDevice,
 } from "../../helper/login.attemp.js";
+
+import { createRefreshToken } from "../../middlewares/auth.middleware.js";
 
 const prisma = new PrismaClient();
 const SALT_ROUNDS = process.env.SALT ? parseInt(process.env.SALT) : 10;
@@ -23,11 +24,19 @@ const REFRESH_TOKEN_LIFETIME_MS = 7 * 24 * 60 * 60 * 1000;
     "password": "TesztJelszo123!",
     "device_id": "valami-unique-id"
   } 
+
+
+      "email": "kiss.peter@example.com"
+      "jelszo": "Peti1234",
+      "device_id": "valami-unique-id"
+
 */
 
 export const Login = async (req, res) => {
   try {
     const { email, password, device_id } = req.body;
+
+    console.log(email,password,device_id)
 
     if (!device_id) {
       return res.status(401).json({ message: "Nincs elérhető azonosító ID" });

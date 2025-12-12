@@ -33,4 +33,5 @@ adminRouter.route("/get-all-rentals").get(GetAllRentals);
 adminRouter.route("/get-a-rental/:felhasznalo_id").get(GetARentalByID);
 
 
+
 export default adminRouter;

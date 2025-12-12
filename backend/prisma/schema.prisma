@@ -90,13 +90,13 @@ model kivansaglista {
 model konyv {
   id                           Int             @id @default(autoincrement())
   cim                          String          @db.VarChar(255)
-  kep                          String?         @unique(map: "kep") @db.VarChar(255)
+  kep                          String?         @db.VarChar(255)
   leiras                       String?         @db.VarChar(255)
   szerzo_id                    Int?
   kiado_id                     Int?
   kategoria_id                 Int?
   ISBN                         String?         @unique(map: "ISBN") @db.VarChar(13)
-  konyvtar_nyilvantartasi_szam String?         @unique(map: "konyvtar_nyilvantartasi_szam") @db.VarChar(255)
+  konyvtar_nyilvantartasi_szam String?         @db.VarChar(50)
   keszlet                      Int?            @default(1)
   kolcsonozheto                Boolean?        @default(true)
   beszerzesi_ar                Decimal?        @db.Decimal(10, 2)
