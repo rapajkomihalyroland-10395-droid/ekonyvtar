@@ -43,11 +43,11 @@ export default function MainHeader() {
 
         {/* Auth + icon */}
         <div className={styles.auth}>
-          <NavLink to="/user" className={styles.authLink}>
+          <NavLink to="/auth?mode=login" className={styles.authLink}>
             Bejelentkezés
           </NavLink>
           <NavLink
-            to="/user"
+            to="/auth?mode=register"
             className={styles.authPrimary}
           >
             Regisztráció

@@ -28,7 +28,7 @@ const rangsorok = [
     extended: ['Kovács Juli', 'Bíró Lajos', 'Tóth Anikó', 'Jakab Milán', 'Lengyel Boróka'],
   },
   {
-    title: 'Leggyorsabban fogyó újdonságok',
+    title: 'Kategóriák top könyvei',
     items: ['Éjféli expressz', 'Egy hét a hegyen', 'Szirének városa', 'Tanulj okosan', 'Kreatív jegyzetelés'],
     extended: ['Felhőatlasz 2.0', 'Nyári szünet', 'Új remény', 'Az utolsó leckéig', 'Lámpafény'],
   },

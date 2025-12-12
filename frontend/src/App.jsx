@@ -6,6 +6,7 @@ import UserLayout from './layouts/UserLayout.jsx';
 import LandingPage from './pages/LandingPage.jsx';
 import ShopPage from './pages/ShopPage.jsx';
 import Toplistak from './pages/Toplistak.jsx';
+import AuthPage from './pages/AuthPage.jsx';
 import UserDashboard from './pages/UserDashboard.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import AdminBooks from './pages/AdminBooks.jsx';
@@ -20,6 +21,7 @@ export default function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/shop" element={<ShopPage />} />
           <Route path="/toplistak" element={<Toplistak />} />
+          <Route path="/auth" element={<AuthPage />} />
         </Route>
 
         <Route path="/user" element={<UserLayout />}>
