@@ -13,6 +13,7 @@ export const TopBooks = async (req, res) => {
             cim: true,
             kep: true,
             leiras: true,
+            csillag_ertekeles: true,
             szerzo: { select: { nev: true } },
             kiado: { select: { nev: true } },
             kategoria: { select: { nev: true } },
@@ -35,6 +36,7 @@ export const TopBooks = async (req, res) => {
           szerzo: book.konyv.szerzo.nev,
           kiado: book.konyv.kiado.nev,
           kategoria: book.konyv.kategoria.nev,
+          csillagok: book.konyv.csillag_ertekeles,
           elofordulas: 1,
         };
       }
@@ -96,4 +98,3 @@ export const TopAuthor = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
-

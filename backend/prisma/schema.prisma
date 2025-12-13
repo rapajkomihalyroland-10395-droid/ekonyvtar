@@ -102,6 +102,7 @@ model konyv {
   beszerzesi_ar                Decimal?        @db.Decimal(10, 2)
   kiadas_ev                    Int?            @db.SmallInt
   magassag_cm                  Decimal?        @db.Decimal(5, 2)
+  csillag_ertekeles            Decimal?        @default(0.0) @db.Decimal(2, 1)
   berles                       berles[]
   kivansaglista                kivansaglista[]
   szerzo                       szerzo?         @relation(fields: [szerzo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "konyv_ibfk_1")
