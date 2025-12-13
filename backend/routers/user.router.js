@@ -1,11 +1,10 @@
 import { Router } from "express";
 
-import { TopBooks } from "../controllers/user/user.TopBooks.js";
-
+import { TopBooks, TopAuthor } from "../controllers/user/user.TopBooks.js";
 
 const userRouter = Router();
 
+userRouter.route("/top-books").get(TopBooks);
+userRouter.route("/top-author").get(TopAuthor);
 
-userRouter.route("/top-books").get(TopBooks)
-
-export default userRouter
+export default userRouter;

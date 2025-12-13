@@ -1,5 +1,5 @@
 Top könyvek 
-    Legnépszerűbb (kölcsönzések alapján)
+    [x] Legnépszerűbb (kölcsönzések alapján)
     Legtöbbet kölcsönzött szerzők
     Legkedvencebb könyvek (4-es csillag felett)
     Kategória alapján könyvek topjai
