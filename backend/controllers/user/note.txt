@@ -1,10 +1,13 @@
 Top könyvek 
     [x] Legnépszerűbb (kölcsönzések alapján)
     [x] Legtöbbet kölcsönzött szerzők
-    Legkedvencebb könyvek (4-es csillag felett)
+    [x] Legkedvencebb könyvek (4-es csillag felett)
     Kategória alapján könyvek topjai
 
-Új könyvek
+
 Könyv keresés
 Kivánságlista
 Vélemény
+Kölcsönzés
+
+Új könyvek kérvényezése
