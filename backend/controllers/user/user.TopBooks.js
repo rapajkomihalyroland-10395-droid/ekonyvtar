@@ -9,6 +9,7 @@ export const TopBooks = async (req, res) => {
         id: true,
         konyv: {
           select: {
+            id: true,
             cim: true,
             kep: true,
             leiras: true,
@@ -20,10 +21,32 @@ export const TopBooks = async (req, res) => {
       },
     });
 
-    
+    const gate_books = books.reduce((acc, book) => {
+      const key = book.konyv.id;
 
-    return res.json(books);
+      if (acc[key]) {
+        acc[key].elofordulas++;
+      } else {
+        acc[key] = {
+          id: key,
+          cim: book.konyv.cim,
+          kep: book.konyv.kep,
+          leiras: book.konyv.leiras,
+          szerzo: book.konyv.szerzo.nev,
+          kiado: book.konyv.kiado.nev,
+          kategoria: book.konyv.kategoria.nev,
+          elofordulas: 1,
+        };
+      }
 
+      return acc;
+    }, {});
+
+    const sortedBooks = Object.values(gate_books)
+      .sort((a, b) => b.elofordulas - a.elofordulas)
+      .slice(0, 10);
+
+    return res.json(sortedBooks);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
