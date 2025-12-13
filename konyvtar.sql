@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 13, 2025 at 09:57 AM
+-- Generation Time: Dec 13, 2025 at 10:11 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.26
 
@@ -343,40 +343,41 @@ CREATE TABLE `konyv` (
   `kolcsonozheto` tinyint(1) DEFAULT '1',
   `beszerzesi_ar` decimal(10,2) DEFAULT NULL,
   `kiadas_ev` smallint DEFAULT NULL,
-  `magassag_cm` decimal(5,2) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
+  `magassag_cm` decimal(5,2) DEFAULT NULL,
+  `csillag_ertekeles` decimal(2,1) DEFAULT '0.0'
+) ;
 
 --
 -- Dumping data for table `konyv`
 --
 
-INSERT INTO `konyv` (`id`, `cim`, `kep`, `leiras`, `szerzo_id`, `kiado_id`, `kategoria_id`, `ISBN`, `konyvtar_nyilvantartasi_szam`, `keszlet`, `kolcsonozheto`, `beszerzesi_ar`, `kiadas_ev`, `magassag_cm`) VALUES
-(1, 'Harry Potter és a bölcsek köve', 'harry_potter.jpg', 'Harry Potter első kalandjai a Roxfort Boszorkány- és Varázslóképző Szakiskolában', 1, 1, 2, '9789631196655', 'K001', 8, 1, 2990.00, 1999, 22.50),
-(2, '1984', '1984.jpg', 'Disztópikus regény a totalitárius társadalomról', 2, 2, 3, NULL, NULL, 3, 1, NULL, NULL, NULL),
-(3, 'A Gyűrűk Ura', 'gyuruk_ura.jpg', 'Epikus fantasy regény a Középföldéről', 3, 3, 2, '9789630752915', 'K003', 4, 1, 5990.00, 1954, 23.00),
-(4, 'A Szent Johanna-gyilkosságok', 'szent_johanna.jpg', 'Hercule Poirot nyomoz egy rejtélyes gyilkosság ügyében', 4, 4, 4, '9789634567890', 'K004', 2, 1, 1990.00, 1928, 19.50),
-(5, 'A beszélő köntös', 'beszelo_kontos.jpg', 'Történelmi regény a magyar történelem egy korszakáról', 6, 5, 6, '9789631234567', 'K005', 6, 1, 3490.00, 1899, 21.00),
-(6, 'Az arany ember', 'arany_ember.jpg', 'Jókai Mór klasszikus történelmi regénye', 8, 2, 6, '9789630765434', 'K006', 4, 1, 2790.00, 1872, 20.50),
-(7, 'Egri csillagok', NULL, 'Történelmi regény', 6, 1, 5, '9789630981234', 'KNYV001', 5, 1, 3990.00, 1901, 21.50),
-(8, '1984', NULL, 'Disztópikus regény', 7, 4, 2, '9789630981235', 'KNYV002', 3, 1, 3490.00, 1949, 20.00),
-(9, 'Harry Potter 1', NULL, 'Fantasy regény', 8, 3, 3, '9789630981236', 'KNYV003', 10, 1, 4990.00, 1997, 23.00),
-(10, 'A Gyűrűk Ura', NULL, 'Fantasy eposz', 9, 2, 3, '9789630981237', 'KNYV004', 4, 1, 6990.00, 1954, 24.50),
-(11, 'Tüskevár', NULL, 'Ifjúsági regény', 14, 3, 6, '9789630981238', 'KNYV005', 6, 1, 2990.00, 1957, 21.00),
-(12, 'Állatfarm', NULL, 'Politikai szatíra', 7, 4, 2, '9789630981239', 'KNYV006', 2, 1, 2490.00, 1945, 19.00),
-(13, 'A kis herceg', NULL, 'Filozófikus mese', 16, 17, 16, '9789630981240', 'KNYV007', 8, 1, 1990.00, 1943, 18.50),
-(14, 'Tíz kicsi néger', NULL, 'Krimi', 10, 5, 8, '9789630981241', 'KNYV008', 4, 1, 3290.00, 1939, 20.50),
-(15, 'A Pál utcai fiúk', NULL, 'Ifjúsági regény', 1, 3, 6, '9789630981242', 'KNYV009', 7, 1, 2890.00, 1907, 20.00),
-(16, 'Az ember tragédiája', NULL, 'Dráma', 2, 1, 20, '9789630981243', 'KNYV010', 3, 1, 2590.00, 1861, 22.00),
-(17, 'Inferno', NULL, 'Thriller', 12, 6, 9, '9789630981244', 'KNYV011', 5, 1, 4490.00, 2013, 23.00),
-(18, 'Ragyogás', NULL, 'Horror', 11, 10, 11, '9789630981245', 'KNYV012', 2, 1, 3990.00, 1977, 24.00),
-(19, 'Sapiens', NULL, 'Ismeretterjesztő', 13, 15, 4, '9789630981246', 'KNYV013', 6, 1, 5990.00, 2011, 23.50),
-(20, 'Bűn és bűnhődés', NULL, 'Regény', 18, 2, 1, '9789630981247', 'KNYV014', 3, 1, 3490.00, 1866, 22.50),
-(21, 'Idegen', NULL, 'Filozófiai regény', 19, 2, 15, '9789630981248', 'KNYV015', 4, 1, 2990.00, 1942, 20.00),
-(22, 'Emma', NULL, 'Romantikus regény', 20, 4, 10, '9789630981249', 'KNYV016', 5, 1, 2790.00, 1815, 21.00),
-(23, 'A varázsló', NULL, 'Fantasy', 9, 2, 3, '9789630981250', 'KNYV017', 2, 1, 4590.00, 1968, 23.00),
-(24, 'Micimackó', NULL, 'Gyermekmese', 15, 19, 7, '9789630981251', 'KNYV018', 9, 1, 1990.00, 1926, 18.00),
-(25, 'Verses mesék', NULL, 'Verses kötet', 15, 19, 18, '9789630981252', 'KNYV019', 6, 1, 1790.00, 1985, 19.00),
-(26, 'Novellák', NULL, 'Novellagyűjtemény', 3, 1, 19, '9789630981253', 'KNYV020', 4, 1, 2490.00, 1933, 20.50);
+INSERT INTO `konyv` (`id`, `cim`, `kep`, `leiras`, `szerzo_id`, `kiado_id`, `kategoria_id`, `ISBN`, `konyvtar_nyilvantartasi_szam`, `keszlet`, `kolcsonozheto`, `beszerzesi_ar`, `kiadas_ev`, `magassag_cm`, `csillag_ertekeles`) VALUES
+(1, 'Harry Potter és a bölcsek köve', 'harry_potter.jpg', 'Harry Potter első kalandjai a Roxfort Boszorkány- és Varázslóképző Szakiskolában', 1, 1, 2, '9789631196655', 'K001', 8, 1, 2990.00, 1999, 22.50, 0.0),
+(2, '1984', '1984.jpg', 'Disztópikus regény a totalitárius társadalomról', 2, 2, 3, NULL, NULL, 3, 1, NULL, NULL, NULL, 0.0),
+(3, 'A Gyűrűk Ura', 'gyuruk_ura.jpg', 'Epikus fantasy regény a Középföldéről', 3, 3, 2, '9789630752915', 'K003', 4, 1, 5990.00, 1954, 23.00, 0.0),
+(4, 'A Szent Johanna-gyilkosságok', 'szent_johanna.jpg', 'Hercule Poirot nyomoz egy rejtélyes gyilkosság ügyében', 4, 4, 4, '9789634567890', 'K004', 2, 1, 1990.00, 1928, 19.50, 0.0),
+(5, 'A beszélő köntös', 'beszelo_kontos.jpg', 'Történelmi regény a magyar történelem egy korszakáról', 6, 5, 6, '9789631234567', 'K005', 6, 1, 3490.00, 1899, 21.00, 0.0),
+(6, 'Az arany ember', 'arany_ember.jpg', 'Jókai Mór klasszikus történelmi regénye', 8, 2, 6, '9789630765434', 'K006', 4, 1, 2790.00, 1872, 20.50, 0.0),
+(7, 'Egri csillagok', NULL, 'Történelmi regény', 6, 1, 5, '9789630981234', 'KNYV001', 5, 1, 3990.00, 1901, 21.50, 0.0),
+(8, '1984', NULL, 'Disztópikus regény', 7, 4, 2, '9789630981235', 'KNYV002', 3, 1, 3490.00, 1949, 20.00, 0.0),
+(9, 'Harry Potter 1', NULL, 'Fantasy regény', 8, 3, 3, '9789630981236', 'KNYV003', 10, 1, 4990.00, 1997, 23.00, 0.0),
+(10, 'A Gyűrűk Ura', NULL, 'Fantasy eposz', 9, 2, 3, '9789630981237', 'KNYV004', 4, 1, 6990.00, 1954, 24.50, 0.0),
+(11, 'Tüskevár', NULL, 'Ifjúsági regény', 14, 3, 6, '9789630981238', 'KNYV005', 6, 1, 2990.00, 1957, 21.00, 0.0),
+(12, 'Állatfarm', NULL, 'Politikai szatíra', 7, 4, 2, '9789630981239', 'KNYV006', 2, 1, 2490.00, 1945, 19.00, 0.0),
+(13, 'A kis herceg', NULL, 'Filozófikus mese', 16, 17, 16, '9789630981240', 'KNYV007', 8, 1, 1990.00, 1943, 18.50, 0.0),
+(14, 'Tíz kicsi néger', NULL, 'Krimi', 10, 5, 8, '9789630981241', 'KNYV008', 4, 1, 3290.00, 1939, 20.50, 0.0),
+(15, 'A Pál utcai fiúk', NULL, 'Ifjúsági regény', 1, 3, 6, '9789630981242', 'KNYV009', 7, 1, 2890.00, 1907, 20.00, 0.0),
+(16, 'Az ember tragédiája', NULL, 'Dráma', 2, 1, 20, '9789630981243', 'KNYV010', 3, 1, 2590.00, 1861, 22.00, 0.0),
+(17, 'Inferno', NULL, 'Thriller', 12, 6, 9, '9789630981244', 'KNYV011', 5, 1, 4490.00, 2013, 23.00, 0.0),
+(18, 'Ragyogás', NULL, 'Horror', 11, 10, 11, '9789630981245', 'KNYV012', 2, 1, 3990.00, 1977, 24.00, 0.0),
+(19, 'Sapiens', NULL, 'Ismeretterjesztő', 13, 15, 4, '9789630981246', 'KNYV013', 6, 1, 5990.00, 2011, 23.50, 0.0),
+(20, 'Bűn és bűnhődés', NULL, 'Regény', 18, 2, 1, '9789630981247', 'KNYV014', 3, 1, 3490.00, 1866, 22.50, 0.0),
+(21, 'Idegen', NULL, 'Filozófiai regény', 19, 2, 15, '9789630981248', 'KNYV015', 4, 1, 2990.00, 1942, 20.00, 0.0),
+(22, 'Emma', NULL, 'Romantikus regény', 20, 4, 10, '9789630981249', 'KNYV016', 5, 1, 2790.00, 1815, 21.00, 0.0),
+(23, 'A varázsló', NULL, 'Fantasy', 9, 2, 3, '9789630981250', 'KNYV017', 2, 1, 4590.00, 1968, 23.00, 0.0),
+(24, 'Micimackó', NULL, 'Gyermekmese', 15, 19, 7, '9789630981251', 'KNYV018', 9, 1, 1990.00, 1926, 18.00, 0.0),
+(25, 'Verses mesék', NULL, 'Verses kötet', 15, 19, 18, '9789630981252', 'KNYV019', 6, 1, 1790.00, 1985, 19.00, 0.0),
+(26, 'Novellák', NULL, 'Novellagyűjtemény', 3, 1, 19, '9789630981253', 'KNYV020', 4, 1, 2490.00, 1933, 20.50, 0.0);
 
 -- --------------------------------------------------------
 
@@ -660,7 +661,7 @@ ALTER TABLE `kivansaglista`
 -- AUTO_INCREMENT for table `konyv`
 --
 ALTER TABLE `konyv`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `login_attempts`

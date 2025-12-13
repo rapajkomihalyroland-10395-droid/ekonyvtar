@@ -79,6 +79,7 @@ export const TopAuthor = async (req, res) => {
         acc[key] = {
           id: key,
           szerzo: book.konyv.szerzo.nev,
+          konyv: book.konyv.cim,
           elofordulas: 1,
         };
       }
@@ -95,3 +96,4 @@ export const TopAuthor = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
