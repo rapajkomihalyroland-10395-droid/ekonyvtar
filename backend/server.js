@@ -5,7 +5,7 @@ import router from "./routers/main.router.js";
 import cookieParser from "cookie-parser";
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

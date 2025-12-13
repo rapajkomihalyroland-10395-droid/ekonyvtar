@@ -22,7 +22,7 @@ const isRefreshTokenValid = (user) => {
   return user.jwt_token_expires_at > new Date();
 };
 
-const createRefreshToken = (user) => {
+export const createRefreshToken = (user) => {
   const token = jwt.sign(
     { email: user.email, role: user.admin },
     process.env.REFRESH_TOKEN_SECRET,
