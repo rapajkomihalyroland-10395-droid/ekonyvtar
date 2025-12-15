@@ -6,8 +6,13 @@ Top könyvek
 
 
 Könyv keresés
-Kivánságlista
 Vélemény
 Kölcsönzés
+Üzenet az adminnak 
+    -> Nem kölcsönözhető köynv (nincs készleten)
+    -> Könyv kérelmek
+
+
+     
 
 Új könyvek kérvényezése
