@@ -14,15 +14,15 @@ model berles {
   berles_kezdete DateTime?   @db.Date
   berles_vege    DateTime?   @db.Date
   visszahozva    Boolean?
-  felhasznalo    felhasznalo @relation(fields: [felhasznalo_id], references: [id], onUpdate: Restrict, map: "berles_ibfk_1")
-  konyv          konyv       @relation(fields: [konyv_id], references: [id], onUpdate: Restrict, map: "berles_ibfk_2")
+  felhasznalo    felhasznalo @relation(fields: [felhasznalo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "berles_ibfk_1")
+  konyv          konyv       @relation(fields: [konyv_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "berles_ibfk_2")
 
   @@index([felhasznalo_id], map: "felhasznalo_id")
   @@index([konyv_id], map: "konyv_id")
 }
 
 model felhasznalo {
-  id                      Int               @id @default(autoincrement())
+  id                      Int               @id @unique(map: "id") @default(autoincrement())
   nev                     String            @db.VarChar(100)
   belepesi_azonosito_hash String            @unique(map: "belepesi_azonosito_hash") @db.VarChar(255)
   telefonszam             String?           @db.VarChar(20)
@@ -34,10 +34,11 @@ model felhasznalo {
   felhasznalo_tipus_id    Int?
   email                   String            @unique(map: "email") @db.VarChar(255)
   jwt_token_expires_at    DateTime?         @db.DateTime(0)
+  jwt_refresh_token       String?           @db.VarChar(255)
   berles                  berles[]
-  iskola                  iskola?           @relation(fields: [iskola_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "felhasznalo_ibfk_1")
-  osztaly                 osztaly?          @relation(fields: [osztaly_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "felhasznalo_ibfk_2")
-  felhasznalotipus        felhasznalotipus? @relation(fields: [felhasznalo_tipus_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "felhasznalo_ibfk_3")
+  iskola                  iskola?           @relation(fields: [iskola_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "felhasznalo_ibfk_1")
+  osztaly                 osztaly?          @relation(fields: [osztaly_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "felhasznalo_ibfk_2")
+  felhasznalotipus        felhasznalotipus? @relation(fields: [felhasznalo_tipus_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "felhasznalo_ibfk_3")
   kivansaglista           kivansaglista[]
   velemeny                velemeny[]
 
@@ -80,8 +81,8 @@ model kivansaglista {
   felhasznalo_id   Int
   konyv_id         Int
   hozzaadas_datuma DateTime    @default(now()) @db.Timestamp(0)
-  felhasznalo      felhasznalo @relation(fields: [felhasznalo_id], references: [id], onUpdate: Restrict, map: "kivansaglista_ibfk_1")
-  konyv            konyv       @relation(fields: [konyv_id], references: [id], onUpdate: Restrict, map: "kivansaglista_ibfk_2")
+  felhasznalo      felhasznalo @relation(fields: [felhasznalo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "kivansaglista_ibfk_1")
+  konyv            konyv       @relation(fields: [konyv_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "kivansaglista_ibfk_2")
 
   @@index([felhasznalo_id], map: "felhasznalo_id")
   @@index([konyv_id], map: "konyv_id")
@@ -90,13 +91,13 @@ model kivansaglista {
 model konyv {
   id                           Int             @id @default(autoincrement())
   cim                          String          @db.VarChar(255)
-  kep                          String?         @db.VarChar(255)
+  kep                          String?         @unique(map: "kep") @db.VarChar(255)
   leiras                       String?         @db.VarChar(255)
   szerzo_id                    Int?
   kiado_id                     Int?
   kategoria_id                 Int?
   ISBN                         String?         @unique(map: "ISBN") @db.VarChar(13)
-  konyvtar_nyilvantartasi_szam String?         @db.VarChar(50)
+  konyvtar_nyilvantartasi_szam String?         @unique(map: "konyvtar_nyilvantartasi_szam") @db.VarChar(255)
   keszlet                      Int?            @default(1)
   kolcsonozheto                Boolean?        @default(true)
   beszerzesi_ar                Decimal?        @db.Decimal(10, 2)
@@ -105,9 +106,9 @@ model konyv {
   csillag_ertekeles            Decimal?        @default(0.0) @db.Decimal(2, 1)
   berles                       berles[]
   kivansaglista                kivansaglista[]
-  szerzo                       szerzo?         @relation(fields: [szerzo_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "konyv_ibfk_1")
-  kiado                        kiado?          @relation(fields: [kiado_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "konyv_ibfk_2")
-  kategoria                    kategoria?      @relation(fields: [kategoria_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "konyv_ibfk_3")
+  szerzo                       szerzo?         @relation(fields: [szerzo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "konyv_ibfk_1")
+  kiado                        kiado?          @relation(fields: [kiado_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "konyv_ibfk_2")
+  kategoria                    kategoria?      @relation(fields: [kategoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "konyv_ibfk_3")
   velemeny                     velemeny[]
 
   @@index([kategoria_id], map: "kategoria_id")
@@ -132,7 +133,7 @@ model osztaly {
   tagozat     String?       @db.VarChar(100)
   iskola_id   Int?
   felhasznalo felhasznalo[]
-  iskola      iskola?       @relation(fields: [iskola_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "osztaly_ibfk_1")
+  iskola      iskola?       @relation(fields: [iskola_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "osztaly_ibfk_1")
 
   @@index([iskola_id], map: "iskola_id")
 }
@@ -150,8 +151,8 @@ model velemeny {
   velemeny_szovege String?     @db.Text
   felhasznalo_id   Int
   konyv_id         Int
-  felhasznalo      felhasznalo @relation(fields: [felhasznalo_id], references: [id], onUpdate: Restrict, map: "velemeny_ibfk_1")
-  konyv            konyv       @relation(fields: [konyv_id], references: [id], onUpdate: Restrict, map: "velemeny_ibfk_2")
+  felhasznalo      felhasznalo @relation(fields: [felhasznalo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "velemeny_ibfk_1")
+  konyv            konyv       @relation(fields: [konyv_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "velemeny_ibfk_2")
 
   @@unique([felhasznalo_id, konyv_id], map: "felhasznalo_id")
   @@index([konyv_id], map: "konyv_id")

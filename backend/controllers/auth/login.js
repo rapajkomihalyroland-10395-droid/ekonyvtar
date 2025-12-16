@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import {
   UpdateAttempts,
   CreateAttemptsByDeviceId,
@@ -9,25 +8,27 @@ import {
   LockDevice,
 } from "../../helper/login.attemp.js";
 
-import { createRefreshToken } from "../../middlewares/auth.middleware.js";
+import {
+  createRefreshToken,
+  createAccessToken,
+  getAccessTokenExp,
+  getRefreshTokenDetail,
+} from "../../middlewares/auth.middleware.js";
 
 const prisma = new PrismaClient();
 
-const SALT_ROUNDS = process.env.SALT ? parseInt(process.env.SALT) : 10;
 const LOGIN_MAX_ATTEMPTS = process.env.LOGIN_MAX_ATTEMPTS
   ? parseInt(process.env.LOGIN_MAX_ATTEMPTS)
-  : 3;
+  : 10;
 
 export const Login = async (req, res) => {
   try {
     const { email, password, device_id } = req.body;
 
-
     if (!device_id) {
       return res.status(401).json({ message: "Nincs elérhető azonosító ID" });
     }
 
-    // Device lekérése vagy létrehozása
     let device = await prisma.login_attempts.findFirst({
       where: { device_id },
     });
@@ -35,7 +36,6 @@ export const Login = async (req, res) => {
       device = await CreateAttemptsByDeviceId(device_id);
     }
 
-    // Lock ellenőrzés
     if (IsLockedOut(device)) {
       return res.status(429).json({
         message:
@@ -43,7 +43,6 @@ export const Login = async (req, res) => {
       });
     }
 
-    // Felhasználó lekérdezése
     const user = await prisma.felhasznalo.findFirst({ where: { email } });
 
     if (!user) {
@@ -56,10 +55,9 @@ export const Login = async (req, res) => {
       return res.status(401).json({ message: "Felhasználó nem található" });
     }
 
-    // 🔥 HELYES JELSZÓ ELLENŐRZÉS  
     const passwordMatch = await bcrypt.compare(
-      password,                       // sima jelszó
-      user.belepesi_azonosito_hash    // adatbázisból hash
+      password,
+      user.belepesi_azonosito_hash
     );
 
     if (!passwordMatch) {
@@ -74,9 +72,12 @@ export const Login = async (req, res) => {
         .json({ message: "Helytelen felhasználónév vagy jelszó" });
     }
 
-    // Refresh token ellenőrzés / generálás
-    let token = req.cookies.refresh_token;
-    let expiresAt = user.jwt_token_expires_at;
+    let AccessToken = req.header.authorization;
+    let AccessTokenExpiresAt = getAccessTokenExp(AccessToken);
+
+    const token = getRefreshTokenDetail(user);
+    let RefreshToken = token.refresh_token;
+    let RefreshTokenExpiresAt = token.exp;
 
     if (!token || !expiresAt || new Date(expiresAt) <= new Date()) {
       const newToken = createRefreshToken(user);
@@ -101,7 +102,6 @@ export const Login = async (req, res) => {
     await SuccessLoginWithDeviceId(device_id);
 
     res.status(200).json({ message: "Sikeres bejelentkezés" });
-
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Belépési hiba: " + err.message });

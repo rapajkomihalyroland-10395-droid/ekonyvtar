@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { objectEnumValues } from "@prisma/client/runtime/library";
 
 const prisma = new PrismaClient();
 
@@ -172,4 +171,3 @@ export const TopByCategory = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
-

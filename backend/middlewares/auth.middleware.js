@@ -2,7 +2,8 @@ import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
-const REFRESH_TOKEN_LIFETIME_MS = 7 * 24 * 60 * 60 * 1000;
+const REFRESH_TOKEN_LIFETIME_MS = 7 * 24 * 60 * 60 * 1000; //7 nap
+const ACCESS_TOKEN_LIFETIME_MS = 15 * 60 * 1000; // 15 perc
 
 const verifyRefreshToken = (token) => {
   try {
@@ -22,14 +23,47 @@ const isRefreshTokenValid = (user) => {
   return user.jwt_token_expires_at > new Date();
 };
 
+export const getAccessTokenExp = (accessToken) => {
+  const decode = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+
+  const exp = decode.exp * 1000;
+
+  return exp;
+};
+
+export const getRefreshTokenDetail = () => {
+  const result = prisma.felhasznalo.findUnique({
+    where: { id: user.id },
+  });
+
+  const refresh_token = result.jwt_refresh_token;
+  const exp = result.jwt_token_expires_at;
+
+  return { refresh_token, exp };
+};
+
+export const createAccessToken = (user) => {
+  const AccessToken = jwt.sign(
+    { id: user.id },
+    process.env.REFRESH_TOKEN_SECRET,
+    { expiresIn: "15m" }
+  );
+
+  const AccessTokenExpiresAt = new Date(Date.now() + ACCESS_TOKEN_LIFETIME_MS);
+
+  return { AccessToken, AccessTokenExpiresAt };
+};
+
 export const createRefreshToken = (user) => {
-  const token = jwt.sign(
-    { email: user.email, role: user.admin },
+  const RefreshToken = jwt.sign(
+    { id: user.id },
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: "7d" }
   );
-  const expires_at = new Date(Date.now() + REFRESH_TOKEN_LIFETIME_MS);
-  return { token, expires_at };
+  const RefreshTokenExpiresAt = new Date(
+    Date.now() + REFRESH_TOKEN_LIFETIME_MS
+  );
+  return { RefreshToken, RefreshTokenExpiresAt };
 };
 
 export const AuthMiddleware = async (req, res, next) => {
