@@ -22,25 +22,27 @@ model berles {
 }
 
 model felhasznalo {
-  id                      Int               @id @unique(map: "id") @default(autoincrement())
-  nev                     String            @db.VarChar(100)
-  belepesi_azonosito_hash String            @unique(map: "belepesi_azonosito_hash") @db.VarChar(255)
-  telefonszam             String?           @db.VarChar(20)
-  szuletesi_datum         DateTime?         @db.Date
-  lakcim                  String?           @db.VarChar(255)
-  admin                   Boolean?          @default(false)
-  iskola_id               Int?
-  osztaly_id              Int?
-  felhasznalo_tipus_id    Int?
-  email                   String            @unique(map: "email") @db.VarChar(255)
-  jwt_token_expires_at    DateTime?         @db.DateTime(0)
-  jwt_refresh_token       String?           @db.VarChar(255)
-  berles                  berles[]
-  iskola                  iskola?           @relation(fields: [iskola_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "felhasznalo_ibfk_1")
-  osztaly                 osztaly?          @relation(fields: [osztaly_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "felhasznalo_ibfk_2")
-  felhasznalotipus        felhasznalotipus? @relation(fields: [felhasznalo_tipus_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "felhasznalo_ibfk_3")
-  kivansaglista           kivansaglista[]
-  velemeny                velemeny[]
+  id                                        Int               @id @unique(map: "id") @default(autoincrement())
+  nev                                       String            @db.VarChar(100)
+  belepesi_azonosito_hash                   String            @unique(map: "belepesi_azonosito_hash") @db.VarChar(255)
+  telefonszam                               String?           @db.VarChar(20)
+  szuletesi_datum                           DateTime?         @db.Date
+  lakcim                                    String?           @db.VarChar(255)
+  admin                                     Boolean?          @default(false)
+  iskola_id                                 Int?
+  osztaly_id                                Int?
+  felhasznalo_tipus_id                      Int?
+  email                                     String            @unique(map: "email") @db.VarChar(255)
+  jwt_token_expires_at                      DateTime?         @db.DateTime(0)
+  jwt_refresh_token                         String?           @db.VarChar(255)
+  berles                                    berles[]
+  iskola                                    iskola?           @relation(fields: [iskola_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "felhasznalo_ibfk_1")
+  osztaly                                   osztaly?          @relation(fields: [osztaly_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "felhasznalo_ibfk_2")
+  felhasznalotipus                          felhasznalotipus? @relation(fields: [felhasznalo_tipus_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "felhasznalo_ibfk_3")
+  konyv_kerelem                             konyv_kerelem[]
+  uzenetek_uzenetek_cimzett_idTofelhasznalo uzenetek[]        @relation("uzenetek_cimzett_idTofelhasznalo")
+  uzenetek_uzenetek_felado_idTofelhasznalo  uzenetek[]        @relation("uzenetek_felado_idTofelhasznalo")
+  velemeny                                  velemeny[]
 
   @@index([felhasznalo_tipus_id], map: "felhasznalo_tipus_id")
   @@index([iskola_id], map: "iskola_id")
@@ -48,12 +50,14 @@ model felhasznalo {
 }
 
 model felhasznalotipus {
-  id                Int           @id @default(autoincrement())
-  megnevezes        String        @unique(map: "megnevezes") @db.VarChar(100)
-  leiras            String?       @db.Text
-  max_kolcsonzes    Int?          @default(5)
-  max_idotartam_nap Int?          @default(30)
-  felhasznalo       felhasznalo[]
+  id                                                   Int           @id @default(autoincrement())
+  megnevezes                                           String        @unique(map: "megnevezes") @db.VarChar(100)
+  leiras                                               String?       @db.Text
+  max_kolcsonzes                                       Int?          @default(5)
+  max_idotartam_nap                                    Int?          @default(30)
+  felhasznalo                                          felhasznalo[]
+  uzenetek_uzenetek_cimzett_tipus_idTofelhasznalotipus uzenetek[]    @relation("uzenetek_cimzett_tipus_idTofelhasznalotipus")
+  uzenetek_uzenetek_felado_tipus_idTofelhasznalotipus  uzenetek[]    @relation("uzenetek_felado_tipus_idTofelhasznalotipus")
 }
 
 model iskola {
@@ -76,18 +80,6 @@ model kiado {
   konyv    konyv[]
 }
 
-model kivansaglista {
-  id               Int         @id @default(autoincrement())
-  felhasznalo_id   Int
-  konyv_id         Int
-  hozzaadas_datuma DateTime    @default(now()) @db.Timestamp(0)
-  felhasznalo      felhasznalo @relation(fields: [felhasznalo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "kivansaglista_ibfk_1")
-  konyv            konyv       @relation(fields: [konyv_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "kivansaglista_ibfk_2")
-
-  @@index([felhasznalo_id], map: "felhasznalo_id")
-  @@index([konyv_id], map: "konyv_id")
-}
-
 model konyv {
   id                           Int             @id @default(autoincrement())
   cim                          String          @db.VarChar(255)
@@ -105,10 +97,10 @@ model konyv {
   magassag_cm                  Decimal?        @db.Decimal(5, 2)
   csillag_ertekeles            Decimal?        @default(0.0) @db.Decimal(2, 1)
   berles                       berles[]
-  kivansaglista                kivansaglista[]
   szerzo                       szerzo?         @relation(fields: [szerzo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "konyv_ibfk_1")
   kiado                        kiado?          @relation(fields: [kiado_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "konyv_ibfk_2")
   kategoria                    kategoria?      @relation(fields: [kategoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "konyv_ibfk_3")
+  konyv_kerelem                konyv_kerelem[]
   velemeny                     velemeny[]
 
   @@index([kategoria_id], map: "kategoria_id")
@@ -156,4 +148,47 @@ model velemeny {
 
   @@unique([felhasznalo_id, konyv_id], map: "felhasznalo_id")
   @@index([konyv_id], map: "konyv_id")
+}
+
+model konyv_kerelem {
+  id             Int         @id @default(autoincrement())
+  felhasznalo_id Int
+  konyv_id       Int?
+  cim            String      @db.VarChar(255)
+  szerzo         String?     @db.VarChar(255)
+  kiado          String?     @db.VarChar(255)
+  ISBN           String?     @db.VarChar(13)
+  megjegyzes     String?     @db.Text
+  allapot        String      @default("FUGGO") @db.VarChar(50)
+  admin_valasz   String?     @db.Text
+  letrehozva     DateTime    @default(now()) @db.DateTime(0)
+  elbiralva      DateTime?   @db.DateTime(0)
+  felhasznalo    felhasznalo @relation(fields: [felhasznalo_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_kerelem_felhasznalo")
+  konyv          konyv?      @relation(fields: [konyv_id], references: [id], onUpdate: NoAction, map: "fk_kerelem_konyv")
+
+  @@index([felhasznalo_id], map: "fk_kerelem_felhasznalo")
+  @@index([konyv_id], map: "fk_kerelem_konyv")
+}
+
+model uzenetek {
+  id                                                           Int              @id @default(autoincrement())
+  felado_id                                                    Int
+  cimzett_id                                                   Int
+  felado_tipus_id                                              Int
+  cimzett_tipus_id                                             Int
+  uzenet_tipus                                                 String           @db.VarChar(100)
+  uzenet_tartalom                                              String           @db.Text
+  allapot                                                      String           @db.VarChar(50)
+  kapcsolodo_elem_id                                           Int?
+  letrehozva                                                   DateTime         @default(now()) @db.DateTime(0)
+  olvasva                                                      DateTime?        @db.DateTime(0)
+  felhasznalo_uzenetek_cimzett_idTofelhasznalo                 felhasznalo      @relation("uzenetek_cimzett_idTofelhasznalo", fields: [cimzett_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_uzenetek_cimzett")
+  felhasznalotipus_uzenetek_cimzett_tipus_idTofelhasznalotipus felhasznalotipus @relation("uzenetek_cimzett_tipus_idTofelhasznalotipus", fields: [cimzett_tipus_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_uzenetek_cimzett_tipus")
+  felhasznalo_uzenetek_felado_idTofelhasznalo                  felhasznalo      @relation("uzenetek_felado_idTofelhasznalo", fields: [felado_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_uzenetek_felado")
+  felhasznalotipus_uzenetek_felado_tipus_idTofelhasznalotipus  felhasznalotipus @relation("uzenetek_felado_tipus_idTofelhasznalotipus", fields: [felado_tipus_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_uzenetek_felado_tipus")
+
+  @@index([cimzett_id], map: "fk_uzenetek_cimzett")
+  @@index([cimzett_tipus_id], map: "fk_uzenetek_cimzett_tipus")
+  @@index([felado_id], map: "fk_uzenetek_felado")
+  @@index([felado_tipus_id], map: "fk_uzenetek_felado_tipus")
 }
