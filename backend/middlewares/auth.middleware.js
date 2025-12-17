@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 const REFRESH_TOKEN_LIFETIME_MS = 7 * 24 * 60 * 60 * 1000; // 7 nap
 const ACCESS_TOKEN_LIFETIME_MS = 15 * 60 * 1000; // 15 perc (ajánlott)
 
-const verifyRefreshToken = (token) => {
+const verifyRefreshToken = async (token) => {
   try {
     return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
   } catch (err) {
@@ -14,9 +14,8 @@ const verifyRefreshToken = (token) => {
   }
 };
 
-const verifyAccessToken = (token) => {
+const verifyAccessToken = async (token) => {
   try {
-    // Távolítsuk el a "Bearer " előtagot, ha van
     const cleanToken = token.replace("Bearer ", "");
     return jwt.verify(cleanToken, process.env.ACCESS_TOKEN_SECRET);
   } catch (err) {
@@ -27,7 +26,7 @@ const verifyAccessToken = (token) => {
 
 export const getAccessTokenExp = async (accessToken) => {
   try {
-    const decoded = verifyAccessToken(accessToken);
+    const decoded = await verifyAccessToken(accessToken);
     return new Date(decoded.exp * 1000); // exp másodpercben van, át kell váltani ms-ra
   } catch (error) {
     console.error("getAccessTokenExp error:", error.message);
@@ -109,72 +108,105 @@ export const createRefreshToken = async (user) => {
 
 export const AuthMiddleware = async (req, res, next) => {
   try {
-    let token = req.cookies.refresh_token || req.header("x-refresh-token");
+    const authHeader = req.headers.authorization;
 
-    if (!token) {
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({
-        message: "Nincs elérhető refresh token",
+        message: "Nincs érvényes hozzáférési token. Bearer token szükséges.",
       });
     }
 
-    let payload;
+    const accessToken = authHeader.split(" ")[1];
+
+    let accessTokenPayload;
     try {
-      payload = verifyRefreshToken(token);
-    } catch (err) {
-      return res.status(401).json({
-        message: "Érvénytelen refresh token",
+      accessTokenPayload = await verifyAccessToken(accessToken);
+
+      const user = await prisma.felhasznalo.findFirst({
+        where: { id: accessTokenPayload.id },
       });
-    }
 
-    const user = await prisma.felhasznalo.findFirst({
-      where: { email: payload.email },
-    });
+      if (!user) {
+        return res.status(401).json({
+          message: "Felhasználó nem található",
+        });
+      }
 
-    if (!user) {
-      return res.status(401).json({
-        message: "Felhasználó nem található",
+      req.headers.authorization = `Bearer ${accessToken}`; // Megőrizzük az eredeti tokent
+      return next();
+    } catch (accessTokenError) {
+      let userId;
+      try {
+        const decodedWithoutVerify = jwt.decode(accessToken);
+        if (!decodedWithoutVerify || !decodedWithoutVerify.id) {
+          return res.status(401).json({
+            message: "Érvénytelen token formátum",
+          });
+        }
+        userId = decodedWithoutVerify.id;
+      } catch (decodeError) {
+        return res.status(401).json({
+          message: "Token dekódolási hiba",
+        });
+      }
+
+      const user = await prisma.felhasznalo.findFirst({
+        where: { id: userId },
       });
+
+      if (!user) {
+        return res.status(401).json({
+          message: "Felhasználó nem található",
+        });
+      }
+
+      const dbRefreshToken = user.jwt_refresh_token;
+      const dbRefreshTokenExpiresAt = user.jwt_token_expires_at
+        ? new Date(user.jwt_token_expires_at)
+        : null;
+
+      if (
+        !dbRefreshToken ||
+        !dbRefreshTokenExpiresAt ||
+        dbRefreshTokenExpiresAt <= new Date()
+      ) {
+        return res.status(401).json({
+          message: "Munkamenet lejárt. Kérjük, jelentkezzen be újra.",
+          code: "REFRESH_TOKEN_EXPIRED",
+          requiresLogin: true,
+        });
+      }
+
+      try {
+        await verifyRefreshToken(dbRefreshToken);
+      } catch (refreshTokenError) {
+        return res.status(401).json({
+          message: "Munkamenet lejárt. Kérjük, jelentkezzen be újra.",
+          code: "REFRESH_TOKEN_INVALID",
+          requiresLogin: true,
+        });
+      }
+
+      const { AccessToken, AccessTokenExpiresAt } = await createAccessToken(
+        user
+      );
+
+      req.headers.authorization = `Bearer ${AccessToken}`;
+
+      return next();
     }
-
-    // Ellenőrizzük, hogy a refresh token még érvényes-e
-    const expiresAt = user.jwt_token_expires_at
-      ? new Date(user.jwt_token_expires_at)
-      : null;
-
-    if (!expiresAt || expiresAt <= new Date()) {
-      // Ha lejárt, új refresh tokent generálunk
-      const newToken = await createRefreshToken(user);
-      token = newToken.RefreshToken;
-
-      // Frissítjük az adatbázisban
-      await prisma.felhasznalo.update({
-        where: { email: user.email },
-        data: {
-          jwt_token_expires_at: newToken.RefreshTokenExpiresAt,
-          jwt_refresh_token: newToken.RefreshToken,
-        },
-      });
-    }
-
-    // Access token generálása mindenképp
-    const { AccessToken } = await createAccessToken(user);
-
-    // Beállítjuk a headert
-    req.headers.authorization = `Bearer ${AccessToken}`;
-    req.user = user;
-
-    // Cookie beállítása (ha cookie-t használsz)
-    res.cookie("refresh_token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: REFRESH_TOKEN_LIFETIME_MS,
-    });
-
-    next();
   } catch (err) {
     console.error("AuthMiddleware error:", err);
-    res.status(500).json({
+
+    if (err instanceof jwt.JsonWebTokenError) {
+      return res.status(401).json({
+        message: "Érvénytelen token",
+        details:
+          process.env.NODE_ENV === "development" ? err.message : undefined,
+      });
+    }
+
+    return res.status(500).json({
       error: "Hitelesítési hiba",
       details: process.env.NODE_ENV === "development" ? err.message : undefined,
     });
