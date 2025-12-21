@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 16, 2025 at 03:17 PM
+-- Generation Time: Dec 21, 2025 at 10:29 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.26
 
@@ -145,11 +145,12 @@ CREATE TABLE `felhasznalo` (
 --
 
 INSERT INTO `felhasznalo` (`id`, `nev`, `belepesi_azonosito_hash`, `telefonszam`, `szuletesi_datum`, `lakcim`, `admin`, `iskola_id`, `osztaly_id`, `felhasznalo_tipus_id`, `email`, `jwt_token_expires_at`, `jwt_refresh_token`) VALUES
-(1, 'Kovács János', '$2y$10$abc123', '+3612345678', '2008-05-15', 'Budapest, Fő utca 1.', 0, 1, 1, 1, 'kovacs.janos@example.com', NULL, NULL),
+(1, 'Kovács János', '$2a$10$fKyT4XU0HCoLGsgUTN.XterJYoDZh8aX6qA0Yr0.3QIEKdzMqTUeia', '+3612345678', '2008-05-15', 'Budapest, Fő utca 1.', 0, 1, 1, 1, 'kovacs.janos@example.com', NULL, NULL),
 (2, 'Nagy Eszter', '$2y$10$def456', '+3623456789', '2007-11-22', 'Budapest, Kossuth tér 5.', 0, 2, 2, 2, 'nagy.eszter@example.com', NULL, NULL),
 (3, 'Kis Péter', '$2y$10$ghi789', '+3634567890', '2005-03-10', 'Budapest, Petőfi utca 10.', 0, 3, 3, 2, 'kis.peter@example.com', NULL, NULL),
 (4, 'Tóth Anna', '$2y$10$jkl012', '+3645678901', '2004-08-30', 'Budapest, Rákóczi út 15.', 1, 2, 4, 3, 'toth.anna@example.com', NULL, NULL),
-(5, 'Szabó Gábor', '$2y$10$mno345', '+3656789012', '2009-01-25', 'Budapest, Andrássy út 20.', 0, 1, 1, 1, 'szabo.gabor@example.com', NULL, NULL);
+(5, 'Szabó Gábor', '$2y$10$mno345', '+3656789012', '2009-01-25', 'Budapest, Andrássy út 20.', 0, 1, 1, 1, 'szabo.gabor@example.com', NULL, NULL),
+(18, 'Kovács János', '$2a$10$fKyT4XU0HCoLGsgUTN.XterJYoDZh8aX6qA0Yr0.3QIEKdzMqTUei', '+3612345678', '2008-05-15', 'Budapest, Fő utca 1.', 0, 1, 1, 1, 'kovacs@example.com', '2025-12-23 19:23:43', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTgsImlhdCI6MTc2NTkxMzAyMiwiZXhwIjoxNzY2NTE3ODIyfQ.EFz2nfFZ1gSsZdA-wBWKztivN3xhZSOqBjtUX8vrlXQ');
 
 -- --------------------------------------------------------
 
@@ -304,7 +305,7 @@ CREATE TABLE `konyv` (
   `kiadas_ev` smallint DEFAULT NULL,
   `magassag_cm` decimal(5,2) DEFAULT NULL,
   `csillag_ertekeles` decimal(2,1) DEFAULT '0.0'
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
 -- Dumping data for table `konyv`
@@ -415,33 +416,12 @@ INSERT INTO `konyv` (`id`, `cim`, `kep`, `leiras`, `szerzo_id`, `kiado_id`, `kat
 -- --------------------------------------------------------
 
 --
--- Table structure for table `konyv_kerelem`
---
-
-CREATE TABLE `konyv_kerelem` (
-  `id` int NOT NULL,
-  `felhasznalo_id` int NOT NULL,
-  `konyv_id` int DEFAULT NULL,
-  `cim` varchar(255) COLLATE utf8mb3_hungarian_ci NOT NULL,
-  `szerzo` varchar(255) COLLATE utf8mb3_hungarian_ci DEFAULT NULL,
-  `kiado` varchar(255) COLLATE utf8mb3_hungarian_ci DEFAULT NULL,
-  `ISBN` varchar(13) COLLATE utf8mb3_hungarian_ci DEFAULT NULL,
-  `megjegyzes` text COLLATE utf8mb3_hungarian_ci,
-  `allapot` varchar(50) COLLATE utf8mb3_hungarian_ci NOT NULL DEFAULT 'FUGGO',
-  `admin_valasz` text COLLATE utf8mb3_hungarian_ci,
-  `letrehozva` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `elbiralva` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_hungarian_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `login_attempts`
 --
 
 CREATE TABLE `login_attempts` (
   `id` int NOT NULL,
-  `device_id` varchar(255) COLLATE utf8mb4_hungarian_ci NOT NULL,
+  `device_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_hungarian_ci NOT NULL,
   `success` tinyint(1) NOT NULL DEFAULT '0',
   `lockout_until` datetime DEFAULT NULL,
   `attempts_count` int NOT NULL DEFAULT '0'
@@ -452,7 +432,6 @@ CREATE TABLE `login_attempts` (
 --
 
 INSERT INTO `login_attempts` (`id`, `device_id`, `success`, `lockout_until`, `attempts_count`) VALUES
-(1, 'device_12345', 1, NULL, 0),
 (2, 'device_67890', 0, '2025-12-06 20:30:00', 3);
 
 -- --------------------------------------------------------
@@ -552,17 +531,21 @@ INSERT INTO `szerzo` (`id`, `nev`) VALUES
 
 CREATE TABLE `uzenetek` (
   `id` int NOT NULL,
-  `felado_id` int NOT NULL,
-  `cimzett_id` int NOT NULL,
-  `felado_tipus_id` int NOT NULL,
-  `cimzett_tipus_id` int NOT NULL,
-  `uzenet_tipus` varchar(100) COLLATE utf8mb4_hungarian_ci NOT NULL,
-  `uzenet_tartalom` text COLLATE utf8mb4_hungarian_ci NOT NULL,
-  `allapot` varchar(50) COLLATE utf8mb4_hungarian_ci NOT NULL,
-  `kapcsolodo_elem_id` int DEFAULT NULL,
-  `letrehozva` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `olvasva` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
+  `user_id` int NOT NULL,
+  `cimzett_szerepkor` enum('ADMIN','DIAK','TANAR') NOT NULL,
+  `uzenet_tipus` varchar(100) NOT NULL,
+  `uzenet_tartalom` text NOT NULL,
+  `cimzett_ids` text,
+  `allapot` varchar(50) DEFAULT 'UJ',
+  `letrehozva` datetime DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `uzenetek`
+--
+
+INSERT INTO `uzenetek` (`id`, `user_id`, `cimzett_szerepkor`, `uzenet_tipus`, `uzenet_tartalom`, `cimzett_ids`, `allapot`, `letrehozva`) VALUES
+(1, 18, 'ADMIN', 'Kérelem', 'A felhasználó könyvkérést szeretne leadni.', '', 'Megnézendő', '2025-12-21 10:15:33');
 
 -- --------------------------------------------------------
 
@@ -573,10 +556,10 @@ CREATE TABLE `uzenetek` (
 CREATE TABLE `velemeny` (
   `id` int NOT NULL,
   `velemeny_erteke` int DEFAULT NULL,
-  `velemeny_szovege` text CHARACTER SET utf8mb4 COLLATE utf8mb4_hungarian_ci,
+  `velemeny_szovege` text COLLATE utf8mb4_hungarian_ci,
   `felhasznalo_id` int NOT NULL,
   `konyv_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf32 COLLATE=utf32_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
 -- Dumping data for table `velemeny`
@@ -585,7 +568,8 @@ CREATE TABLE `velemeny` (
 INSERT INTO `velemeny` (`id`, `velemeny_erteke`, `velemeny_szovege`, `felhasznalo_id`, `konyv_id`) VALUES
 (1, 5, 'Nagyon tetszett, izgalmas történet!', 1, 1),
 (2, 4, 'Érdekes könyv, de kicsit nehéz volt.', 2, 3),
-(3, 5, 'Klasszikus, mindenkinek ajánlom!', 3, 2);
+(3, 5, 'Klasszikus, mindenkinek ajánlom!', 3, 2),
+(4, 4, 'Test vélemény', 18, 1);
 
 --
 -- Indexes for dumped tables
@@ -604,10 +588,8 @@ ALTER TABLE `berles`
 --
 ALTER TABLE `felhasznalo`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `belepesi_azonosito_hash` (`belepesi_azonosito_hash`),
   ADD UNIQUE KEY `email` (`email`),
-  ADD UNIQUE KEY `email_2` (`email`),
-  ADD UNIQUE KEY `id` (`id`),
+  ADD UNIQUE KEY `belepesi_azonosito_hash` (`belepesi_azonosito_hash`),
   ADD KEY `iskola_id` (`iskola_id`),
   ADD KEY `osztaly_id` (`osztaly_id`),
   ADD KEY `felhasznalo_tipus_id` (`felhasznalo_tipus_id`);
@@ -644,18 +626,9 @@ ALTER TABLE `konyv`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `ISBN` (`ISBN`),
   ADD UNIQUE KEY `konyvtar_nyilvantartasi_szam` (`konyvtar_nyilvantartasi_szam`),
-  ADD UNIQUE KEY `kep` (`kep`),
   ADD KEY `szerzo_id` (`szerzo_id`),
   ADD KEY `kiado_id` (`kiado_id`),
   ADD KEY `kategoria_id` (`kategoria_id`);
-
---
--- Indexes for table `konyv_kerelem`
---
-ALTER TABLE `konyv_kerelem`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_kerelem_felhasznalo` (`felhasznalo_id`),
-  ADD KEY `fk_kerelem_konyv` (`konyv_id`);
 
 --
 -- Indexes for table `login_attempts`
@@ -683,18 +656,15 @@ ALTER TABLE `szerzo`
 --
 ALTER TABLE `uzenetek`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_uzenetek_felado` (`felado_id`),
-  ADD KEY `fk_uzenetek_cimzett` (`cimzett_id`),
-  ADD KEY `fk_uzenetek_felado_tipus` (`felado_tipus_id`),
-  ADD KEY `fk_uzenetek_cimzett_tipus` (`cimzett_tipus_id`);
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `velemeny`
 --
 ALTER TABLE `velemeny`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `felhasznalo_id` (`felhasznalo_id`,`konyv_id`),
-  ADD KEY `konyv_id` (`konyv_id`);
+  ADD UNIQUE KEY `unique_velemeny` (`felhasznalo_id`,`konyv_id`),
+  ADD KEY `velemeny_ibfk_2` (`konyv_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -710,7 +680,7 @@ ALTER TABLE `berles`
 -- AUTO_INCREMENT for table `felhasznalo`
 --
 ALTER TABLE `felhasznalo`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `felhasznalotipus`
@@ -740,19 +710,13 @@ ALTER TABLE `kiado`
 -- AUTO_INCREMENT for table `konyv`
 --
 ALTER TABLE `konyv`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `konyv_kerelem`
---
-ALTER TABLE `konyv_kerelem`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
 
 --
 -- AUTO_INCREMENT for table `login_attempts`
 --
 ALTER TABLE `login_attempts`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `osztaly`
@@ -770,13 +734,13 @@ ALTER TABLE `szerzo`
 -- AUTO_INCREMENT for table `uzenetek`
 --
 ALTER TABLE `uzenetek`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `velemeny`
 --
 ALTER TABLE `velemeny`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
@@ -806,26 +770,10 @@ ALTER TABLE `konyv`
   ADD CONSTRAINT `konyv_ibfk_3` FOREIGN KEY (`kategoria_id`) REFERENCES `kategoria` (`id`);
 
 --
--- Constraints for table `konyv_kerelem`
---
-ALTER TABLE `konyv_kerelem`
-  ADD CONSTRAINT `fk_kerelem_felhasznalo` FOREIGN KEY (`felhasznalo_id`) REFERENCES `felhasznalo` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_kerelem_konyv` FOREIGN KEY (`konyv_id`) REFERENCES `konyv` (`id`) ON DELETE SET NULL;
-
---
--- Constraints for table `osztaly`
---
-ALTER TABLE `osztaly`
-  ADD CONSTRAINT `osztaly_ibfk_1` FOREIGN KEY (`iskola_id`) REFERENCES `iskola` (`id`);
-
---
 -- Constraints for table `uzenetek`
 --
 ALTER TABLE `uzenetek`
-  ADD CONSTRAINT `fk_uzenetek_cimzett` FOREIGN KEY (`cimzett_id`) REFERENCES `felhasznalo` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_uzenetek_cimzett_tipus` FOREIGN KEY (`cimzett_tipus_id`) REFERENCES `felhasznalotipus` (`id`),
-  ADD CONSTRAINT `fk_uzenetek_felado` FOREIGN KEY (`felado_id`) REFERENCES `felhasznalo` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_uzenetek_felado_tipus` FOREIGN KEY (`felado_tipus_id`) REFERENCES `felhasznalotipus` (`id`);
+  ADD CONSTRAINT `uzenetek_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `felhasznalo` (`id`);
 
 --
 -- Constraints for table `velemeny`
