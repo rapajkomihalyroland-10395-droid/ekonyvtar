@@ -6,11 +6,10 @@ Top könyvek
 
 
 [x] Könyv keresés 
-Vélemény
-Kölcsönzés
+[x] Vélemény
+[x] Kölcsönzés
 Üzenet az adminnak 
-    -> Nem kölcsönözhető köynv (nincs készleten)
-    -> Könyv kérelmek
+    -> [x] Könyv kérelmek
 
 [x] Access token useContext-el
 [x] Refresh token adatbázisban

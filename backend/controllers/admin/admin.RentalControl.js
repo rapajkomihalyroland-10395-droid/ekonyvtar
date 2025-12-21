@@ -45,19 +45,34 @@ export const GetARentalByID = async (req, res) => {
   try {
     const { felhasznalo_id } = req.params;
 
-    console.log(Number(felhasznalo_id))
+    console.log(Number(felhasznalo_id));
 
     const IsUserHaveRental = await prisma.berles.findMany({
-      where: {felhasznalo_id : Number(felhasznalo_id)},
+      where: { felhasznalo_id: Number(felhasznalo_id) },
       include: {
-        konyv: true
-      }
-    })
+        konyv: true,
+      },
+    });
 
-    return res.json({IsUserHaveRental});
-
-
+    return res.json({ IsUserHaveRental });
   } catch (error) {
     return res.status(200).json({ message: error.message });
+  }
+};
+
+export const BookLoan = async (req, res) => {
+  try {
+    const { user_id, book_id, end_loan } = req.body;
+
+    
+
+    if (!book)
+      return res
+        .status(400)
+        .json({ message: "Ez a könyv már nem található rendszerünkben" });
+
+    
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
   }
 };
