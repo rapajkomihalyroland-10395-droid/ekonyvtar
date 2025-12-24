@@ -11,7 +11,7 @@ export const UpdateAttempts = async (device_id) => {
 
 export const CreateAttemptsByDeviceId = async (device_id) => {
   return await prisma.login_attempts.create({
-    data: { device_id, attempts_count: 1, success: false },
+    data: { device_id, attempts_count: 0, success: false },
   });
 };
 

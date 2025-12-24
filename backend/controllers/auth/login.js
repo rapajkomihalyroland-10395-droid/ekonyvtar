@@ -18,6 +18,13 @@ import {
 
 const prisma = new PrismaClient();
 
+/**
+ * $2b$10$dt0HYvPips8VfNMFC/kBp.NH82hZgRf6bnIfQQr1ms5AJ5flsPBWK
+ *
+ * kovacs@example.com
+ * test123
+ */
+
 const LOGIN_MAX_ATTEMPTS = process.env.LOGIN_MAX_ATTEMPTS
   ? parseInt(process.env.LOGIN_MAX_ATTEMPTS)
   : 5;
@@ -43,6 +50,8 @@ export const Login = async (req, res) => {
     if (IsLockedOut(device)) {
       return res.status(429).json({
         message: "Túl sok sikertelen próbálkozás. Kérjük, próbálja meg később.",
+        attempts: device.attempts_count,
+        maxAttempts: LOGIN_MAX_ATTEMPTS,
       });
     }
 
@@ -59,6 +68,8 @@ export const Login = async (req, res) => {
 
       return res.status(401).json({
         message: "Helytelen felhasználónév vagy jelszó",
+        attempts: updatedDevice.attempts_count,
+        maxAttempts: LOGIN_MAX_ATTEMPTS,
       });
     }
 
@@ -71,6 +82,8 @@ export const Login = async (req, res) => {
 
       return res.status(401).json({
         message: "Helytelen felhasználónév vagy jelszó",
+        attempts: updatedDevice.attempts_count,
+        maxAttempts: LOGIN_MAX_ATTEMPTS,
       });
     }
 
@@ -88,6 +101,8 @@ export const Login = async (req, res) => {
 
       return res.status(401).json({
         message: "Helytelen felhasználónév vagy jelszó",
+        attempts: updatedDevice.attempts_count,
+        maxAttempts: LOGIN_MAX_ATTEMPTS,
       });
     }
 
