@@ -1,0 +1,59 @@
+import React from 'react';
+import Image from '../../../components/AppImage';
+import Icon from '../../../components/AppIcon';
+
+const BookSummaryCard = ({ book, onRemove }) => {
+  const calculateDueDate = (rentalDays) => {
+    const dueDate = new Date();
+    dueDate?.setDate(dueDate?.getDate() + rentalDays);
+    return dueDate?.toLocaleDateString('en-US', { 
+      month: 'short', 
+      day: 'numeric', 
+      year: 'numeric' 
+    });
+  };
+
+  return (
+    <div className="flex gap-4 p-4 bg-card border border-border rounded-lg hover:shadow-md transition-shadow duration-200">
+      <div className="flex-shrink-0 w-20 h-28 overflow-hidden rounded-md bg-muted">
+        <Image
+          src={book?.coverImage}
+          alt={book?.coverImageAlt}
+          className="w-full h-full object-cover"
+        />
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-start justify-between gap-2 mb-2">
+          <div className="flex-1 min-w-0">
+            <h3 className="text-base font-semibold text-foreground truncate mb-1">
+              {book?.title}
+            </h3>
+            <p className="text-sm text-muted-foreground truncate">
+              by {book?.author}
+            </p>
+          </div>
+          <button
+            onClick={() => onRemove(book?.id)}
+            className="flex-shrink-0 p-1 text-muted-foreground hover:text-destructive transition-colors duration-200"
+            aria-label={`Remove ${book?.title} from checkout`}
+          >
+            <Icon name="X" size={18} />
+          </button>
+        </div>
+        
+        <div className="flex items-center gap-4 text-sm">
+          <div className="flex items-center gap-1 text-muted-foreground">
+            <Icon name="Calendar" size={14} />
+            <span>{book?.rentalDays} days</span>
+          </div>
+          <div className="flex items-center gap-1 text-muted-foreground">
+            <Icon name="Clock" size={14} />
+            <span>Due: {calculateDueDate(book?.rentalDays)}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default BookSummaryCard;

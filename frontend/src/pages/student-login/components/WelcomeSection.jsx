@@ -1,0 +1,73 @@
+import React from 'react';
+import Icon from '../../../components/AppIcon';
+
+const WelcomeSection = () => {
+  const features = [
+    {
+      id: 1,
+      icon: 'BookOpen',
+      title: 'Browse Thousands of Books',
+      description: 'Access our extensive digital library catalog'
+    },
+    {
+      id: 2,
+      icon: 'Clock',
+      title: 'Rent Anytime, Anywhere',
+      description: 'Check out books 24/7 from any device'
+    },
+    {
+      id: 3,
+      icon: 'Star',
+      title: 'Track Your Reading',
+      description: 'Manage rentals, reviews, and favorites'
+    }
+  ];
+
+  return (
+    <div className="space-y-6">
+      <div className="text-center lg:text-left">
+        <h1 className="text-3xl lg:text-4xl font-heading font-bold text-foreground mb-3">
+          Welcome Back to SchoolLibrary Digital
+        </h1>
+        <p className="text-base lg:text-lg text-muted-foreground">
+          Sign in to access your library account and continue your reading journey
+        </p>
+      </div>
+      <div className="grid grid-cols-1 gap-4 mt-8">
+        {features?.map((feature) => (
+          <div
+            key={feature?.id}
+            className="flex items-start gap-4 p-4 rounded-lg bg-card border border-border hover:border-primary/50 transition-all duration-200"
+          >
+            <div className="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-lg flex-shrink-0">
+              <Icon name={feature?.icon} size={24} color="var(--color-primary)" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-base font-semibold text-foreground mb-1">
+                {feature?.title}
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                {feature?.description}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="mt-8 p-4 bg-accent/10 border border-accent/20 rounded-lg">
+        <div className="flex items-start gap-3">
+          <Icon name="Info" size={20} color="var(--color-accent)" className="flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sm font-medium text-foreground mb-1">
+              First Time Here?
+            </p>
+            <p className="text-sm text-muted-foreground">
+              New students can create an account using their school email address. Registration takes less than 2 minutes.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default WelcomeSection;
