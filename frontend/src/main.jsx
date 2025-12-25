@@ -16,6 +16,8 @@ import RentalCheckout from "./pages/rental-checkout/index.jsx";
 import StudentDashboard from "./pages/student-dashboard/index.jsx";
 import StudentLogin from "./pages/student-login/index.jsx";
 
+import { AuthProvider } from "hooks/AuthContext.jsx";
+
 const RouteErrorElement = () => {
   return <NotFound />;
 };
@@ -53,7 +55,7 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  <AuthProvider>
     <RouterProvider router={router} future={{ v7_startTransition: true }} />
-  </StrictMode>
+  </AuthProvider>
 );

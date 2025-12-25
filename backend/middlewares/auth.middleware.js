@@ -83,8 +83,8 @@ export const getRefreshTokenDetail = async (user) => {
 export const createAccessToken = async (user) => {
   const AccessToken = jwt.sign(
     { id: user.id },
-    process.env.ACCESS_TOKEN_SECRET, // JAVÍTVA: ACCESS_TOKEN_SECRET
-    { expiresIn: "1m" }
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: "15m" }
   );
 
   const AccessTokenExpiresAt = new Date(Date.now() + ACCESS_TOKEN_LIFETIME_MS);
@@ -109,7 +109,6 @@ export const createRefreshToken = async (user) => {
 export const AuthMiddleware = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
-
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({
         message: "Nincs érvényes hozzáférési token. Bearer token szükséges.",
@@ -118,67 +117,31 @@ export const AuthMiddleware = async (req, res, next) => {
 
     const accessToken = authHeader.split(" ")[1];
 
-    let accessTokenPayload;
     try {
-      accessTokenPayload = await verifyAccessToken(accessToken);
-
+      const accessTokenPayload = await verifyAccessToken(accessToken);
       const user = await prisma.felhasznalo.findFirst({
         where: { id: accessTokenPayload.id },
       });
 
       if (!user) {
-        return res.status(401).json({
-          message: "Felhasználó nem található",
-        });
+        return res.status(401).json({ message: "Felhasználó nem található" });
       }
 
-      req.headers.authorization = `Bearer ${accessToken}`; // Megőrizzük az eredeti tokent
+      req.headers.authorization = `Bearer ${accessToken}`;
       return next();
     } catch (accessTokenError) {
-      let userId;
-      try {
-        const decodedWithoutVerify = jwt.decode(accessToken);
-        if (!decodedWithoutVerify || !decodedWithoutVerify.id) {
-          return res.status(401).json({
-            message: "Érvénytelen token formátum",
-          });
-        }
-        userId = decodedWithoutVerify.id;
-      } catch (decodeError) {
-        return res.status(401).json({
-          message: "Token dekódolási hiba",
-        });
-      }
-
-      const user = await prisma.felhasznalo.findFirst({
-        where: { id: userId },
-      });
-
-      if (!user) {
-        return res.status(401).json({
-          message: "Felhasználó nem található",
-        });
-      }
-
-      const dbRefreshToken = user.jwt_refresh_token;
-      const dbRefreshTokenExpiresAt = user.jwt_token_expires_at
-        ? new Date(user.jwt_token_expires_at)
-        : null;
-
-      if (
-        !dbRefreshToken ||
-        !dbRefreshTokenExpiresAt ||
-        dbRefreshTokenExpiresAt <= new Date()
-      ) {
+      const refreshToken = req.cookies.refreshToken;
+      if (!refreshToken) {
         return res.status(401).json({
           message: "Munkamenet lejárt. Kérjük, jelentkezzen be újra.",
-          code: "REFRESH_TOKEN_EXPIRED",
+          code: "NO_REFRESH_TOKEN",
           requiresLogin: true,
         });
       }
 
+      let decodedRefresh;
       try {
-        await verifyRefreshToken(dbRefreshToken);
+        decodedRefresh = await verifyRefreshToken(refreshToken);
       } catch (refreshTokenError) {
         return res.status(401).json({
           message: "Munkamenet lejárt. Kérjük, jelentkezzen be újra.",
@@ -187,24 +150,23 @@ export const AuthMiddleware = async (req, res, next) => {
         });
       }
 
-      const { AccessToken, AccessTokenExpiresAt } = await createAccessToken(
-        user
-      );
+      const user = await prisma.felhasznalo.findFirst({
+        where: { id: decodedRefresh.id },
+      });
 
+      if (!user) {
+        return res.status(401).json({
+          message: "Felhasználó nem található",
+        });
+      }
+
+      const { AccessToken } = await createAccessToken(user);
       req.headers.authorization = `Bearer ${AccessToken}`;
 
       return next();
     }
   } catch (err) {
     console.error("AuthMiddleware error:", err);
-
-    if (err instanceof jwt.JsonWebTokenError) {
-      return res.status(401).json({
-        message: "Érvénytelen token",
-        details:
-          process.env.NODE_ENV === "development" ? err.message : undefined,
-      });
-    }
 
     return res.status(500).json({
       error: "Hitelesítési hiba",

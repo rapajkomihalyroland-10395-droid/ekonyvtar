@@ -13,7 +13,7 @@ app.use(
   cors({
     origin: "http://localhost:4028",
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    exposedHeaders: ["Authorization"],
   })
 );
 app.use(cookieParser());

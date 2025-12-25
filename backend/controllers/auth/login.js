@@ -12,18 +12,10 @@ import {
   createRefreshToken,
   createAccessToken,
   getAccessTokenExp,
-  getRefreshTokenDetail,
   isTokenExpired,
 } from "../../middlewares/auth.middleware.js";
 
 const prisma = new PrismaClient();
-
-/**
- * $2b$10$dt0HYvPips8VfNMFC/kBp.NH82hZgRf6bnIfQQr1ms5AJ5flsPBWK
- *
- * kovacs@example.com
- * test123
- */
 
 const LOGIN_MAX_ATTEMPTS = process.env.LOGIN_MAX_ATTEMPTS
   ? parseInt(process.env.LOGIN_MAX_ATTEMPTS)
@@ -34,9 +26,9 @@ export const Login = async (req, res) => {
     const { email, password, device_id } = req.body;
 
     if (!device_id) {
-      return res.status(400).json({
-        message: "Nincs elérhető eszköz azonosító",
-      });
+      return res
+        .status(400)
+        .json({ message: "Nincs elérhető eszköz azonosító" });
     }
 
     let device = await prisma.login_attempts.findFirst({
@@ -55,31 +47,12 @@ export const Login = async (req, res) => {
       });
     }
 
-    const user = await prisma.felhasznalo.findFirst({
-      where: { email },
-    });
+    const user = await prisma.felhasznalo.findFirst({ where: { email } });
 
-    if (!user) {
+    if (!user || !user.belepesi_azonosito_hash) {
       const updatedDevice = await UpdateAttempts(device_id);
-
-      if (updatedDevice.attempts_count >= LOGIN_MAX_ATTEMPTS) {
+      if (updatedDevice.attempts_count >= LOGIN_MAX_ATTEMPTS)
         await LockDevice(device_id);
-      }
-
-      return res.status(401).json({
-        message: "Helytelen felhasználónév vagy jelszó",
-        attempts: updatedDevice.attempts_count,
-        maxAttempts: LOGIN_MAX_ATTEMPTS,
-      });
-    }
-
-    if (!user.belepesi_azonosito_hash) {
-      const updatedDevice = await UpdateAttempts(device_id);
-
-      if (updatedDevice.attempts_count >= LOGIN_MAX_ATTEMPTS) {
-        await LockDevice(device_id);
-      }
-
       return res.status(401).json({
         message: "Helytelen felhasználónév vagy jelszó",
         attempts: updatedDevice.attempts_count,
@@ -94,11 +67,8 @@ export const Login = async (req, res) => {
 
     if (!passwordMatch) {
       const updatedDevice = await UpdateAttempts(device_id);
-
-      if (updatedDevice.attempts_count >= LOGIN_MAX_ATTEMPTS) {
+      if (updatedDevice.attempts_count >= LOGIN_MAX_ATTEMPTS)
         await LockDevice(device_id);
-      }
-
       return res.status(401).json({
         message: "Helytelen felhasználónév vagy jelszó",
         attempts: updatedDevice.attempts_count,
@@ -108,19 +78,14 @@ export const Login = async (req, res) => {
 
     await SuccessLoginWithDeviceId(device_id);
 
-    const tokenDetail = await getRefreshTokenDetail(user);
-    let RefreshToken = tokenDetail.refresh_token;
-    let RefreshTokenExpiresAt = tokenDetail.exp;
+    const newRefreshToken = await createRefreshToken(user);
 
-    if (
-      !RefreshToken ||
-      !RefreshTokenExpiresAt ||
-      new Date(RefreshTokenExpiresAt) <= new Date()
-    ) {
-      const newToken = await createRefreshToken(user);
-      RefreshToken = newToken.RefreshToken;
-      RefreshTokenExpiresAt = newToken.RefreshTokenExpiresAt;
-    }
+    res.cookie("refreshToken", newRefreshToken.RefreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "strict",
+      expires: newRefreshToken.RefreshTokenExpiresAt,
+    });
 
     let AccessToken = req.headers.authorization;
     let AccessTokenExpiresAt;
@@ -132,7 +97,6 @@ export const Login = async (req, res) => {
         AccessTokenExpiresAt = newAccessToken.AccessTokenExpiresAt;
       } else {
         const isExpired = await isTokenExpired(AccessToken);
-
         if (isExpired) {
           const newAccessToken = await createAccessToken(user);
           AccessToken = `Bearer ${newAccessToken.AccessToken}`;
@@ -142,32 +106,15 @@ export const Login = async (req, res) => {
         }
       }
     } catch (error) {
-      console.log("Access token error, generating new:", error.message);
       const newAccessToken = await createAccessToken(user);
       AccessToken = `Bearer ${newAccessToken.AccessToken}`;
       AccessTokenExpiresAt = newAccessToken.AccessTokenExpiresAt;
     }
 
-    await prisma.felhasznalo.update({
-      where: { id: user.id },
-      data: {
-        jwt_token_expires_at: RefreshTokenExpiresAt,
-        jwt_refresh_token: RefreshToken,
-      },
-    });
-
     res.status(200).json({
       message: "Sikeres bejelentkezés",
-      accessToken: AccessToken.replace("Bearer ", ""),
-      accessTokenExpiresAt: AccessTokenExpiresAt,
-      refreshToken: RefreshToken,
-      refreshTokenExpiresAt: RefreshTokenExpiresAt,
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.nev,
-        role: user.szerep,
-      },
+      accessToken: AccessToken,
+      user: { id: user.id, email: user.email, name: user.name },
     });
   } catch (err) {
     console.error("Login error:", err);

@@ -1,12 +1,15 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Input from "../../../components/ui/Input";
 import Button from "../../../components/ui/Button";
 import Icon from "../../../components/AppIcon";
+import { useAuth } from "hooks/AuthContext";
 
 const LoginForm = () => {
   const navigate = useNavigate();
+
+  const { user, setUser, accessToken, setAccessToken } = useAuth();
 
   const deviceId = useRef(
     `device_${Math.random().toString(36).substr(2, 9)}_${Date.now()}`
@@ -64,12 +67,6 @@ const LoginForm = () => {
     );
   };
 
-  const handleLoginSuccess = (responseData) => {
-    axios.defaults.headers.common["Authorization"] = responseData.accessToken;
-
-    navigate("/student-dashboard");
-  };
-
   const getErrorMessage = (error) => {
     if (error.response) {
       const { status, data } = error.response;
@@ -122,7 +119,10 @@ const LoginForm = () => {
         device_id: deviceId.current,
       });
 
-      handleLoginSuccess(response.data);
+      setAccessToken(response.data.accessToken);
+      setUser(response.data.user);
+      console.log(response.data.accessToken, response.data.user);
+      navigate("/student-dashboard");
     } catch (error) {
       console.error("Login error:", error);
 
