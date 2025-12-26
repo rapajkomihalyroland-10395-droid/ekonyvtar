@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import Header from '../../components/ui/Header';
 import LoginForm from './components/LoginForm';
 import TrustSignals from './components/TrustSignals';
@@ -7,15 +6,6 @@ import WelcomeSection from './components/WelcomeSection';
 import Icon from '../../components/AppIcon';
 
 const StudentLogin = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const isAuthenticated = localStorage.getItem('isAuthenticated');
-    if (isAuthenticated === 'true') {
-      navigate('/student-dashboard');
-    }
-  }, [navigate]);
-
   return (
     <div className="min-h-screen bg-background">
       <Header />

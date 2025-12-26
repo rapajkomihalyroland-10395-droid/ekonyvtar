@@ -1,10 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import {
-  createBrowserRouter,
-  RouterProvider,
-  useRouteError,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import "./styles/tailwind.css";
 import "./styles/index.css";
@@ -16,7 +12,7 @@ import RentalCheckout from "./pages/rental-checkout/index.jsx";
 import StudentDashboard from "./pages/student-dashboard/index.jsx";
 import StudentLogin from "./pages/student-login/index.jsx";
 
-import { AuthProvider } from "hooks/AuthContext.jsx";
+import RouterGuard from "security/RouterGuard";
 
 const RouteErrorElement = () => {
   return <NotFound />;
@@ -25,12 +21,12 @@ const RouteErrorElement = () => {
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <BookCatalog />,
+    element: (
+      <RouterGuard>
+        <BookCatalog />
+      </RouterGuard>
+    ),
     errorElement: <RouteErrorElement />,
-  },
-  {
-    path: "/book-catalog",
-    element: <BookCatalog />,
   },
   {
     path: "/book-details/:id",
@@ -42,10 +38,14 @@ const router = createBrowserRouter([
   },
   {
     path: "/student-dashboard",
-    element: <StudentDashboard />,
+    element: (
+      <RouterGuard>
+        <StudentDashboard />
+      </RouterGuard>
+    ),
   },
   {
-    path: "/student-login",
+    path: "/login",
     element: <StudentLogin />,
   },
   {
@@ -55,7 +55,5 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")).render(
-  <AuthProvider>
-    <RouterProvider router={router} future={{ v7_startTransition: true }} />
-  </AuthProvider>
+  <RouterProvider router={router} future={{ v7_startTransition: true }} />
 );

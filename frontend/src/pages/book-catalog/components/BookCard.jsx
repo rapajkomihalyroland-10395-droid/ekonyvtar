@@ -1,74 +1,102 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Icon from '../../../components/AppIcon';
-import Image from '../../../components/AppImage';
-import Button from '../../../components/ui/Button';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Icon from "../../../components/AppIcon";
+import Image from "../../../components/AppImage";
+import Button from "../../../components/ui/Button";
+import api from "../../../axios_url/baseURL.js";
+import { getAccessToken } from "store/authStore";
 
 const BookCard = ({ book, onAddToCart, onRentNow }) => {
   const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [books, setBooks] = useState([]);
 
   const getStatusConfig = (status) => {
     const configs = {
       available: {
-        label: 'Available',
-        bgColor: 'bg-success/10',
-        textColor: 'text-success',
-        icon: 'CheckCircle2'
+        label: "Available",
+        bgColor: "bg-success/10",
+        textColor: "text-success",
+        icon: "CheckCircle2",
       },
-      'checked-out': {
-        label: 'Checked Out',
-        bgColor: 'bg-error/10',
-        textColor: 'text-error',
-        icon: 'XCircle'
+      "checked-out": {
+        label: "Checked Out",
+        bgColor: "bg-error/10",
+        textColor: "text-error",
+        icon: "XCircle",
       },
       reserved: {
-        label: 'Reserved',
-        bgColor: 'bg-warning/10',
-        textColor: 'text-warning',
-        icon: 'Clock'
-      }
+        label: "Reserved",
+        bgColor: "bg-warning/10",
+        textColor: "text-warning",
+        icon: "Clock",
+      },
     };
     return configs?.[status] || configs?.available;
   };
 
+  const accessToken = getAccessToken();
+
+  const GetAllBooks = async () => {
+    try {
+      const response = await api.get("/top-books", {
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      setBooks(response.data);
+
+      console.log(response.data.map((book) => book.cim + " - " + book.szerzo));
+    } catch (error) {
+      console.error(error.response?.data?.message || error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (!accessToken) return;
+
+    GetAllBooks();
+  }, []);
+
   const statusConfig = getStatusConfig(book?.status);
 
   const handleCardClick = () => {
-    navigate('/book-details', { state: { bookId: book?.id } });
+    navigate("/book-details", { state: { bookId: book?.id } });
   };
 
   return (
     <article className="bg-card border border-border rounded-lg overflow-hidden hover:shadow-card transition-all duration-300 group">
-      <div 
+      <div
         className="relative aspect-[3/4] overflow-hidden bg-muted cursor-pointer"
         onClick={handleCardClick}
       >
         {!imageLoaded && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <Icon name="BookOpen" size={48} className="text-muted-foreground animate-pulse" />
+            <Icon
+              name="BookOpen"
+              size={48}
+              className="text-muted-foreground animate-pulse"
+            />
           </div>
         )}
         <Image
           src={book?.coverImage}
           alt={book?.coverImageAlt}
           className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ${
-            imageLoaded ? 'opacity-100' : 'opacity-0'
+            imageLoaded ? "opacity-100" : "opacity-0"
           }`}
           onLoad={() => setImageLoaded(true)}
         />
         <div className="absolute top-2 right-2">
-          <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium ${statusConfig?.bgColor} ${statusConfig?.textColor}`}>
+          <span
+            className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium ${statusConfig?.bgColor} ${statusConfig?.textColor}`}
+          >
             <Icon name={statusConfig?.icon} size={14} />
             {statusConfig?.label}
           </span>
         </div>
       </div>
       <div className="p-4 space-y-3">
-        <div 
-          className="space-y-1 cursor-pointer"
-          onClick={handleCardClick}
-        >
+        <div className="space-y-1 cursor-pointer" onClick={handleCardClick}>
           <h3 className="font-heading font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors duration-200">
             {book?.title}
           </h3>
@@ -79,9 +107,13 @@ const BookCard = ({ book, onAddToCart, onRentNow }) => {
           {[...Array(5)]?.map((_, index) => (
             <Icon
               key={index}
-              name={index < Math.floor(book?.rating) ? 'Star' : 'Star'}
+              name={index < Math.floor(book?.rating) ? "Star" : "Star"}
               size={16}
-              className={index < Math.floor(book?.rating) ? 'text-warning fill-warning' : 'text-muted-foreground'}
+              className={
+                index < Math.floor(book?.rating)
+                  ? "text-warning fill-warning"
+                  : "text-muted-foreground"
+              }
             />
           ))}
           <span className="text-sm font-medium text-foreground ml-1">
@@ -105,21 +137,8 @@ const BookCard = ({ book, onAddToCart, onRentNow }) => {
         </div>
 
         <div className="flex items-center gap-2 pt-2">
-          {book?.status === 'available' ? (
+          {book?.status === "available" ? (
             <>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={(e) => {
-                  e?.stopPropagation();
-                  onAddToCart(book);
-                }}
-                iconName="ShoppingCart"
-                iconSize={16}
-                className="flex-1"
-              >
-                Add to Cart
-              </Button>
               <Button
                 variant="default"
                 size="sm"
@@ -133,13 +152,8 @@ const BookCard = ({ book, onAddToCart, onRentNow }) => {
               </Button>
             </>
           ) : (
-            <Button
-              variant="outline"
-              size="sm"
-              disabled
-              className="flex-1"
-            >
-              Unavailable
+            <Button variant="outline" size="sm" disabled className="flex-1">
+              Kérelem benyújtása
             </Button>
           )}
         </div>

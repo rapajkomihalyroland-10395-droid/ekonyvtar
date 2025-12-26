@@ -1,15 +1,13 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import Input from "../../../components/ui/Input";
 import Button from "../../../components/ui/Button";
 import Icon from "../../../components/AppIcon";
-import { useAuth } from "hooks/AuthContext";
+import api from "../../../axios_url/baseURL.js";
+import { setAccessToken } from "../../../store/authStore.js";
 
 const LoginForm = () => {
   const navigate = useNavigate();
-
-  const { user, setUser, accessToken, setAccessToken } = useAuth();
 
   const deviceId = useRef(
     `device_${Math.random().toString(36).substr(2, 9)}_${Date.now()}`
@@ -113,16 +111,19 @@ const LoginForm = () => {
     setFormErrors({});
 
     try {
-      const response = await axios.post("http://localhost:3000/api/login", {
+      const response = await api.post("/login", {
         email: formData.email,
         password: formData.password,
         device_id: deviceId.current,
       });
 
-      setAccessToken(response.data.accessToken);
-      setUser(response.data.user);
-      console.log(response.data.accessToken, response.data.user);
-      navigate("/student-dashboard");
+      const rawToken = (response.data?.accessToken || "")
+        .toString()
+        .replace(/^Bearer\s+/i, "")
+        .trim();
+
+      setAccessToken(rawToken);
+      navigate("/");
     } catch (error) {
       console.error("Login error:", error);
 

@@ -114,7 +114,6 @@ export const Login = async (req, res) => {
     res.status(200).json({
       message: "Sikeres bejelentkezés",
       accessToken: AccessToken,
-      user: { id: user.id, email: user.email, name: user.name },
     });
   } catch (err) {
     console.error("Login error:", err);
