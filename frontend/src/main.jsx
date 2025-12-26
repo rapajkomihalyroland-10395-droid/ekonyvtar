@@ -30,11 +30,19 @@ const router = createBrowserRouter([
   },
   {
     path: "/book-details/:id",
-    element: <BookDetails />,
+    element: (
+      <RouterGuard>
+        <BookDetails />
+      </RouterGuard>
+    ),
   },
   {
     path: "/rental-checkout",
-    element: <RentalCheckout />,
+    element: (
+      <RouterGuard>
+        <RentalCheckout />
+      </RouterGuard>
+    ),
   },
   {
     path: "/student-dashboard",

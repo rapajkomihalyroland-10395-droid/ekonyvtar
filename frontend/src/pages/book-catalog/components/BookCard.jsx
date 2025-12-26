@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "../../../components/AppIcon";
 import Image from "../../../components/AppImage";
 import Button from "../../../components/ui/Button";
-import api from "../../../axios_url/baseURL.js";
-import { getAccessToken } from "store/authStore";
 
-const BookCard = ({ book, onAddToCart, onRentNow }) => {
+const BookCard = ({ book, onRentNow }) => {
   const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [books, setBooks] = useState([]);
 
   const getStatusConfig = (status) => {
     const configs = {
@@ -35,28 +32,6 @@ const BookCard = ({ book, onAddToCart, onRentNow }) => {
     return configs?.[status] || configs?.available;
   };
 
-  const accessToken = getAccessToken();
-
-  const GetAllBooks = async () => {
-    try {
-      const response = await api.get("/top-books", {
-        withCredentials: true,
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-      setBooks(response.data);
-
-      console.log(response.data.map((book) => book.cim + " - " + book.szerzo));
-    } catch (error) {
-      console.error(error.response?.data?.message || error.message);
-    }
-  };
-
-  useEffect(() => {
-    if (!accessToken) return;
-
-    GetAllBooks();
-  }, []);
-
   const statusConfig = getStatusConfig(book?.status);
 
   const handleCardClick = () => {
@@ -78,14 +53,16 @@ const BookCard = ({ book, onAddToCart, onRentNow }) => {
             />
           </div>
         )}
+
         <Image
           src={book?.coverImage}
-          alt={book?.coverImageAlt}
+          alt={book?.coverImageAlt || book?.title}
           className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ${
             imageLoaded ? "opacity-100" : "opacity-0"
           }`}
           onLoad={() => setImageLoaded(true)}
         />
+
         <div className="absolute top-2 right-2">
           <span
             className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium ${statusConfig?.bgColor} ${statusConfig?.textColor}`}
@@ -95,6 +72,7 @@ const BookCard = ({ book, onAddToCart, onRentNow }) => {
           </span>
         </div>
       </div>
+
       <div className="p-4 space-y-3">
         <div className="space-y-1 cursor-pointer" onClick={handleCardClick}>
           <h3 className="font-heading font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors duration-200">
@@ -107,20 +85,20 @@ const BookCard = ({ book, onAddToCart, onRentNow }) => {
           {[...Array(5)]?.map((_, index) => (
             <Icon
               key={index}
-              name={index < Math.floor(book?.rating) ? "Star" : "Star"}
+              name="Star"
               size={16}
               className={
-                index < Math.floor(book?.rating)
+                index < Math.floor(book?.rating || 0)
                   ? "text-warning fill-warning"
                   : "text-muted-foreground"
               }
             />
           ))}
           <span className="text-sm font-medium text-foreground ml-1">
-            {book?.rating?.toFixed(1)}
+            {(book?.rating ?? 0).toFixed(1)}
           </span>
           <span className="text-xs text-muted-foreground ml-1">
-            ({book?.reviewCount})
+            ({book?.reviewCount ?? 0})
           </span>
         </div>
 
@@ -138,19 +116,17 @@ const BookCard = ({ book, onAddToCart, onRentNow }) => {
 
         <div className="flex items-center gap-2 pt-2">
           {book?.status === "available" ? (
-            <>
-              <Button
-                variant="default"
-                size="sm"
-                onClick={(e) => {
-                  e?.stopPropagation();
-                  onRentNow(book);
-                }}
-                className="flex-1"
-              >
-                Rent Now
-              </Button>
-            </>
+            <Button
+              variant="default"
+              size="sm"
+              onClick={(e) => {
+                e?.stopPropagation();
+                onRentNow(book);
+              }}
+              className="flex-1"
+            >
+              Rent Now
+            </Button>
           ) : (
             <Button variant="outline" size="sm" disabled className="flex-1">
               Kérelem benyújtása
