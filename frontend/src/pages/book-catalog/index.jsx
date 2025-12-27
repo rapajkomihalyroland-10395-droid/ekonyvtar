@@ -24,10 +24,11 @@ const BookCatalog = () => {
 
   const [filters, setFilters] = useState({
     category: "all",
-    genre: "",
-    year: "all",
+    yearFrom: "",
+    yearTo: "",
     availability: ["available"],
     minRating: "",
+    maxRating: "",
   });
 
   const [selectedBook, setSelectedBook] = useState(null);
@@ -45,7 +46,14 @@ const BookCatalog = () => {
         });
 
         const books = (response.data || []).map((b) => {
-          const stock = Number(b.elofordulas ?? 0);
+          const popularity = Number(b.elofordulas ?? 0);
+          const inventory = Number(b.keszlet ?? 0);
+          const borrowable = b.kolcsonozheto !== false;
+          const status = !borrowable
+            ? "reserved"
+            : inventory > 0
+            ? "available"
+            : "checked-out";
 
           return {
             id: b.id,
@@ -53,11 +61,13 @@ const BookCatalog = () => {
             author: b.szerzo,
             coverImage: b.kep,
             coverImageAlt: b.cim,
-            rating: Number(b.csillagok ?? 0),
-            reviewCount: stock,
-            status: stock >= 1 ? "available" : "checked-out",
+            rating:
+              Number.parseFloat(String(b.csillagok ?? 0).replace(/,/g, ".")) ||
+              0,
+            reviewCount: popularity,
+            status,
             category: b.kategoria,
-            genre: "",
+            categoryId: b.kategoria_id,
             publicationYear: b.kiadas_ev,
           };
         });
@@ -80,6 +90,14 @@ const BookCatalog = () => {
   useEffect(() => {
     let result = [...apiBooks];
 
+    const parseRating = (value) => {
+      if (!value && value !== 0) return null;
+      const s = String(value).replace(/,/g, ".").trim();
+      if (!s) return null;
+      const n = Number.parseFloat(s);
+      return Number.isFinite(n) ? n : null;
+    };
+
     // Search
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
@@ -92,23 +110,17 @@ const BookCatalog = () => {
 
     // Category
     if (filters.category !== "all") {
-      result = result.filter((b) => b.category === filters.category);
+      result = result.filter((b) => b.categoryId === filters.category);
     }
 
-    // Genre
-    if (filters.genre) {
-      result = result.filter((b) => b.genre === filters.genre);
+    // Year range (from-to)
+    const yearFrom = filters.yearFrom ? Number(filters.yearFrom) : null;
+    const yearTo = filters.yearTo ? Number(filters.yearTo) : null;
+    if (Number.isFinite(yearFrom)) {
+      result = result.filter((b) => Number(b.publicationYear) >= yearFrom);
     }
-
-    // Year
-    if (filters.year !== "all") {
-      if (filters.year === "older") {
-        result = result.filter((b) => b.publicationYear < 2020);
-      } else {
-        result = result.filter(
-          (b) => String(b.publicationYear) === filters.year
-        );
-      }
+    if (Number.isFinite(yearTo)) {
+      result = result.filter((b) => Number(b.publicationYear) <= yearTo);
     }
 
     // Availability
@@ -117,8 +129,20 @@ const BookCatalog = () => {
     }
 
     // Min rating
-    if (filters.minRating) {
-      result = result.filter((b) => b.rating >= Number(filters.minRating));
+    const minRating = parseRating(filters.minRating);
+    const maxRating = parseRating(filters.maxRating);
+    const min = minRating !== null ? minRating : null;
+    const max = maxRating !== null ? maxRating : null;
+    const lower = min !== null && max !== null ? Math.min(min, max) : min;
+    const upper = min !== null && max !== null ? Math.max(min, max) : max;
+
+    if (lower !== null) {
+      result = result.filter((b) => Number(b.rating) >= lower);
+    }
+
+    // Max rating
+    if (upper !== null) {
+      result = result.filter((b) => Number(b.rating) <= upper);
     }
 
     // Sorting
@@ -153,10 +177,11 @@ const BookCatalog = () => {
   const handleClearFilters = () => {
     setFilters({
       category: "all",
-      genre: "",
-      year: "all",
+      yearFrom: "",
+      yearTo: "",
       availability: ["available"],
       minRating: "",
+      maxRating: "",
     });
     setSearchQuery("");
     setSortBy("relevance");

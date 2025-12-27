@@ -118,3 +118,29 @@ export const UserLoanIntention = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+export const GetBookDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const book = await prisma.konyv.findUnique({
+      where: { id: Number(id) },
+      include: {
+        szerzo: true,
+        kiado: true,
+        kategoria: true,
+        velemeny: {
+          include: {
+            felhasznalo: true,
+          },
+        },
+      },
+    });
+
+    if (!book) return res.status(404).json({ message: "A könyv nem található" });
+
+    return res.status(200).json(book);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};

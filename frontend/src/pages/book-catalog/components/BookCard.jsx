@@ -35,7 +35,8 @@ const BookCard = ({ book, onRentNow }) => {
   const statusConfig = getStatusConfig(book?.status);
 
   const handleCardClick = () => {
-    navigate("/book-details", { state: { bookId: book?.id } });
+    if (!book?.id && book?.id !== 0) return;
+    navigate(`/book-details/${book.id}`, { state: { bookId: book.id } });
   };
 
   return (

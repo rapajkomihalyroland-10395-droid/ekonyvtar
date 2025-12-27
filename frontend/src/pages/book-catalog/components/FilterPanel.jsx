@@ -1,58 +1,105 @@
-import React from 'react';
-import Icon from '../../../components/AppIcon';
-import Select from '../../../components/ui/Select';
-import Input from '../../../components/ui/Input';
-import Button from '../../../components/ui/Button';
-import { Checkbox } from '../../../components/ui/Checkbox';
+import React, { useEffect, useMemo, useState } from "react";
+import Icon from "../../../components/AppIcon";
+import Select from "../../../components/ui/Select";
+import Input from "../../../components/ui/Input";
+import Button from "../../../components/ui/Button";
+import { Checkbox } from "../../../components/ui/Checkbox";
+import api from "../../../axios_url/baseURL.js";
+import { getAuthHeader } from "../../../store/authStore.js";
 
-const FilterPanel = ({ 
-  filters, 
-  onFilterChange, 
-  onClearFilters, 
-  isOpen, 
+const FilterPanel = ({
+  filters,
+  onFilterChange,
+  onClearFilters,
+  isOpen,
   onClose,
-  resultCount 
+  resultCount,
 }) => {
-  const categories = [
-    { value: 'all', label: 'All Categories' },
-    { value: 'fiction', label: 'Fiction' },
-    { value: 'non-fiction', label: 'Non-Fiction' },
-    { value: 'science', label: 'Science' },
-    { value: 'history', label: 'History' },
-    { value: 'biography', label: 'Biography' },
-    { value: 'technology', label: 'Technology' }
-  ];
+  const [apiCategories, setApiCategories] = useState([]);
 
-  const genres = [
-    { value: 'adventure', label: 'Adventure' },
-    { value: 'mystery', label: 'Mystery' },
-    { value: 'romance', label: 'Romance' },
-    { value: 'thriller', label: 'Thriller' },
-    { value: 'fantasy', label: 'Fantasy' },
-    { value: 'sci-fi', label: 'Science Fiction' }
-  ];
+  useEffect(() => {
+    let active = true;
 
-  const publicationYears = [
-    { value: 'all', label: 'All Years' },
-    { value: '2024', label: '2024' },
-    { value: '2023', label: '2023' },
-    { value: '2022', label: '2022' },
-    { value: '2021', label: '2021' },
-    { value: '2020', label: '2020' },
-    { value: 'older', label: 'Before 2020' }
-  ];
+    const fetchCategories = async () => {
+      try {
+        const response = await api.get("/get-all-categories", {
+          headers: getAuthHeader(),
+        });
+
+        if (!active) return;
+        setApiCategories(Array.isArray(response.data) ? response.data : []);
+      } catch {
+        if (!active) return;
+        setApiCategories([]);
+      }
+    };
+
+    fetchCategories();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const categories = useMemo(() => {
+    const base = [{ value: "all", label: "Összes kategória" }];
+    const uniqueCategoryIds = new Set();
+    const mapped = [];
+
+    apiCategories.forEach((c) => {
+      if (c?.id && c?.nev && !uniqueCategoryIds.has(c.id)) {
+        uniqueCategoryIds.add(c.id);
+        mapped.push({ value: c.id, label: c.nev });
+      }
+    });
+
+    return base.concat(mapped);
+  }, [apiCategories]);
+
+  const sanitizeYear = (value) =>
+    String(value || "")
+      .replace(/[^\d]/g, "")
+      .slice(0, 4);
+
+  const sanitizeRating = (value) => {
+    const digits = String(value || "").replace(/[^\d]/g, "");
+    if (!digits) return "";
+
+    const first = digits[0];
+    const second = digits[1];
+
+    const composed = second !== undefined ? `${first}.${second}` : first;
+    const n = Number.parseFloat(composed);
+    if (!Number.isFinite(n)) return "";
+
+    const clamped = Math.max(0, Math.min(5, n));
+    if (second !== undefined && clamped % 1 === 0) return clamped.toFixed(1);
+    return String(clamped);
+  };
+
+  const normalizeRating = (value) => {
+    const v = String(value || "")
+      .replace(/,/g, ".")
+      .trim();
+    if (!v) return "";
+
+    let normalized = v;
+    if (/^\d+$/.test(normalized)) normalized = `${normalized}.0`;
+    if (/^\d+\.$/.test(normalized)) normalized = `${normalized}0`;
+
+    const n = Number.parseFloat(normalized);
+    if (!Number.isFinite(n)) return "";
+    const clamped = Math.max(0, Math.min(5, n));
+    return clamped % 1 === 0 ? `${clamped.toFixed(1)}` : `${clamped}`;
+  };
 
   const handleAvailabilityChange = (status, checked) => {
-    const newAvailability = checked
-      ? [...filters?.availability, status]
-      : filters?.availability?.filter(s => s !== status);
-    onFilterChange('availability', newAvailability);
+    onFilterChange("availability", checked ? [status] : []);
   };
 
   return (
     <>
       {isOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 lg:hidden"
           onClick={onClose}
           aria-hidden="true"
@@ -60,12 +107,14 @@ const FilterPanel = ({
       )}
       <aside
         className={`fixed lg:static top-16 right-0 bottom-0 w-80 bg-card border-l lg:border-l-0 lg:border-r border-border shadow-overlay lg:shadow-none z-40 transform transition-transform duration-300 lg:transform-none overflow-y-auto ${
-          isOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'
+          isOpen ? "translate-x-0" : "translate-x-full lg:translate-x-0"
         }`}
         aria-label="Book filters"
       >
         <div className="sticky top-0 bg-card border-b border-border p-4 flex items-center justify-between lg:hidden z-10">
-          <h2 className="text-lg font-heading font-semibold text-foreground">Filters</h2>
+          <h2 className="text-lg font-heading font-semibold text-foreground">
+            Filters
+          </h2>
           <button
             onClick={onClose}
             className="p-2 rounded-md hover:bg-muted transition-colors duration-200"
@@ -78,7 +127,7 @@ const FilterPanel = ({
         <div className="p-4 space-y-6">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-medium text-foreground">
-              {resultCount} {resultCount === 1 ? 'Book' : 'Books'} Found
+              {resultCount} {resultCount === 1 ? "Book" : "Books"} Found
             </h3>
             <Button
               variant="ghost"
@@ -96,65 +145,110 @@ const FilterPanel = ({
               label="Category"
               options={categories}
               value={filters?.category}
-              onChange={(value) => onFilterChange('category', value)}
+              onChange={(value) => onFilterChange("category", value)}
               placeholder="Select category"
             />
 
-            <Select
-              label="Genre"
-              options={genres}
-              value={filters?.genre}
-              onChange={(value) => onFilterChange('genre', value)}
-              placeholder="Select genre"
-              searchable
-            />
-
-            <Select
-              label="Publication Year"
-              options={publicationYears}
-              value={filters?.year}
-              onChange={(value) => onFilterChange('year', value)}
-              placeholder="Select year"
-            />
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">
+                Publication Year
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                <Input
+                  type="text"
+                  inputMode="numeric"
+                  pattern="\\d*"
+                  value={filters?.yearFrom}
+                  onChange={(e) =>
+                    onFilterChange("yearFrom", sanitizeYear(e?.target?.value))
+                  }
+                  placeholder="tól"
+                />
+                <Input
+                  type="text"
+                  inputMode="numeric"
+                  pattern="\\d*"
+                  value={filters?.yearTo}
+                  onChange={(e) =>
+                    onFilterChange("yearTo", sanitizeYear(e?.target?.value))
+                  }
+                  placeholder="ig"
+                />
+              </div>
+            </div>
 
             <div className="space-y-3">
               <label className="text-sm font-medium text-foreground">
-                Availability Status
+                Elérhetőség
               </label>
               <div className="space-y-2">
                 <Checkbox
-                  label="Available"
-                  checked={filters?.availability?.includes('available')}
-                  onChange={(e) => handleAvailabilityChange('available', e?.target?.checked)}
+                  label="Elérhető"
+                  checked={filters?.availability?.[0] === "available"}
+                  onChange={(e) =>
+                    handleAvailabilityChange("available", e?.target?.checked)
+                  }
                 />
                 <Checkbox
-                  label="Checked Out"
-                  checked={filters?.availability?.includes('checked-out')}
-                  onChange={(e) => handleAvailabilityChange('checked-out', e?.target?.checked)}
+                  label="Kikölcsönözve"
+                  checked={filters?.availability?.[0] === "checked-out"}
+                  onChange={(e) =>
+                    handleAvailabilityChange("checked-out", e?.target?.checked)
+                  }
                 />
                 <Checkbox
-                  label="Reserved"
-                  checked={filters?.availability?.includes('reserved')}
-                  onChange={(e) => handleAvailabilityChange('reserved', e?.target?.checked)}
+                  label="Foglalt"
+                  checked={filters?.availability?.[0] === "reserved"}
+                  onChange={(e) =>
+                    handleAvailabilityChange("reserved", e?.target?.checked)
+                  }
                 />
               </div>
             </div>
 
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">
-                Minimum Rating
+                Értékelés
               </label>
-              <div className="flex items-center gap-2">
+              <div className="grid grid-cols-2 gap-2">
                 <Input
-                  type="number"
-                  min="0"
-                  max="5"
-                  step="0.5"
+                  type="text"
+                  inputMode="decimal"
+                  pattern="[0-9]*[\\.]?[0-9]*"
                   value={filters?.minRating}
-                  onChange={(e) => onFilterChange('minRating', e?.target?.value)}
-                  placeholder="0.0"
+                  onChange={(e) =>
+                    onFilterChange(
+                      "minRating",
+                      sanitizeRating(e?.target?.value)
+                    )
+                  }
+                  onBlur={(e) =>
+                    onFilterChange(
+                      "minRating",
+                      normalizeRating(e?.target?.value)
+                    )
+                  }
+                  placeholder="min"
                 />
-                <span className="text-sm text-muted-foreground">/ 5.0</span>
+                <Input
+                  type="text"
+                  inputMode="decimal"
+                  pattern="[0-9]*[\\.]?[0-9]*"
+                  value={filters?.maxRating}
+                  onChange={(e) =>
+                    onFilterChange(
+                      "maxRating",
+                      sanitizeRating(e?.target?.value)
+                    )
+                  }
+                  onBlur={(e) =>
+                    onFilterChange(
+                      "maxRating",
+                      normalizeRating(e?.target?.value)
+                    )
+                  }
+                  placeholder="max"
+                />
               </div>
             </div>
           </div>
