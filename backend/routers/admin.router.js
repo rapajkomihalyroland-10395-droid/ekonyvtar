@@ -10,10 +10,9 @@ import {
   IncreaseStock,
   GetBookByID,
   UpdateBookDetail,
-  
 } from "../controllers/admin/admin.BookControl.js";
 
-import { GetAllRentals, GetARentalByID } from "../controllers/admin/admin.RentalControl.js";
+import { GetAllRentals } from "../controllers/admin/admin.RentalControl.js";
 
 const adminRouter = Router();
 
@@ -30,7 +29,5 @@ adminRouter.route("/update-a-book/:id").patch(UpdateBookDetail);
 
 //BÉRLÉSEK
 adminRouter.route("/get-all-rentals").get(GetAllRentals);
-adminRouter.route("/get-a-rental/:felhasznalo_id").get(GetARentalByID);
-
 
 export default adminRouter;

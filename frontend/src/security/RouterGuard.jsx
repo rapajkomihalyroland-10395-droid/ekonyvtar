@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import {
-  getAccessToken,
-  getAuthHeader,
-  setAccessToken,
-} from "../store/authStore.js";
+import { getAuthHeader, setAccessToken, SetUser } from "../store/authStore.js";
 import api from "../axios_url/baseURL.js";
 
 const RouterGuard = ({ children }) => {
@@ -13,7 +9,7 @@ const RouterGuard = ({ children }) => {
 
   useEffect(() => {
     const checkAccess = async () => {
-      const token = getAccessToken();
+      const token = getAuthHeader();
 
       try {
         const response = await api.get("/token-details", {
@@ -23,6 +19,9 @@ const RouterGuard = ({ children }) => {
 
         if (response.data?.accessToken) {
           setAccessToken(response.data.accessToken);
+          if (response.data?.user) {
+            SetUser(response.data.user);
+          }
           setAuthorized(true);
         } else {
           setAuthorized(false);

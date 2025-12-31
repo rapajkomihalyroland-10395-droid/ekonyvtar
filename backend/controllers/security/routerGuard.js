@@ -11,6 +11,7 @@ export const GetAccessToken = async (req, res) => {
     const refreshToken = req.cookies.refreshToken; // HttpOnly
 
     let accessToken = null;
+    let user;
 
     if (authHeader) {
       const token = authHeader.split(" ")[1];
@@ -18,7 +19,7 @@ export const GetAccessToken = async (req, res) => {
       if (token) {
         try {
           jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-          accessToken = token; 
+          accessToken = token;
         } catch {}
       }
     }
@@ -30,7 +31,7 @@ export const GetAccessToken = async (req, res) => {
           process.env.REFRESH_TOKEN_SECRET
         );
 
-        const user = await prisma.felhasznalo.findUnique({
+        user = await prisma.felhasznalo.findUnique({
           where: { id: decodedRefresh.id },
         });
 
@@ -40,7 +41,7 @@ export const GetAccessToken = async (req, res) => {
       } catch {}
     }
 
-    return res.json({ accessToken: accessToken || null });
+    return res.json({ accessToken: accessToken || null, user: user || null });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: error.message });

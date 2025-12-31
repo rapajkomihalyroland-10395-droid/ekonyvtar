@@ -48,7 +48,7 @@ const RecommendedBookCard = ({ book }) => {
           iconPosition="left"
           onClick={() => navigate('/book-details')}
         >
-          View Details
+          Részletek
         </Button>
       </div>
     </div>

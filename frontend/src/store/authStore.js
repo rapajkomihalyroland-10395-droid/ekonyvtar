@@ -1,5 +1,5 @@
 let token;
-
+let user;
 export const setAccessToken = (newToken) => {
   if (!newToken) {
     token = null;
@@ -14,8 +14,6 @@ export const setAccessToken = (newToken) => {
   token = newToken.replace(/^Bearer\s+/i, "").trim();
 };
 
-export const getAccessToken = () => token;
-
 export const getAuthHeader = () => {
   if (!token) return {};
   return { Authorization: `Bearer ${token}` };
@@ -23,4 +21,20 @@ export const getAuthHeader = () => {
 
 export const deleteAccessToken = () => {
   token = null;
+};
+
+export const SetUser = (newUser) => {
+  if (!newUser) {
+    user = null;
+    return;
+  }
+  user = newUser;
+};
+
+export const GetUser = () => {
+  return user;
+};
+
+export const DeleteUser = () => {
+  user = null;
 };

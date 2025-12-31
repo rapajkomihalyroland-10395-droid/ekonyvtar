@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Image from '../../../components/AppImage';
-import Icon from '../../../components/AppIcon';
-import Button from '../../../components/ui/Button';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Image from "../../../components/AppImage";
+import Icon from "../../../components/AppIcon";
+import Button from "../../../components/ui/Button";
 
 const RentalHistoryItem = ({ rental, onRate }) => {
   const navigate = useNavigate();
@@ -11,10 +11,10 @@ const RentalHistoryItem = ({ rental, onRate }) => {
   const [hoverRating, setHoverRating] = useState(0);
 
   const formatDate = (date) => {
-    return new Date(date)?.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
+    return new Date(date)?.toLocaleDateString("hu-HU", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
     });
   };
 
@@ -28,35 +28,37 @@ const RentalHistoryItem = ({ rental, onRate }) => {
   return (
     <div className="bg-card border border-border rounded-lg overflow-hidden hover:shadow-md transition-shadow duration-200">
       <div className="flex flex-col sm:flex-row gap-4 p-4">
-        <div 
+        <div
           className="flex-shrink-0 w-20 h-28 overflow-hidden rounded-md cursor-pointer"
-          onClick={() => navigate('/book-details')}
+          onClick={() => navigate("/book-details")}
         >
           <Image
-            src={rental?.bookCover}
-            alt={rental?.bookCoverAlt}
+            src={rental?.kep}
+            alt={rental?.cim}
             className="w-full h-full object-cover hover:scale-105 transition-transform duration-200"
           />
         </div>
 
         <div className="flex-1 flex flex-col justify-between min-w-0">
           <div>
-            <h4 
+            <h4
               className="text-base font-semibold text-foreground mb-1 cursor-pointer hover:text-primary transition-colors duration-200 line-clamp-1"
-              onClick={() => navigate('/book-details')}
+              onClick={() => navigate(`/book-details/${rental.konyv_id}`)}
             >
-              {rental?.bookTitle}
+              {rental?.cim}
             </h4>
-            <p className="text-sm text-muted-foreground mb-2">{rental?.author}</p>
+            <p className="text-sm text-muted-foreground mb-2">
+              {rental?.szerzo}
+            </p>
 
             <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
               <div className="flex items-center gap-1">
                 <Icon name="Calendar" size={14} />
-                <span>Borrowed: {formatDate(rental?.borrowDate)}</span>
+                <span>Kölcsönözve: {formatDate(rental?.berles_kezdete)}</span>
               </div>
               <div className="flex items-center gap-1">
                 <Icon name="CheckCircle2" size={14} />
-                <span>Returned: {formatDate(rental?.returnDate)}</span>
+                <span>Visszavéve: {formatDate(rental?.berles_vege)}</span>
               </div>
             </div>
           </div>
@@ -70,12 +72,20 @@ const RentalHistoryItem = ({ rental, onRate }) => {
                       key={star}
                       name="Star"
                       size={16}
-                      color={star <= rental?.userRating ? "var(--color-warning)" : "var(--color-muted)"}
-                      className={star <= rental?.userRating ? "fill-current" : ""}
+                      color={
+                        star <= rental?.userRating
+                          ? "var(--color-warning)"
+                          : "var(--color-muted)"
+                      }
+                      className={
+                        star <= rental?.userRating ? "fill-current" : ""
+                      }
                     />
                   ))}
                 </div>
-                <span className="text-xs text-muted-foreground ml-1">Your rating</span>
+                <span className="text-xs text-muted-foreground ml-1">
+                  Értékelésed
+                </span>
               </div>
             ) : (
               <>
@@ -87,7 +97,7 @@ const RentalHistoryItem = ({ rental, onRate }) => {
                     iconPosition="left"
                     onClick={() => setShowRating(true)}
                   >
-                    Rate Book
+                    Értékelés
                   </Button>
                 ) : (
                   <div className="flex items-center gap-2">
@@ -104,8 +114,16 @@ const RentalHistoryItem = ({ rental, onRate }) => {
                           <Icon
                             name="Star"
                             size={18}
-                            color={star <= (hoverRating || selectedRating) ? "var(--color-warning)" : "var(--color-muted)"}
-                            className={star <= (hoverRating || selectedRating) ? "fill-current" : ""}
+                            color={
+                              star <= (hoverRating || selectedRating)
+                                ? "var(--color-warning)"
+                                : "var(--color-muted)"
+                            }
+                            className={
+                              star <= (hoverRating || selectedRating)
+                                ? "fill-current"
+                                : ""
+                            }
                           />
                         </button>
                       ))}
@@ -116,7 +134,7 @@ const RentalHistoryItem = ({ rental, onRate }) => {
                       onClick={handleRatingSubmit}
                       disabled={selectedRating === 0}
                     >
-                      Submit
+                      Küldés
                     </Button>
                     <Button
                       variant="ghost"
@@ -127,7 +145,7 @@ const RentalHistoryItem = ({ rental, onRate }) => {
                         setHoverRating(0);
                       }}
                     >
-                      Cancel
+                      Mégse
                     </Button>
                   </div>
                 )}

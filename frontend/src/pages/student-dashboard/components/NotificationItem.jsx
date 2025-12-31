@@ -1,34 +1,34 @@
-import React from 'react';
-import Icon from '../../../components/AppIcon';
+import React from "react";
+import Icon from "../../../components/AppIcon";
 
 const NotificationItem = ({ notification, onDismiss }) => {
   const getIconName = () => {
     switch (notification?.type) {
-      case 'overdue':
-        return 'AlertCircle';
-      case 'due-soon':
-        return 'Clock';
-      case 'new-arrival':
-        return 'BookPlus';
-      case 'fine':
-        return 'DollarSign';
+      case "overdue":
+        return "AlertCircle";
+      case "due-soon":
+        return "Clock";
+      case "new-arrival":
+        return "BookPlus";
+      case "fine":
+        return "DollarSign";
       default:
-        return 'Bell';
+        return "Bell";
     }
   };
 
   const getIconColor = () => {
     switch (notification?.type) {
-      case 'overdue':
-        return 'var(--color-error)';
-      case 'due-soon':
-        return 'var(--color-warning)';
-      case 'new-arrival':
-        return 'var(--color-success)';
-      case 'fine':
-        return 'var(--color-error)';
+      case "overdue":
+        return "var(--color-error)";
+      case "due-soon":
+        return "var(--color-warning)";
+      case "new-arrival":
+        return "var(--color-success)";
+      case "fine":
+        return "var(--color-error)";
       default:
-        return 'var(--color-primary)';
+        return "var(--color-primary)";
     }
   };
 
@@ -40,9 +40,9 @@ const NotificationItem = ({ notification, onDismiss }) => {
     const diffHours = Math.floor(diffMs / 3600000);
     const diffDays = Math.floor(diffMs / 86400000);
 
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
-    return `${diffDays}d ago`;
+    if (diffMins < 60) return `${diffMins}p perce`;
+    if (diffHours < 24) return `${diffHours}ó perce`;
+    return `${diffDays}n napja`;
   };
 
   return (
@@ -52,13 +52,15 @@ const NotificationItem = ({ notification, onDismiss }) => {
       </div>
       <div className="flex-1 min-w-0">
         <p className="text-sm text-foreground mb-1">{notification?.message}</p>
-        <p className="text-xs text-muted-foreground">{formatTime(notification?.timestamp)}</p>
+        <p className="text-xs text-muted-foreground">
+          {formatTime(notification?.timestamp)}
+        </p>
       </div>
       {onDismiss && (
         <button
           onClick={() => onDismiss(notification?.id)}
           className="flex-shrink-0 p-1 hover:bg-background rounded transition-colors duration-200"
-          aria-label="Dismiss notification"
+          aria-label="Értesítés elvetése"
         >
           <Icon name="X" size={14} color="var(--color-muted-foreground)" />
         </button>

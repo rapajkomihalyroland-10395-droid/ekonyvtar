@@ -4,7 +4,7 @@ import Input from "../../../components/ui/Input";
 import Button from "../../../components/ui/Button";
 import Icon from "../../../components/AppIcon";
 import api from "../../../axios_url/baseURL.js";
-import { setAccessToken } from "../../../store/authStore.js";
+import { setAccessToken, SetUser } from "../../../store/authStore.js";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -123,6 +123,7 @@ const LoginForm = () => {
         .trim();
 
       setAccessToken(rawToken);
+      SetUser(response.data?.user);
       navigate("/");
     } catch (error) {
       console.error("Login error:", error);
