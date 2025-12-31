@@ -73,8 +73,13 @@ const ReviewsTab = ({ reviews, overallRating, totalReviews }) => {
               <div className="flex-shrink-0">
                 <div className="w-10 h-10 rounded-full overflow-hidden bg-muted">
                   <Image
-                    src={review?.studentAvatar}
-                    alt={review?.studentAvatarAlt}
+                    src={
+                      review?.studentAvatar ||
+                      `https://ui-avatars.com/api/?name=${
+                        review?.felhasznalo?.nev || "A"
+                      }`
+                    }
+                    alt={review?.felhasznalo?.nev || "User"}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -82,8 +87,12 @@ const ReviewsTab = ({ reviews, overallRating, totalReviews }) => {
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-2">
                   <div>
-                    <p className="font-medium text-foreground">{review?.studentName}</p>
-                    <p className="text-xs text-muted-foreground">{formatDate(review?.date)}</p>
+                    <p className="font-medium text-foreground">
+                      {review?.felhasznalo?.nev || "Anonymous"}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {formatDate(review?.date || "2024-01-01")}
+                    </p>
                   </div>
                   <div className="flex items-center gap-1">
                     {[...Array(5)]?.map((_, index) => (
@@ -91,17 +100,27 @@ const ReviewsTab = ({ reviews, overallRating, totalReviews }) => {
                         key={index}
                         name="Star"
                         size={14}
-                        color={index < review?.rating ? '#F59E0B' : '#E5E7EB'}
-                        className={index < review?.rating ? 'fill-current' : ''}
+                        color={
+                          index < (review?.velemeny_erteke || review?.rating)
+                            ? "#F59E0B"
+                            : "#E5E7EB"
+                        }
+                        className={
+                          index < (review?.velemeny_erteke || review?.rating)
+                            ? "fill-current"
+                            : ""
+                        }
                       />
                     ))}
                   </div>
                 </div>
-                <p className="text-sm text-foreground leading-relaxed mb-3">{review?.comment}</p>
+                <p className="text-sm text-foreground leading-relaxed mb-3">
+                  {review?.velemeny_szovege || review?.comment}
+                </p>
                 <div className="flex items-center gap-4">
                   <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
                     <Icon name="ThumbsUp" size={14} />
-                    <span>Helpful ({review?.helpfulCount})</span>
+                    <span>Helpful ({review?.helpfulCount || 0})</span>
                   </button>
                   <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
                     <Icon name="MessageSquare" size={14} />

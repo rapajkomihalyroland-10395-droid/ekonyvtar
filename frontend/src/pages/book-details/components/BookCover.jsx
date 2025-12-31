@@ -1,5 +1,5 @@
-import React from 'react';
-import Image from '../../../components/AppImage';
+import React from "react";
+import Image from "../../../components/AppImage";
 
 const BookCover = ({ book }) => {
   return (
@@ -8,23 +8,26 @@ const BookCover = ({ book }) => {
         <div className="bg-card rounded-lg shadow-card overflow-hidden border border-border">
           <div className="aspect-[3/4] overflow-hidden bg-muted">
             <Image
-              src={book?.coverImage}
-              alt={book?.coverImageAlt}
+              src={book?.kep}
+              alt={book?.cim}
               className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
             />
           </div>
           <div className="p-4 bg-muted/30">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-muted-foreground">Availability</span>
-              <span className={`text-sm font-semibold ${book?.availableCopies > 0 ? 'text-success' : 'text-error'}`}>
-                {book?.availableCopies > 0 ? `${book?.availableCopies} copies available` : 'Currently unavailable'}
+              <span className="text-sm font-medium text-muted-foreground">
+                Availability
+              </span>
+              <span
+                className={`text-sm font-semibold ${
+                  book?.keszlet > 0 ? "text-success" : "text-error"
+                }`}
+              >
+                {book?.keszlet > 0
+                  ? `${book?.keszlet} copies available`
+                  : "Currently unavailable"}
               </span>
             </div>
-            {book?.availableCopies === 0 && book?.estimatedReturnDate && (
-              <p className="text-xs text-muted-foreground">
-                Expected return: {new Date(book.estimatedReturnDate)?.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-              </p>
-            )}
           </div>
         </div>
       </div>

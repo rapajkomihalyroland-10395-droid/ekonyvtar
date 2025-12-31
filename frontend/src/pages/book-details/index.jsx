@@ -23,46 +23,14 @@ const BookDetails = () => {
   useEffect(() => {
     const fetchBookDetails = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3000/api/get-book/${id}`
-        );
-        if (!response.ok) throw new Error("Failed to fetch book details");
-        const data = await response.json();
-
-        setBookData({
-          id: data.id,
-          title: data.cim,
-          author: data.szerzo?.nev || "Unknown Author",
-          isbn: data.ISBN,
-          publisher: data.kiado?.nev || "Unknown Publisher",
-          publicationYear: data.kiadas_ev,
-          pages: data.magassag_cm ? Math.round(data.magassag_cm * 10) : 0,
-          coverImage: data.kep,
-          coverImageAlt: data.cim,
-          rating: Number(data.csillag_ertekeles),
-          totalReviews: data.velemeny?.length || 0,
-          availableCopies: data.keszlet,
-          totalCopies: data.keszlet,
-          estimatedReturnDate: null,
-          categories: data.kategoria ? [data.kategoria.nev] : [],
-          synopsis: data.leiras,
-          language: "Hungarian",
-          genre: data.kategoria?.nev,
+        const response = await api.get(`/get-book/${id}`, {
+          headers: getAuthHeader(),
         });
+        const data = response.data;
 
-        setReviewsData(
-          data.velemeny?.map((v) => ({
-            id: v.id,
-            studentName: v.felhasznalo?.nev || "Anonymous",
-            studentAvatar:
-              "https://ui-avatars.com/api/?name=" + (v.felhasznalo?.nev || "A"),
-            studentAvatarAlt: v.felhasznalo?.nev,
-            rating: v.velemeny_erteke,
-            date: "2024-01-01",
-            comment: v.velemeny_szovege,
-            helpfulCount: 0,
-          })) || []
-        );
+        setBookData(data);
+
+        setReviewsData(data.velemeny || []);
       } catch (error) {
         console.error("Error fetching book details:", error);
       } finally {
@@ -246,13 +214,13 @@ const BookDetails = () => {
                     </summary>
                     <div className="px-4 py-4 border-t border-border">
                       {tab?.id === "synopsis" && (
-                        <SynopsisTab synopsis={bookData?.synopsis} />
+                        <SynopsisTab synopsis={bookData?.leiras} />
                       )}
                       {tab?.id === "reviews" && (
                         <ReviewsTab
                           reviews={reviewsData}
-                          overallRating={bookData?.rating}
-                          totalReviews={bookData?.totalReviews}
+                          overallRating={Number(bookData?.csillag_ertekeles)}
+                          totalReviews={bookData?.velemeny?.length}
                         />
                       )}
                       {tab?.id === "related" && (
@@ -270,8 +238,8 @@ const BookDetails = () => {
                 {activeTab === "reviews" && (
                   <ReviewsTab
                     reviews={reviewsData}
-                    overallRating={bookData?.rating}
-                    totalReviews={bookData?.totalReviews}
+                    overallRating={Number(bookData?.csillag_ertekeles)}
+                    totalReviews={bookData?.velemeny?.length}
                   />
                 )}
                 {activeTab === "related" && (

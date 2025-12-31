@@ -29,7 +29,7 @@ userRouter.route("/top-by-category").get(AuthMiddleware, TopByCategory);
 
 //KERESÉS
 userRouter.route("/search/:book_name").get(AuthMiddleware, BookSearching);
-userRouter.route("/get-book/:id").get(AuthMiddleware, GetBookDetails);
+userRouter.route("/get-book/:id").get(GetBookDetails);
 
 //KÖLCSÖN
 userRouter.route("/loan-signal").post(AuthMiddleware, UserLoanIntention);

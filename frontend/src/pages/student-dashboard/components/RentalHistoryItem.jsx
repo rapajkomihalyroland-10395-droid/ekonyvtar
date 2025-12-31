@@ -30,7 +30,7 @@ const RentalHistoryItem = ({ rental, onRate }) => {
       <div className="flex flex-col sm:flex-row gap-4 p-4">
         <div
           className="flex-shrink-0 w-20 h-28 overflow-hidden rounded-md cursor-pointer"
-          onClick={() => navigate("/book-details")}
+          onClick={() => navigate(`/book-details/${rental.konyv_id}`)}
         >
           <Image
             src={rental?.kep}

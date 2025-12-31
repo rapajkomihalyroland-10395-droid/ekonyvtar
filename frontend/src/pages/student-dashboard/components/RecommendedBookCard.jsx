@@ -11,7 +11,7 @@ const RecommendedBookCard = ({ book }) => {
     <div className="bg-card border border-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-200 flex flex-col h-full">
       <div 
         className="w-full h-48 overflow-hidden cursor-pointer"
-        onClick={() => navigate('/book-details')}
+        onClick={() => navigate(`/book-details/${book?.id}`)}
       >
         <Image
           src={book?.cover}
@@ -23,7 +23,7 @@ const RecommendedBookCard = ({ book }) => {
         <div className="flex-1">
           <h4 
             className="text-base font-semibold text-foreground mb-1 cursor-pointer hover:text-primary transition-colors duration-200 line-clamp-2"
-            onClick={() => navigate('/book-details')}
+            onClick={() => navigate(`/book-details/${book?.id}`)}
           >
             {book?.title}
           </h4>
@@ -46,7 +46,7 @@ const RecommendedBookCard = ({ book }) => {
           fullWidth
           iconName="BookOpen"
           iconPosition="left"
-          onClick={() => navigate('/book-details')}
+          onClick={() => navigate(`/book-details/${book?.id}`)}
         >
           Részletek
         </Button>

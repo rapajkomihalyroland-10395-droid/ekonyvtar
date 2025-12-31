@@ -57,10 +57,10 @@ const ActionPanel = ({ book }) => {
         iconName="ShoppingCart"
         iconPosition="left"
         onClick={handleRentBook}
-        disabled={book?.availableCopies === 0}
+        disabled={book?.keszlet === 0}
         className="mb-3"
       >
-        {book?.availableCopies > 0 ? 'Rent This Book' : 'Currently Unavailable'}
+        {book?.keszlet > 0 ? 'Rent This Book' : 'Currently Unavailable'}
       </Button>
       <div className="grid grid-cols-2 gap-2 mb-4">
         <Button

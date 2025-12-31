@@ -57,7 +57,7 @@ const CurrentRentalCard = ({ rental, onRenew }) => {
           <div>
             <h3
               className="text-lg font-semibold text-foreground mb-1 cursor-pointer hover:text-primary transition-colors duration-200 line-clamp-2"
-              onClick={() => navigate("/book-details")}
+              onClick={() => navigate(`/book-details/${rental.konyv_id}`)}
             >
               {rental?.cim}
             </h3>
