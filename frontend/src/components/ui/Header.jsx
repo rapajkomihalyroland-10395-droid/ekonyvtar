@@ -9,12 +9,16 @@ const Header = () => {
   const navigate = useNavigate();
 
   const navigationItems = [
-    { label: 'My Library', path: '/student-dashboard', icon: 'LayoutDashboard' },
-    { label: 'Browse Books', path: '/book-catalog', icon: 'BookOpen' },
-    { label: 'Account', path: '/student-login', icon: 'User' }
+    { label: 'Főoldal', path: '/', icon: 'Home' },
+    { label: 'Könyvtáram', path: '/student-dashboard', icon: 'LayoutDashboard' },
+    { label: 'Könyvek Böngészése', path: '/book-catalog', icon: 'BookOpen' },
+    { label: 'Fiók', path: '/student-login', icon: 'User' }
   ];
 
   const isActivePath = (path) => {
+    if (path === '/') {
+      return location?.pathname === '/';
+    }
     if (path === '/student-dashboard') {
       return location?.pathname === path;
     }

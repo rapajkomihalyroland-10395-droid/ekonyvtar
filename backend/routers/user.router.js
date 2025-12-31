@@ -20,14 +20,14 @@ import { GetAllCategories } from "../controllers/books/get.all.categories.js";
 const userRouter = Router();
 
 //TOPLISTÁK
-userRouter.route("/top-books").get(AuthMiddleware, TopBooks);
+userRouter.route("/top-books").get(TopBooks);
 userRouter.route("/top-author").get(TopAuthor);
 userRouter.route("/top-by-stars").get(TopByStars);
 userRouter.route("/top-by-category").get(TopByCategory);
 
 //KERESÉS
 userRouter.route("/search/:book_name").get(AuthMiddleware, BookSearching);
-userRouter.route("/get-book/:id").get(GetBookDetails);
+userRouter.route("/get-book/:id").get(AuthMiddleware, GetBookDetails);
 
 //KÖLCSÖN
 userRouter.route("/loan-signal").post(AuthMiddleware, UserLoanIntention);
@@ -36,6 +36,6 @@ userRouter.route("/loan-signal").post(AuthMiddleware, UserLoanIntention);
 userRouter.route("/write-opinion").post(AuthMiddleware, ReaderOpinion);
 
 //KATEGÓRIÁK
-userRouter.route("/get-all-categories").get(GetAllCategories);
+userRouter.route("/get-all-categories").get(AuthMiddleware, GetAllCategories);
 
 export default userRouter;

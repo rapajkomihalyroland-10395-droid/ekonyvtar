@@ -122,7 +122,18 @@ export const TopByStars = async (req, res) => {
       take: 25,
     });
 
-    return res.status(200).json(books);
+    const formattedBooks = books.map((book) => ({
+      id: book.id,
+      cim: book.cim,
+      kep: book.kep,
+      leiras: book.leiras,
+      csillag_ertekeles: book.csillag_ertekeles,
+      szerzo: book.szerzo.nev,
+      kiado: book.kiado.nev,
+      kategoria: book.kategoria.nev,
+    }));
+
+    return res.status(200).json(formattedBooks);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -170,7 +181,6 @@ export const TopByCategory = async (req, res) => {
     const sortedBooks = Object.values(collect_books)
       .sort((a, b) => b.elofordulas - a.elofordulas)
       .slice(0, 10);
-
     return res.status(200).json(sortedBooks);
   } catch (error) {
     return res.status(500).json({ error: error.message });

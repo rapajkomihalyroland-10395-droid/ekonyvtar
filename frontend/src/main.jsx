@@ -6,7 +6,8 @@ import "./styles/tailwind.css";
 import "./styles/index.css";
 
 import NotFound from "pages/NotFound";
-import BookCatalog from "./pages/book-catalog";
+import MainPage from "./pages/main-page/index.jsx";
+import BookCatalog from "./pages/book-catalog/index.jsx";
 import BookDetails from "./pages/book-details/index.jsx";
 import RentalCheckout from "./pages/rental-checkout/index.jsx";
 import StudentDashboard from "./pages/student-dashboard/index.jsx";
@@ -23,10 +24,18 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <RouterGuard>
-        <BookCatalog />
+        <MainPage />
       </RouterGuard>
     ),
     errorElement: <RouteErrorElement />,
+  },
+  {
+    path: "/book-catalog",
+    element: (
+      <RouterGuard>
+        <BookCatalog />
+      </RouterGuard>
+    ),
   },
   {
     path: "/book-details/:id",
