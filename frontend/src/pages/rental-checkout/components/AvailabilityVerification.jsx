@@ -1,12 +1,12 @@
 import React from 'react';
-import Icon from '../../../components/AppIcon';
+import { Loader2, CheckCircle2, AlertTriangle, XCircle } from 'lucide-react';
 
 const AvailabilityVerification = ({ isVerifying, verificationStatus }) => {
   if (!isVerifying && !verificationStatus) return null;
 
   const statusConfig = {
     verifying: {
-      icon: 'Loader2',
+      Icon: Loader2,
       iconClass: 'animate-spin',
       bgColor: 'bg-muted',
       borderColor: 'border-border',
@@ -14,7 +14,7 @@ const AvailabilityVerification = ({ isVerifying, verificationStatus }) => {
       message: 'Verifying book availability...'
     },
     success: {
-      icon: 'CheckCircle2',
+      Icon: CheckCircle2,
       iconClass: '',
       bgColor: 'bg-success/10',
       borderColor: 'border-success/20',
@@ -22,7 +22,7 @@ const AvailabilityVerification = ({ isVerifying, verificationStatus }) => {
       message: 'All books are available for checkout'
     },
     conflict: {
-      icon: 'AlertTriangle',
+      Icon: AlertTriangle,
       iconClass: '',
       bgColor: 'bg-warning/10',
       borderColor: 'border-warning/20',
@@ -30,7 +30,7 @@ const AvailabilityVerification = ({ isVerifying, verificationStatus }) => {
       message: 'Some books may have limited availability. Please review your selection.'
     },
     error: {
-      icon: 'XCircle',
+      Icon: XCircle,
       iconClass: '',
       bgColor: 'bg-destructive/10',
       borderColor: 'border-destructive/20',
@@ -41,11 +41,11 @@ const AvailabilityVerification = ({ isVerifying, verificationStatus }) => {
 
   const status = isVerifying ? 'verifying' : verificationStatus;
   const config = statusConfig?.[status] || statusConfig?.verifying;
+  const IconComponent = config.Icon;
 
   return (
     <div className={`flex items-center gap-3 p-4 ${config?.bgColor} border ${config?.borderColor} rounded-lg`}>
-      <Icon 
-        name={config?.icon} 
+      <IconComponent 
         size={20} 
         className={`${config?.textColor} ${config?.iconClass}`}
       />

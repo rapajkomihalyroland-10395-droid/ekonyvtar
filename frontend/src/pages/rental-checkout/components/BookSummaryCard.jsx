@@ -1,8 +1,9 @@
-import React from 'react';
-import Image from '../../../components/AppImage';
-import Icon from '../../../components/AppIcon';
+import React, { useState } from 'react';
+import { X, Calendar, Clock } from 'lucide-react';
 
 const BookSummaryCard = ({ book, onRemove }) => {
+  const [imageError, setImageError] = useState(false);
+
   const calculateDueDate = (rentalDays) => {
     const dueDate = new Date();
     dueDate?.setDate(dueDate?.getDate() + rentalDays);
@@ -16,10 +17,11 @@ const BookSummaryCard = ({ book, onRemove }) => {
   return (
     <div className="flex gap-4 p-4 bg-card border border-border rounded-lg hover:shadow-md transition-shadow duration-200">
       <div className="flex-shrink-0 w-20 h-28 overflow-hidden rounded-md bg-muted">
-        <Image
-          src={book?.coverImage}
+        <img
+          src={imageError ? "/assets/images/no_image.png" : book?.coverImage}
           alt={book?.coverImageAlt}
           className="w-full h-full object-cover"
+          onError={() => setImageError(true)}
         />
       </div>
       <div className="flex-1 min-w-0">
@@ -37,17 +39,17 @@ const BookSummaryCard = ({ book, onRemove }) => {
             className="flex-shrink-0 p-1 text-muted-foreground hover:text-destructive transition-colors duration-200"
             aria-label={`Remove ${book?.title} from checkout`}
           >
-            <Icon name="X" size={18} />
+            <X size={18} />
           </button>
         </div>
         
         <div className="flex items-center gap-4 text-sm">
           <div className="flex items-center gap-1 text-muted-foreground">
-            <Icon name="Calendar" size={14} />
+            <Calendar size={14} />
             <span>{book?.rentalDays} days</span>
           </div>
           <div className="flex items-center gap-1 text-muted-foreground">
-            <Icon name="Clock" size={14} />
+            <Clock size={14} />
             <span>Due: {calculateDueDate(book?.rentalDays)}</span>
           </div>
         </div>

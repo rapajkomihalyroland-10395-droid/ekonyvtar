@@ -1,9 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import Icon from "../../../components/AppIcon";
-import Select from "../../../components/ui/Select";
-import Input from "../../../components/ui/Input";
-import Button from "../../../components/ui/Button";
-import { Checkbox } from "../../../components/ui/Checkbox";
 import api from "../../../axios_url/baseURL.js";
 import { getAuthHeader } from "../../../store/authStore.js";
 
@@ -96,6 +91,8 @@ const FilterPanel = ({
     onFilterChange("availability", checked ? [status] : []);
   };
 
+  const inputClassName = "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
+
   return (
     <>
       {isOpen && (
@@ -120,7 +117,10 @@ const FilterPanel = ({
             className="p-2 rounded-md hover:bg-muted transition-colors duration-200"
             aria-label="Close filters"
           >
-            <Icon name="X" size={20} />
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 6 6 18" />
+              <path d="m6 6 18 18" />
+            </svg>
           </button>
         </div>
 
@@ -129,50 +129,61 @@ const FilterPanel = ({
             <h3 className="text-sm font-medium text-foreground">
               {resultCount} {resultCount === 1 ? "Book" : "Books"} Found
             </h3>
-            <Button
-              variant="ghost"
-              size="sm"
+            <button
               onClick={onClearFilters}
-              iconName="RotateCcw"
-              iconSize={16}
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 px-3"
             >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                <path d="M3 3v5h5" />
+              </svg>
               Clear
-            </Button>
+            </button>
           </div>
 
           <div className="space-y-4">
-            <Select
-              label="Category"
-              options={categories}
-              value={filters?.category}
-              onChange={(value) => onFilterChange("category", value)}
-              placeholder="Select category"
-            />
+            <div className="space-y-2">
+              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Category</label>
+              <select
+                className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1"
+                value={filters?.category || ""}
+                onChange={(e) => onFilterChange("category", e.target.value)}
+              >
+                <option value="" disabled>Select category</option>
+                {categories.map((cat) => (
+                  <option key={cat.value} value={cat.value}>
+                    {cat.label}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">
                 Publication Year
               </label>
               <div className="grid grid-cols-2 gap-2">
-                <Input
+                <input
                   type="text"
                   inputMode="numeric"
-                  pattern="\\d*"
+                  pattern="\d*"
                   value={filters?.yearFrom}
                   onChange={(e) =>
                     onFilterChange("yearFrom", sanitizeYear(e?.target?.value))
                   }
                   placeholder="tól"
+                  className={inputClassName}
                 />
-                <Input
+                <input
                   type="text"
                   inputMode="numeric"
-                  pattern="\\d*"
+                  pattern="\d*"
                   value={filters?.yearTo}
                   onChange={(e) =>
                     onFilterChange("yearTo", sanitizeYear(e?.target?.value))
                   }
                   placeholder="ig"
+                  className={inputClassName}
                 />
               </div>
             </div>
@@ -182,27 +193,57 @@ const FilterPanel = ({
                 Elérhetőség
               </label>
               <div className="space-y-2">
-                <Checkbox
-                  label="Elérhető"
-                  checked={filters?.availability?.[0] === "available"}
-                  onChange={(e) =>
-                    handleAvailabilityChange("available", e?.target?.checked)
-                  }
-                />
-                <Checkbox
-                  label="Kikölcsönözve"
-                  checked={filters?.availability?.[0] === "checked-out"}
-                  onChange={(e) =>
-                    handleAvailabilityChange("checked-out", e?.target?.checked)
-                  }
-                />
-                <Checkbox
-                  label="Foglalt"
-                  checked={filters?.availability?.[0] === "reserved"}
-                  onChange={(e) =>
-                    handleAvailabilityChange("reserved", e?.target?.checked)
-                  }
-                />
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="available"
+                    className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                    checked={filters?.availability?.[0] === "available"}
+                    onChange={(e) =>
+                      handleAvailabilityChange("available", e?.target?.checked)
+                    }
+                  />
+                  <label
+                    htmlFor="available"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Elérhető
+                  </label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="checked-out"
+                    className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                    checked={filters?.availability?.[0] === "checked-out"}
+                    onChange={(e) =>
+                      handleAvailabilityChange("checked-out", e?.target?.checked)
+                    }
+                  />
+                  <label
+                    htmlFor="checked-out"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Kikölcsönözve
+                  </label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="reserved"
+                    className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                    checked={filters?.availability?.[0] === "reserved"}
+                    onChange={(e) =>
+                      handleAvailabilityChange("reserved", e?.target?.checked)
+                    }
+                  />
+                  <label
+                    htmlFor="reserved"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Foglalt
+                  </label>
+                </div>
               </div>
             </div>
 
@@ -211,10 +252,10 @@ const FilterPanel = ({
                 Értékelés
               </label>
               <div className="grid grid-cols-2 gap-2">
-                <Input
+                <input
                   type="text"
                   inputMode="decimal"
-                  pattern="[0-9]*[\\.]?[0-9]*"
+                  pattern="[0-9]*[\.]?[0-9]*"
                   value={filters?.minRating}
                   onChange={(e) =>
                     onFilterChange(
@@ -229,11 +270,12 @@ const FilterPanel = ({
                     )
                   }
                   placeholder="min"
+                  className={inputClassName}
                 />
-                <Input
+                <input
                   type="text"
                   inputMode="decimal"
-                  pattern="[0-9]*[\\.]?[0-9]*"
+                  pattern="[0-9]*[\.]?[0-9]*"
                   value={filters?.maxRating}
                   onChange={(e) =>
                     onFilterChange(
@@ -248,6 +290,7 @@ const FilterPanel = ({
                     )
                   }
                   placeholder="max"
+                  className={inputClassName}
                 />
               </div>
             </div>

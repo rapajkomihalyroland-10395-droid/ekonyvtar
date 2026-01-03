@@ -2,8 +2,8 @@ import { React, useState, useEffect } from "react";
 import api from "../../axios_url/baseURL.js";
 import { getAuthHeader } from "../../store/authStore.js";
 import Header from "../../components/ui/Header";
-import Button from "../../components/ui/Button";
 import Carousel from "../../components/ui/Carousel";
+import { Search, BookOpen } from "lucide-react";
 
 import SectionHeader from "./components/SectionHeader";
 import BookCard from "./components/BookCard";
@@ -62,12 +62,14 @@ const MainPage = () => {
               könyvtárunkban.
             </p>
             <div className="flex gap-4">
-              <Button size="lg" icon="Search">
+              <button className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8 gap-2">
+                <Search size={20} />
                 Keresés
-              </Button>
-              <Button variant="outline" size="lg" icon="BookOpen">
+              </button>
+              <button className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 rounded-md px-8 gap-2">
+                <BookOpen size={20} />
                 Katalógus
-              </Button>
+              </button>
             </div>
           </div>
         </div>

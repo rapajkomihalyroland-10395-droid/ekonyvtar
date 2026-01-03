@@ -1,6 +1,4 @@
 import React from 'react';
-import Input from '../../../components/ui/Input';
-import Select from '../../../components/ui/Select';
 import { Checkbox } from '../../../components/ui/Checkbox';
 
 const CheckoutForm = ({ formData, setFormData, errors }) => {
@@ -14,38 +12,59 @@ const CheckoutForm = ({ formData, setFormData, errors }) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const inputClassName = "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
+
   return (
     <div className="bg-card border border-border rounded-lg p-6">
       <h2 className="text-lg font-semibold text-foreground mb-4">Checkout Information</h2>
       <div className="space-y-4">
-        <Select
-          label="Pickup Preference"
-          description="Choose how you'd like to receive your books"
-          options={pickupOptions}
-          value={formData?.pickupPreference}
-          onChange={(value) => handleInputChange('pickupPreference', value)}
-          error={errors?.pickupPreference}
-          required
-        />
+        <div className="space-y-2">
+          <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            Pickup Preference <span className="text-destructive">*</span>
+          </label>
+          <select
+            className={inputClassName}
+            value={formData?.pickupPreference}
+            onChange={(e) => handleInputChange('pickupPreference', e.target.value)}
+          >
+            <option value="" disabled>Choose how you'd like to receive your books</option>
+            {pickupOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <p className="text-sm text-muted-foreground">Choose how you'd like to receive your books</p>
+          {errors?.pickupPreference && <p className="text-sm font-medium text-destructive">{errors.pickupPreference}</p>}
+        </div>
         
-        <Input
-          label="Special Instructions"
-          type="text"
-          placeholder="Any special accommodations or notes (optional)"
-          value={formData?.specialInstructions}
-          onChange={(e) => handleInputChange('specialInstructions', e?.target?.value)}
-          description="Maximum 200 characters"
-        />
+        <div className="space-y-2">
+          <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            Special Instructions
+          </label>
+          <input
+            type="text"
+            className={inputClassName}
+            placeholder="Any special accommodations or notes (optional)"
+            value={formData?.specialInstructions}
+            onChange={(e) => handleInputChange('specialInstructions', e?.target?.value)}
+          />
+          <p className="text-sm text-muted-foreground">Maximum 200 characters</p>
+        </div>
         
-        <Input
-          label="Contact Phone Number"
-          type="tel"
-          placeholder="(555) 123-4567"
-          value={formData?.contactPhone}
-          onChange={(e) => handleInputChange('contactPhone', e?.target?.value)}
-          error={errors?.contactPhone}
-          required
-        />
+        <div className="space-y-2">
+          <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            Contact Phone Number <span className="text-destructive">*</span>
+          </label>
+          <input
+            type="tel"
+            className={inputClassName}
+            placeholder="(555) 123-4567"
+            value={formData?.contactPhone}
+            onChange={(e) => handleInputChange('contactPhone', e?.target?.value)}
+          />
+          {errors?.contactPhone && <p className="text-sm font-medium text-destructive">{errors.contactPhone}</p>}
+        </div>
         
         <div className="pt-2">
           <Checkbox

@@ -1,8 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Image from "../../../components/AppImage";
-import Icon from "../../../components/AppIcon";
-import Button from "../../../components/ui/Button";
+import { Calendar, CalendarClock, AlertCircle, Clock, RefreshCw, BookOpen } from "lucide-react";
 import RentalTermsPanel from "pages/rental-checkout/components/RentalTermsPanel";
 
 const CurrentRentalCard = ({ rental, onRenew }) => {
@@ -46,10 +44,13 @@ const CurrentRentalCard = ({ rental, onRenew }) => {
           className="flex-shrink-0 w-full sm:w-32 h-48 sm:h-44 overflow-hidden rounded-md cursor-pointer"
           onClick={() => navigate(`/book-details/${rental.konyv_id}`)}
         >
-          <Image
+          <img
             src={rental?.kep}
             alt={rental?.cim}
             className="w-full h-full object-cover hover:scale-105 transition-transform duration-200"
+            onError={(e) => {
+              e.target.src = "/assets/images/no_image.png";
+            }}
           />
         </div>
 
@@ -67,11 +68,11 @@ const CurrentRentalCard = ({ rental, onRenew }) => {
 
             <div className="flex flex-wrap gap-3 mb-3">
               <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                <Icon name="Calendar" size={16} />
+                <Calendar size={16} />
                 <span>Kölcsönözve: {formatDate(rental?.berles_kezdete)}</span>
               </div>
               <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                <Icon name="CalendarClock" size={16} />
+                <CalendarClock size={16} />
                 <span>Határidő: {formatDate(rental?.berles_vege)}</span>
               </div>
             </div>
@@ -79,34 +80,27 @@ const CurrentRentalCard = ({ rental, onRenew }) => {
             <div
               className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium ${getStatusColor()}`}
             >
-              <Icon
-                name={daysRemaining < 0 ? "AlertCircle" : "Clock"}
-                size={14}
-              />
+              {daysRemaining < 0 ? <AlertCircle size={14} /> : <Clock size={14} />}
               <span>{getStatusText()}</span>
             </div>
           </div>
 
           <div className="flex flex-wrap gap-2 mt-4">
-            <Button
-              variant="outline"
-              size="sm"
-              iconName="RefreshCw"
-              iconPosition="left"
+            <button
               onClick={() => onRenew(rental?.id)}
               disabled={!rental?.canRenew || daysRemaining < 0}
+              className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3 gap-2"
             >
+              <RefreshCw size={16} />
               Hosszabbítás
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              iconName="BookOpen"
-              iconPosition="left"
+            </button>
+            <button
               onClick={() => navigate(`/book-details/${rental.konyv_id}`)}
+              className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3 gap-2"
             >
+              <BookOpen size={16} />
               Részletek
-            </Button>
+            </button>
           </div>
         </div>
       </div>

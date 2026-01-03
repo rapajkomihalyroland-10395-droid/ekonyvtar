@@ -1,8 +1,6 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import Input from "../../../components/ui/Input";
-import Button from "../../../components/ui/Button";
-import Icon from "../../../components/AppIcon";
+import { AlertCircle, Eye, EyeOff, Loader2 } from "lucide-react";
 import api from "../../../axios_url/baseURL.js";
 import { setAccessToken, SetUser } from "../../../store/authStore.js";
 
@@ -143,11 +141,9 @@ const LoginForm = () => {
     <form onSubmit={handleSubmit} className="space-y-6" noValidate>
       {formErrors.submit && (
         <div className="p-4 bg-error/10 border border-error/20 rounded-lg flex items-start gap-3">
-          <Icon
-            name="AlertCircle"
+          <AlertCircle
             size={20}
-            color="var(--color-error)"
-            className="flex-shrink-0 mt-0.5"
+            className="text-error flex-shrink-0 mt-0.5"
           />
           <p className="text-sm font-medium text-error flex-1">
             {formErrors.submit}
@@ -155,44 +151,59 @@ const LoginForm = () => {
         </div>
       )}
 
-      <div>
-        <Input
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-foreground">
+          Email Address <span className="text-error">*</span>
+        </label>
+        <input
           type="email"
           name="email"
-          label="Email Address"
           placeholder="student@schoollibrary.edu"
           value={formData.email}
           onChange={handleInputChange}
-          error={formErrors.email}
+          className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
+            formErrors.email ? "border-error focus-visible:ring-error" : ""
+          }`}
           required
           disabled={isSubmitting}
           autoComplete="email"
         />
+        {formErrors.email && (
+          <p className="text-xs text-error">{formErrors.email}</p>
+        )}
       </div>
 
-      <div className="relative">
-        <Input
-          type={showPassword ? "text" : "password"}
-          name="password"
-          label="Password"
-          placeholder="Enter your password"
-          value={formData.password}
-          onChange={handleInputChange}
-          error={formErrors.password}
-          required
-          disabled={isSubmitting}
-          autoComplete="current-password"
-        />
-
-        <button
-          type="button"
-          onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-3 top-9 text-muted-foreground hover:text-foreground transition-colors"
-          aria-label={showPassword ? "Hide password" : "Show password"}
-          disabled={isSubmitting}
-        >
-          <Icon name={showPassword ? "EyeOff" : "Eye"} size={20} />
-        </button>
+      <div className="space-y-2 relative">
+        <label className="text-sm font-medium text-foreground">
+          Password <span className="text-error">*</span>
+        </label>
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder="Enter your password"
+            value={formData.password}
+            onChange={handleInputChange}
+            className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pr-10 ${
+              formErrors.password ? "border-error focus-visible:ring-error" : ""
+            }`}
+            required
+            disabled={isSubmitting}
+            autoComplete="current-password"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground transition-colors"
+            aria-label={showPassword ? "Hide password" : "Show password"}
+            disabled={isSubmitting}
+          >
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </button>
+        </div>
+        {formErrors.password && (
+          <p className="text-xs text-error">{formErrors.password}</p>
+        )}
       </div>
 
       <div className="flex justify-end">
@@ -207,16 +218,20 @@ const LoginForm = () => {
       </div>
 
       {/* Submit Button */}
-      <Button
+      <button
         type="submit"
-        variant="default"
-        size="lg"
-        fullWidth
-        loading={isSubmitting}
         disabled={isSubmitting}
+        className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 w-full"
       >
-        {isSubmitting ? "Signing in..." : "Sign In"}
-      </Button>
+        {isSubmitting ? (
+          <>
+            <Loader2 size={20} className="mr-2 animate-spin" />
+            Signing in...
+          </>
+        ) : (
+          "Sign In"
+        )}
+      </button>
     </form>
   );
 };

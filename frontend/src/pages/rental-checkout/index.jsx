@@ -1,14 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
-import Header from '../../components/ui/Header';
-import Button from '../../components/ui/Button';
-import Icon from '../../components/AppIcon';
-import BookSummaryCard from './components/BookSummaryCard';
-import RentalTermsPanel from './components/RentalTermsPanel';
-import CheckoutForm from './components/CheckoutForm';
-import RentalSummary from './components/RentalSummary';
-import AvailabilityVerification from './components/AvailabilityVerification';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
+import Header from "../../components/ui/Header";
+import {
+  ShoppingCart,
+  MapPin,
+  Clock,
+  Smartphone,
+  CheckCircle2,
+  Bookmark,
+  Loader2,
+} from "lucide-react";
+import BookSummaryCard from "./components/BookSummaryCard";
+import RentalTermsPanel from "./components/RentalTermsPanel";
+import CheckoutForm from "./components/CheckoutForm";
+import RentalSummary from "./components/RentalSummary";
+import AvailabilityVerification from "./components/AvailabilityVerification";
 
 const RentalCheckout = () => {
   const navigate = useNavigate();
@@ -18,38 +25,44 @@ const RentalCheckout = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const [selectedBooks, setSelectedBooks] = useState([
-  {
-    id: 1,
-    title: "To Kill a Mockingbird",
-    author: "Harper Lee",
-    coverImage: "https://img.rocket.new/generatedImages/rocket_gen_img_14b25cd30-1764648854966.png",
-    coverImageAlt: "Classic novel cover showing courthouse steps with warm sepia tones and vintage typography",
-    rentalDays: 14
-  },
-  {
-    id: 2,
-    title: "1984",
-    author: "George Orwell",
-    coverImage: "https://img.rocket.new/generatedImages/rocket_gen_img_1fd29f48f-1764646532421.png",
-    coverImageAlt: "Dystopian novel cover featuring dark surveillance imagery with bold red and black design elements",
-    rentalDays: 14
-  },
-  {
-    id: 3,
-    title: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    coverImage: "https://img.rocket.new/generatedImages/rocket_gen_img_1f9e2ac86-1765564429502.png",
-    coverImageAlt: "Art deco style book cover with golden lights and elegant 1920s typography against dark blue background",
-    rentalDays: 21
-  }]
-  );
+    {
+      id: 1,
+      title: "To Kill a Mockingbird",
+      author: "Harper Lee",
+      coverImage:
+        "https://img.rocket.new/generatedImages/rocket_gen_img_14b25cd30-1764648854966.png",
+      coverImageAlt:
+        "Classic novel cover showing courthouse steps with warm sepia tones and vintage typography",
+      rentalDays: 14,
+    },
+    {
+      id: 2,
+      title: "1984",
+      author: "George Orwell",
+      coverImage:
+        "https://img.rocket.new/generatedImages/rocket_gen_img_1fd29f48f-1764646532421.png",
+      coverImageAlt:
+        "Dystopian novel cover featuring dark surveillance imagery with bold red and black design elements",
+      rentalDays: 14,
+    },
+    {
+      id: 3,
+      title: "The Great Gatsby",
+      author: "F. Scott Fitzgerald",
+      coverImage:
+        "https://img.rocket.new/generatedImages/rocket_gen_img_1f9e2ac86-1765564429502.png",
+      coverImageAlt:
+        "Art deco style book cover with golden lights and elegant 1920s typography against dark blue background",
+      rentalDays: 21,
+    },
+  ]);
 
   const [formData, setFormData] = useState({
-    pickupPreference: '',
-    specialInstructions: '',
-    contactPhone: '',
+    pickupPreference: "",
+    specialInstructions: "",
+    contactPhone: "",
     smsNotifications: false,
-    termsAgreed: false
+    termsAgreed: false,
   });
 
   const [errors, setErrors] = useState({});
@@ -62,7 +75,7 @@ const RentalCheckout = () => {
     setIsVerifying(true);
     setTimeout(() => {
       setIsVerifying(false);
-      setVerificationStatus('success');
+      setVerificationStatus("success");
     }, 2000);
   };
 
@@ -74,17 +87,17 @@ const RentalCheckout = () => {
     const newErrors = {};
 
     if (!formData?.pickupPreference) {
-      newErrors.pickupPreference = 'Please select a pickup preference';
+      newErrors.pickupPreference = "Please select a pickup preference";
     }
 
     if (!formData?.contactPhone) {
-      newErrors.contactPhone = 'Contact phone number is required';
+      newErrors.contactPhone = "Contact phone number is required";
     } else if (!/^\(\d{3}\)\s\d{3}-\d{4}$/?.test(formData?.contactPhone)) {
-      newErrors.contactPhone = 'Please enter a valid phone number';
+      newErrors.contactPhone = "Please enter a valid phone number";
     }
 
     if (!formData?.termsAgreed) {
-      newErrors.termsAgreed = 'You must agree to the rental terms to proceed';
+      newErrors.termsAgreed = "You must agree to the rental terms to proceed";
     }
 
     setErrors(newErrors);
@@ -101,17 +114,17 @@ const RentalCheckout = () => {
       setIsLoading(false);
       setShowSuccessModal(true);
       setTimeout(() => {
-        navigate('/student-dashboard');
+        navigate("/student-dashboard");
       }, 3000);
     }, 2000);
   };
 
   const handleContinueShopping = () => {
-    navigate('/book-catalog');
+    navigate("/book-catalog");
   };
 
   const handleSaveForLater = () => {
-    navigate('/student-dashboard');
+    navigate("/student-dashboard");
   };
 
   if (selectedBooks?.length === 0) {
@@ -119,38 +132,54 @@ const RentalCheckout = () => {
       <>
         <Helmet>
           <title>Rental Checkout - SchoolLibrary Digital</title>
-          <meta name="description" content="Complete your book rental checkout process" />
+          <meta
+            name="description"
+            content="Complete your book rental checkout process"
+          />
         </Helmet>
         <Header />
         <div className="min-h-screen bg-background pt-16">
           <div className="max-w-4xl mx-auto px-4 py-12 text-center">
             <div className="bg-card border border-border rounded-lg p-12">
-              <Icon name="ShoppingCart" size={64} className="mx-auto mb-4 text-muted-foreground" />
-              <h1 className="text-2xl font-bold text-foreground mb-2">Your Cart is Empty</h1>
+              <ShoppingCart
+                size={64}
+                className="mx-auto mb-4 text-muted-foreground"
+              />
+              <h1 className="text-2xl font-bold text-foreground mb-2">
+                Your Cart is Empty
+              </h1>
               <p className="text-muted-foreground mb-6">
                 Add some books to your cart to proceed with checkout
               </p>
-              <Button variant="default" onClick={handleContinueShopping}>
+              <button
+                onClick={handleContinueShopping}
+                className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+              >
                 Browse Books
-              </Button>
+              </button>
             </div>
           </div>
         </div>
-      </>);
-
+      </>
+    );
   }
 
   return (
     <>
       <Helmet>
         <title>Rental Checkout - SchoolLibrary Digital</title>
-        <meta name="description" content="Complete your book rental checkout process with clear terms and confirmation" />
+        <meta
+          name="description"
+          content="Complete your book rental checkout process with clear terms and confirmation"
+        />
       </Helmet>
       <Header />
       <div className="min-h-screen bg-background pt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="mb-6">
-            <h1 className="text-3xl font-bold text-foreground mb-2">Checkout</h1>
+            <h1 className="text-3xl font-bold text-foreground mb-2">
+              Checkout
+            </h1>
             <p className="text-muted-foreground">
               Review your selection and complete your rental
             </p>
@@ -158,21 +187,23 @@ const RentalCheckout = () => {
 
           <AvailabilityVerification
             isVerifying={isVerifying}
-            verificationStatus={verificationStatus} />
-
+            verificationStatus={verificationStatus}
+          />
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
             <div className="lg:col-span-2 space-y-6">
               <div className="bg-card border border-border rounded-lg p-6">
-                <h2 className="text-lg font-semibold text-foreground mb-4">Selected Books</h2>
+                <h2 className="text-lg font-semibold text-foreground mb-4">
+                  Selected Books
+                </h2>
                 <div className="space-y-3">
-                  {selectedBooks?.map((book) =>
-                  <BookSummaryCard
-                    key={book?.id}
-                    book={book}
-                    onRemove={handleRemoveBook} />
-
-                  )}
+                  {selectedBooks?.map((book) => (
+                    <BookSummaryCard
+                      key={book?.id}
+                      book={book}
+                      onRemove={handleRemoveBook}
+                    />
+                  ))}
                 </div>
               </div>
 
@@ -181,95 +212,121 @@ const RentalCheckout = () => {
               <CheckoutForm
                 formData={formData}
                 setFormData={setFormData}
-                errors={errors} />
-
+                errors={errors}
+              />
             </div>
 
             <div className="lg:col-span-1 space-y-6">
               <RentalSummary books={selectedBooks} />
 
               <div className="bg-card border border-border rounded-lg p-6">
-                <h2 className="text-lg font-semibold text-foreground mb-4">Pickup Information</h2>
+                <h2 className="text-lg font-semibold text-foreground mb-4">
+                  Pickup Information
+                </h2>
                 <div className="space-y-3 text-sm">
                   <div className="flex items-start gap-2">
-                    <Icon name="MapPin" size={16} className="text-primary mt-0.5 flex-shrink-0" />
+                    <MapPin
+                      size={16}
+                      className="text-primary mt-0.5 flex-shrink-0"
+                    />
                     <div>
-                      <p className="font-medium text-foreground">Library Location</p>
-                      <p className="text-muted-foreground">Main Building, 2nd Floor</p>
+                      <p className="font-medium text-foreground">
+                        Library Location
+                      </p>
+                      <p className="text-muted-foreground">
+                        Main Building, 2nd Floor
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-start gap-2">
-                    <Icon name="Clock" size={16} className="text-primary mt-0.5 flex-shrink-0" />
+                    <Clock
+                      size={16}
+                      className="text-primary mt-0.5 flex-shrink-0"
+                    />
                     <div>
-                      <p className="font-medium text-foreground">Operating Hours</p>
-                      <p className="text-muted-foreground">Mon-Fri: 8:00 AM - 6:00 PM</p>
-                      <p className="text-muted-foreground">Sat: 9:00 AM - 4:00 PM</p>
+                      <p className="font-medium text-foreground">
+                        Operating Hours
+                      </p>
+                      <p className="text-muted-foreground">
+                        Mon-Fri: 8:00 AM - 6:00 PM
+                      </p>
+                      <p className="text-muted-foreground">
+                        Sat: 9:00 AM - 4:00 PM
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-start gap-2">
-                    <Icon name="Smartphone" size={16} className="text-primary mt-0.5 flex-shrink-0" />
+                    <Smartphone
+                      size={16}
+                      className="text-primary mt-0.5 flex-shrink-0"
+                    />
                     <div>
-                      <p className="font-medium text-foreground">Digital Access</p>
-                      <p className="text-muted-foreground">Available immediately after checkout</p>
+                      <p className="font-medium text-foreground">
+                        Digital Access
+                      </p>
+                      <p className="text-muted-foreground">
+                        Available immediately after checkout
+                      </p>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-3">
-                <Button
-                  variant="default"
-                  fullWidth
-                  loading={isLoading}
+                <button
                   onClick={handleConfirmRental}
-                  iconName="CheckCircle2"
-                  iconPosition="left">
-
+                  disabled={isLoading}
+                  className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full gap-2"
+                >
+                  {isLoading ? (
+                    <Loader2 size={20} className="animate-spin" />
+                  ) : (
+                    <CheckCircle2 size={20} />
+                  )}
                   Confirm Rental
-                </Button>
-                
-                <Button
-                  variant="outline"
-                  fullWidth
+                </button>
+
+                <button
                   onClick={handleContinueShopping}
-                  iconName="ShoppingCart"
-                  iconPosition="left">
-
+                  className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full gap-2"
+                >
+                  <ShoppingCart size={20} />
                   Continue Shopping
-                </Button>
-                
-                <Button
-                  variant="ghost"
-                  fullWidth
-                  onClick={handleSaveForLater}
-                  iconName="Bookmark"
-                  iconPosition="left">
+                </button>
 
+                <button
+                  onClick={handleSaveForLater}
+                  className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full gap-2"
+                >
+                  <Bookmark size={20} />
                   Save for Later
-                </Button>
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
-      {showSuccessModal &&
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+      {showSuccessModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
           <div className="bg-card border border-border rounded-lg p-8 max-w-md mx-4 text-center shadow-overlay">
             <div className="w-16 h-16 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Icon name="CheckCircle2" size={32} color="var(--color-success)" />
+              <CheckCircle2 size={32} className="text-success" />
             </div>
-            <h2 className="text-2xl font-bold text-foreground mb-2">Rental Confirmed!</h2>
+            <h2 className="text-2xl font-bold text-foreground mb-2">
+              Rental Confirmed!
+            </h2>
             <p className="text-muted-foreground mb-4">
-              Your books have been successfully checked out. You'll receive a confirmation email shortly.
+              Your books have been successfully checked out. You'll receive a
+              confirmation email shortly.
             </p>
             <p className="text-sm text-muted-foreground">
               Redirecting to your dashboard...
             </p>
           </div>
         </div>
-      }
-    </>);
-
+      )}
+    </>
+  );
 };
 
 export default RentalCheckout;

@@ -1,10 +1,8 @@
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { Search, BookOpen, Bell, ArrowRight } from "lucide-react";
 import Header from "../../components/ui/Header";
-import Icon from "../../components/AppIcon";
-import Button from "../../components/ui/Button";
-import Input from "../../components/ui/Input";
 import CurrentRentalCard from "./components/CurrentRentalCard";
 import RentalHistoryItem from "./components/RentalHistoryItem";
 import QuickAccessWidget from "./components/QuickAccessWidget";
@@ -12,6 +10,7 @@ import RecommendedBookCard from "./components/RecommendedBookCard";
 import NotificationItem from "./components/NotificationItem";
 import { GetUser, getAuthHeader } from "store/authStore";
 import api from "../../axios_url/baseURL.js";
+
 const StudentDashboard = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
@@ -41,71 +40,6 @@ const StudentDashboard = () => {
 
     GetRentals();
   }, []);
-
-  console.log(rentals);
-
-  /*const rentalHistory = [
-    {
-      id: 4,
-      bookTitle: "Pride and Prejudice",
-      author: "Jane Austen",
-      bookCover:
-        "https://img.rocket.new/generatedImages/rocket_gen_img_15fe6e907-1764646533126.png",
-      bookCoverAlt:
-        "Classic romance novel cover with elegant Victorian-era design in soft pastel colors",
-      borrowDate: "2025-11-01",
-      returnDate: "2025-11-22",
-      userRating: 5,
-    },
-    {
-      id: 5,
-      bookTitle: "The Catcher in the Rye",
-      author: "J.D. Salinger",
-      bookCover:
-        "https://img.rocket.new/generatedImages/rocket_gen_img_141fa9da6-1764775317246.png",
-      bookCoverAlt:
-        "Coming-of-age novel cover featuring urban landscape with red hunting hat symbolism",
-      borrowDate: "2025-10-15",
-      returnDate: "2025-11-05",
-      userRating: 4,
-    },
-    {
-      id: 6,
-      bookTitle: "The Hobbit",
-      author: "J.R.R. Tolkien",
-      bookCover:
-        "https://img.rocket.new/generatedImages/rocket_gen_img_1d2eb51d5-1764671442079.png",
-      bookCoverAlt:
-        "Fantasy adventure book cover with mountain landscape and mystical elements in green and gold tones",
-      borrowDate: "2025-10-01",
-      returnDate: "2025-10-20",
-      userRating: 0,
-    },
-    {
-      id: 7,
-      bookTitle: "Harry Potter and the Sorcerer's Stone",
-      author: "J.K. Rowling",
-      bookCover:
-        "https://img.rocket.new/generatedImages/rocket_gen_img_1b42025a8-1764692280873.png",
-      bookCoverAlt:
-        "Magical fantasy book cover with castle silhouette and lightning bolt against purple starry night sky",
-      borrowDate: "2025-09-15",
-      returnDate: "2025-10-05",
-      userRating: 5,
-    },
-    {
-      id: 8,
-      bookTitle: "The Lord of the Rings",
-      author: "J.R.R. Tolkien",
-      bookCover:
-        "https://img.rocket.new/generatedImages/rocket_gen_img_1f420e7fd-1765217757444.png",
-      bookCoverAlt:
-        "Epic fantasy trilogy cover featuring ring symbol with volcanic landscape in dramatic red and black colors",
-      borrowDate: "2025-09-01",
-      returnDate: "2025-09-28",
-      userRating: 0,
-    },
-  ];*/
 
   const recommendedBooks = [
     {
@@ -157,41 +91,6 @@ const StudentDashboard = () => {
       reason: "Highly rated by students with similar interests",
     },
   ];
-
-  /*const initialNotifications = [
-    {
-      id: 1,
-      type: "due-soon",
-      message:
-        "The Great Gatsby is due in 1 day. Consider renewing if you need more time.",
-      timestamp: new Date(Date.now() - 3600000),
-    },
-    {
-      id: 2,
-      type: "overdue",
-      message:
-        "1984 is overdue. Please return it as soon as possible to avoid additional fines.",
-      timestamp: new Date(Date.now() - 7200000),
-    },
-    {
-      id: 3,
-      type: "new-arrival",
-      message:
-        "New book matching your interests: The Midnight Library by Matt Haig is now available.",
-      timestamp: new Date(Date.now() - 86400000),
-    },
-    {
-      id: 4,
-      type: "fine",
-      message:
-        "You have an outstanding fine of $5.00. Please clear your balance.",
-      timestamp: new Date(Date.now() - 172800000),
-    },
-  ];
-
-  useEffect(() => {
-    setNotifications(initialNotifications);
-  }, []);*/
 
   const activeRentals = rentals?.filter(
     (rental) => rental.visszahozva === false || rental.visszahozva === 0
@@ -252,12 +151,12 @@ const StudentDashboard = () => {
 
             <form onSubmit={handleSearch} className="mb-8">
               <div className="relative max-w-2xl">
-                <Input
+                <input
                   type="search"
                   placeholder="Keresés cím, szerző vagy ISBN alapján..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e?.target?.value)}
-                  className="pr-12"
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pr-12"
                 />
 
                 <button
@@ -265,10 +164,9 @@ const StudentDashboard = () => {
                   className="absolute right-3 top-1/2 -translate-y-1/2 p-2 hover:bg-muted rounded-md transition-colors duration-200"
                   aria-label="Keresés"
                 >
-                  <Icon
-                    name="Search"
+                  <Search
                     size={20}
-                    color="var(--color-muted-foreground)"
+                    className="text-muted-foreground"
                   />
                 </button>
               </div>
@@ -298,23 +196,20 @@ const StudentDashboard = () => {
                     </div>
                   ) : (
                     <div className="bg-card border border-border rounded-lg p-8 text-center">
-                      <Icon
-                        name="BookOpen"
+                      <BookOpen
                         size={48}
-                        color="var(--color-muted-foreground)"
-                        className="mx-auto mb-4"
+                        className="mx-auto mb-4 text-muted-foreground"
                       />
                       <p className="text-muted-foreground mb-4">
                         Nincsenek aktív kölcsönzéseid
                       </p>
-                      <Button
-                        variant="default"
-                        iconName="Search"
-                        iconPosition="left"
+                      <button
                         onClick={() => navigate("/book-catalog")}
+                        className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 gap-2"
                       >
+                        <Search size={16} />
                         Könyvek Böngészése
-                      </Button>
+                      </button>
                     </div>
                   )}
                 </section>
@@ -340,14 +235,14 @@ const StudentDashboard = () => {
 
                       {rentalHistory?.length > 3 && (
                         <div className="mt-4 text-center">
-                          <Button
-                            variant="ghost"
+                          <button
                             onClick={() => setShowAllHistory(!showAllHistory)}
+                            className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
                           >
                             {showAllHistory
                               ? "Kevesebb mutatása"
                               : `Összes megtekintése (${rentalHistory?.length})`}
-                          </Button>
+                          </button>
                         </div>
                       )}
                     </>
@@ -435,27 +330,24 @@ const StudentDashboard = () => {
 
                       {notifications?.length > 3 && (
                         <div className="mt-3 text-center">
-                          <Button
-                            variant="ghost"
-                            size="sm"
+                          <button
                             onClick={() =>
                               setShowAllNotifications(!showAllNotifications)
                             }
+                            className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 px-3"
                           >
                             {showAllNotifications
                               ? "Kevesebb mutatása"
                               : `Összes megtekintése (${notifications?.length})`}
-                          </Button>
+                          </button>
                         </div>
                       )}
                     </>
                   ) : (
                     <div className="bg-card border border-border rounded-lg p-4 text-center">
-                      <Icon
-                        name="Bell"
+                      <Bell
                         size={32}
-                        color="var(--color-muted-foreground)"
-                        className="mx-auto mb-2"
+                        className="mx-auto mb-2 text-muted-foreground"
                       />
                       <p className="text-sm text-muted-foreground">
                         Nincsenek új értesítések
@@ -471,14 +363,13 @@ const StudentDashboard = () => {
                 <h2 className="text-2xl font-heading font-bold text-foreground">
                   Neked Ajánlott
                 </h2>
-                <Button
-                  variant="ghost"
-                  iconName="ArrowRight"
-                  iconPosition="right"
+                <button
                   onClick={() => navigate("/book-catalog")}
+                  className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 gap-2"
                 >
                   Összes megtekintése
-                </Button>
+                  <ArrowRight size={16} />
+                </button>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

@@ -1,34 +1,19 @@
 import React from "react";
-import Icon from "../../../components/AppIcon";
+import { AlertCircle, Clock, BookPlus, DollarSign, Bell, X } from "lucide-react";
 
 const NotificationItem = ({ notification, onDismiss }) => {
-  const getIconName = () => {
+  const getIcon = () => {
     switch (notification?.type) {
       case "overdue":
-        return "AlertCircle";
+        return <AlertCircle size={18} className="text-error" />;
       case "due-soon":
-        return "Clock";
+        return <Clock size={18} className="text-warning" />;
       case "new-arrival":
-        return "BookPlus";
+        return <BookPlus size={18} className="text-success" />;
       case "fine":
-        return "DollarSign";
+        return <DollarSign size={18} className="text-error" />;
       default:
-        return "Bell";
-    }
-  };
-
-  const getIconColor = () => {
-    switch (notification?.type) {
-      case "overdue":
-        return "var(--color-error)";
-      case "due-soon":
-        return "var(--color-warning)";
-      case "new-arrival":
-        return "var(--color-success)";
-      case "fine":
-        return "var(--color-error)";
-      default:
-        return "var(--color-primary)";
+        return <Bell size={18} className="text-primary" />;
     }
   };
 
@@ -48,7 +33,7 @@ const NotificationItem = ({ notification, onDismiss }) => {
   return (
     <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg hover:bg-muted transition-colors duration-200">
       <div className="flex-shrink-0 mt-0.5">
-        <Icon name={getIconName()} size={18} color={getIconColor()} />
+        {getIcon()}
       </div>
       <div className="flex-1 min-w-0">
         <p className="text-sm text-foreground mb-1">{notification?.message}</p>
@@ -62,7 +47,7 @@ const NotificationItem = ({ notification, onDismiss }) => {
           className="flex-shrink-0 p-1 hover:bg-background rounded transition-colors duration-200"
           aria-label="Értesítés elvetése"
         >
-          <Icon name="X" size={14} color="var(--color-muted-foreground)" />
+          <X size={14} className="text-muted-foreground" />
         </button>
       )}
     </div>

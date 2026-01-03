@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from 'components/ui/Button';
-import Icon from 'components/AppIcon';
+import { ArrowLeft, Home } from 'lucide-react';
 
 const NotFound = () => {
   const navigate = useNavigate();
@@ -25,23 +24,21 @@ const NotFound = () => {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button
-            variant="primary"
-            icon={<Icon name="ArrowLeft" />}
-            iconPosition="left"
+          <button
             onClick={() => window.history?.back()}
+            className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 gap-2"
           >
+            <ArrowLeft size={16} />
             Go Back
-          </Button>
+          </button>
 
-          <Button
-            variant="outline"
-            icon={<Icon name="Home" />}
-            iconPosition="left"
+          <button
             onClick={handleGoHome}
+            className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 gap-2"
           >
+            <Home size={16} />
             Back to Home
-          </Button>
+          </button>
         </div>
       </div>
     </div>

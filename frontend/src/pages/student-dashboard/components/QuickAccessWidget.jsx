@@ -1,6 +1,17 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Icon from '../../../components/AppIcon';
+import { AlertCircle, DollarSign, Heart, BookCheck, FileText, Search, User, Settings } from 'lucide-react';
+
+const iconMap = {
+  AlertCircle,
+  DollarSign,
+  Heart,
+  BookCheck,
+  FileText,
+  Search,
+  User,
+  Settings
+};
 
 const QuickAccessWidget = ({ title, value, subtitle, icon, iconColor, onClick, badge }) => {
   const navigate = useNavigate();
@@ -11,6 +22,8 @@ const QuickAccessWidget = ({ title, value, subtitle, icon, iconColor, onClick, b
     }
   };
 
+  const IconComponent = iconMap[icon] || FileText;
+
   return (
     <div 
       className="bg-card border border-border rounded-lg p-4 hover:shadow-md transition-all duration-200 cursor-pointer group"
@@ -18,10 +31,10 @@ const QuickAccessWidget = ({ title, value, subtitle, icon, iconColor, onClick, b
     >
       <div className="flex items-start justify-between mb-3">
         <div className={`flex items-center justify-center w-10 h-10 rounded-lg ${iconColor || 'bg-primary/10'}`}>
-          <Icon 
-            name={icon} 
+          <IconComponent 
             size={20} 
-            color={iconColor ? iconColor?.includes('bg-') ? 'var(--color-primary)' : iconColor : 'var(--color-primary)'} 
+            className={`${iconColor && iconColor.includes('bg-') ? 'text-primary' : ''}`}
+            style={{ color: iconColor && !iconColor.includes('bg-') ? iconColor : undefined }}
           />
         </div>
         {badge && (

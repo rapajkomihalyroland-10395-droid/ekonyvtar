@@ -3,7 +3,7 @@ import Header from "../../components/ui/Header";
 import LoginForm from "./components/LoginForm";
 import TrustSignals from "./components/TrustSignals";
 import WelcomeSection from "./components/WelcomeSection";
-import Icon from "../../components/AppIcon";
+import { BookMarked } from "lucide-react";
 
 const StudentLogin = () => {
   return (
@@ -21,10 +21,9 @@ const StudentLogin = () => {
                 <div className="bg-card border border-border rounded-xl shadow-card p-6 lg:p-8">
                   <div className="text-center mb-8">
                     <div className="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mx-auto mb-4">
-                      <Icon
-                        name="BookMarked"
+                      <BookMarked
                         size={32}
-                        color="var(--color-primary)"
+                        className="text-primary"
                       />
                     </div>
                     <h2 className="text-2xl font-heading font-bold text-foreground mb-2">
