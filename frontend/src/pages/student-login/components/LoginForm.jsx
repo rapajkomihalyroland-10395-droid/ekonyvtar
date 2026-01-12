@@ -217,7 +217,7 @@ const LoginForm = () => {
         </button>
       </div>
 
-      {/* Submit Button */}
+      {}
       <button
         type="submit"
         disabled={isSubmitting}

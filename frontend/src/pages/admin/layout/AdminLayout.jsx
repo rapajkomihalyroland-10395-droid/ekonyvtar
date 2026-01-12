@@ -25,7 +25,7 @@ const AdminLayout = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
+      {}
       <aside
         className={cn(
           "fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 shadow-sm transition-transform duration-300 ease-in-out lg:static lg:translate-x-0",
@@ -82,9 +82,9 @@ const AdminLayout = () => {
         </div>
       </aside>
 
-      {/* Main Content */}
+      {}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Top Header for Mobile */}
+        {}
         <header className="lg:hidden h-16 bg-white border-b border-gray-200 flex items-center px-4">
           <button onClick={toggleSidebar} className="p-2 rounded-md hover:bg-gray-100">
             <Menu size={24} />
@@ -97,7 +97,7 @@ const AdminLayout = () => {
         </main>
       </div>
 
-      {/* Overlay for mobile sidebar */}
+      {}
       {isSidebarOpen && (
         <div 
           className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm lg:hidden"

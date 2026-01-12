@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Icon from '../AppIcon';
+import { GetIsAdmin } from '../../store/authStore.js';
 
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const isAdmin = GetIsAdmin();
 
   const navigationItems = [
     { label: 'Főoldal', path: '/', icon: 'Home' },
@@ -14,6 +16,10 @@ const Header = () => {
     { label: 'Könyvek Böngészése', path: '/book-catalog', icon: 'BookOpen' },
     { label: 'Fiók', path: '/student-login', icon: 'User' }
   ];
+
+  if (isAdmin) {
+    navigationItems.push({ label: 'Admin Panel', path: '/admin', icon: 'Settings' });
+  }
 
   const isActivePath = (path) => {
     if (path === '/') {
@@ -26,7 +32,7 @@ const Header = () => {
       return location?.pathname === path || location?.pathname === '/book-details';
     }
     if (path === '/student-login') {
-      return location?.pathname === path; // Removed reference to '/student-registration'
+      return location?.pathname === path; 
     }
     return location?.pathname === path;
   };

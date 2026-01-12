@@ -8,100 +8,100 @@
 
 @layer base {
   :root {
-    /* Primary Colors */
-    --color-primary: #1E3A8A; /* blue-900 */
-    --color-primary-foreground: #FFFFFF; /* white */
     
-    /* Secondary Colors */
-    --color-secondary: #64748B; /* slate-500 */
-    --color-secondary-foreground: #FFFFFF; /* white */
+    --color-primary: #1E3A8A; 
+    --color-primary-foreground: #FFFFFF; 
     
-    /* Accent Colors */
-    --color-accent: #F59E0B; /* amber-500 */
-    --color-accent-foreground: #1F2937; /* gray-800 */
     
-    /* Background Colors */
-    --color-background: #FAFAF9; /* stone-50 */
-    --color-foreground: #1F2937; /* gray-800 */
+    --color-secondary: #64748B; 
+    --color-secondary-foreground: #FFFFFF; 
     
-    /* Surface Colors */
-    --color-card: #FFFFFF; /* white */
-    --color-card-foreground: #1F2937; /* gray-800 */
     
-    --color-popover: #FFFFFF; /* white */
-    --color-popover-foreground: #1F2937; /* gray-800 */
+    --color-accent: #F59E0B; 
+    --color-accent-foreground: #1F2937; 
     
-    /* Muted Colors */
-    --color-muted: #F3F4F6; /* gray-100 */
-    --color-muted-foreground: #6B7280; /* gray-500 */
     
-    /* Border & Input */
-    --color-border: #E5E7EB; /* gray-200 */
-    --color-input: #E5E7EB; /* gray-200 */
-    --color-ring: #1E3A8A; /* blue-900 */
+    --color-background: #FAFAF9; 
+    --color-foreground: #1F2937; 
     
-    /* Status Colors */
-    --color-success: #10B981; /* emerald-500 */
-    --color-success-foreground: #FFFFFF; /* white */
     
-    --color-warning: #F59E0B; /* amber-500 */
-    --color-warning-foreground: #1F2937; /* gray-800 */
+    --color-card: #FFFFFF; 
+    --color-card-foreground: #1F2937; 
     
-    --color-error: #EF4444; /* red-500 */
-    --color-error-foreground: #FFFFFF; /* white */
+    --color-popover: #FFFFFF; 
+    --color-popover-foreground: #1F2937; 
     
-    --color-destructive: #EF4444; /* red-500 */
-    --color-destructive-foreground: #FFFFFF; /* white */
     
-    /* Radius */
+    --color-muted: #F3F4F6; 
+    --color-muted-foreground: #6B7280; 
+    
+    
+    --color-border: #E5E7EB; 
+    --color-input: #E5E7EB; 
+    --color-ring: #1E3A8A; 
+    
+    
+    --color-success: #10B981; 
+    --color-success-foreground: #FFFFFF; 
+    
+    --color-warning: #F59E0B; 
+    --color-warning-foreground: #1F2937; 
+    
+    --color-error: #EF4444; 
+    --color-error-foreground: #FFFFFF; 
+    
+    --color-destructive: #EF4444; 
+    --color-destructive-foreground: #FFFFFF; 
+    
+    
     --radius: 0.5rem;
   }
 
   .dark {
-    /* Primary Colors */
-    --color-primary: #3B82F6; /* blue-500 */
-    --color-primary-foreground: #FFFFFF; /* white */
     
-    /* Secondary Colors */
-    --color-secondary: #475569; /* slate-600 */
-    --color-secondary-foreground: #F1F5F9; /* slate-100 */
+    --color-primary: #3B82F6; 
+    --color-primary-foreground: #FFFFFF; 
     
-    /* Accent Colors */
-    --color-accent: #FBBF24; /* amber-400 */
-    --color-accent-foreground: #1F2937; /* gray-800 */
     
-    /* Background Colors */
-    --color-background: #0F172A; /* slate-900 */
-    --color-foreground: #F1F5F9; /* slate-100 */
+    --color-secondary: #475569; 
+    --color-secondary-foreground: #F1F5F9; 
     
-    /* Surface Colors */
-    --color-card: #1E293B; /* slate-800 */
-    --color-card-foreground: #F1F5F9; /* slate-100 */
     
-    --color-popover: #1E293B; /* slate-800 */
-    --color-popover-foreground: #F1F5F9; /* slate-100 */
+    --color-accent: #FBBF24; 
+    --color-accent-foreground: #1F2937; 
     
-    /* Muted Colors */
-    --color-muted: #334155; /* slate-700 */
-    --color-muted-foreground: #94A3B8; /* slate-400 */
     
-    /* Border & Input */
-    --color-border: #334155; /* slate-700 */
-    --color-input: #334155; /* slate-700 */
-    --color-ring: #3B82F6; /* blue-500 */
+    --color-background: #0F172A; 
+    --color-foreground: #F1F5F9; 
     
-    /* Status Colors */
-    --color-success: #34D399; /* emerald-400 */
-    --color-success-foreground: #1F2937; /* gray-800 */
     
-    --color-warning: #FBBF24; /* amber-400 */
-    --color-warning-foreground: #1F2937; /* gray-800 */
+    --color-card: #1E293B; 
+    --color-card-foreground: #F1F5F9; 
     
-    --color-error: #F87171; /* red-400 */
-    --color-error-foreground: #FFFFFF; /* white */
+    --color-popover: #1E293B; 
+    --color-popover-foreground: #F1F5F9; 
     
-    --color-destructive: #F87171; /* red-400 */
-    --color-destructive-foreground: #FFFFFF; /* white */
+    
+    --color-muted: #334155; 
+    --color-muted-foreground: #94A3B8; 
+    
+    
+    --color-border: #334155; 
+    --color-input: #334155; 
+    --color-ring: #3B82F6; 
+    
+    
+    --color-success: #34D399; 
+    --color-success-foreground: #1F2937; 
+    
+    --color-warning: #FBBF24; 
+    --color-warning-foreground: #1F2937; 
+    
+    --color-error: #F87171; 
+    --color-error-foreground: #FFFFFF; 
+    
+    --color-destructive: #F87171; 
+    --color-destructive-foreground: #FFFFFF; 
   }
 }
 

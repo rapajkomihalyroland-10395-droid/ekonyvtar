@@ -1,4 +1,4 @@
-/** @type {import('tailwindcss').Config} */
+
 module.exports = {
   darkMode: 'class',
   content: [
@@ -15,50 +15,50 @@ module.exports = {
     },
     extend: {
       colors: {
-        border: 'var(--color-border)', /* gray-200 */
-        input: 'var(--color-input)', /* gray-200 */
-        ring: 'var(--color-ring)', /* blue-900 */
-        background: 'var(--color-background)', /* stone-50 */
-        foreground: 'var(--color-foreground)', /* gray-800 */
+        border: 'var(--color-border)', 
+        input: 'var(--color-input)', 
+        ring: 'var(--color-ring)', 
+        background: 'var(--color-background)', 
+        foreground: 'var(--color-foreground)', 
         primary: {
-          DEFAULT: 'var(--color-primary)', /* blue-900 */
-          foreground: 'var(--color-primary-foreground)', /* white */
+          DEFAULT: 'var(--color-primary)', 
+          foreground: 'var(--color-primary-foreground)', 
         },
         secondary: {
-          DEFAULT: 'var(--color-secondary)', /* slate-500 */
-          foreground: 'var(--color-secondary-foreground)', /* white */
+          DEFAULT: 'var(--color-secondary)', 
+          foreground: 'var(--color-secondary-foreground)', 
         },
         destructive: {
-          DEFAULT: 'var(--color-destructive)', /* red-500 */
-          foreground: 'var(--color-destructive-foreground)', /* white */
+          DEFAULT: 'var(--color-destructive)', 
+          foreground: 'var(--color-destructive-foreground)', 
         },
         muted: {
-          DEFAULT: 'var(--color-muted)', /* gray-100 */
-          foreground: 'var(--color-muted-foreground)', /* gray-500 */
+          DEFAULT: 'var(--color-muted)', 
+          foreground: 'var(--color-muted-foreground)', 
         },
         accent: {
-          DEFAULT: 'var(--color-accent)', /* amber-500 */
-          foreground: 'var(--color-accent-foreground)', /* gray-800 */
+          DEFAULT: 'var(--color-accent)', 
+          foreground: 'var(--color-accent-foreground)', 
         },
         popover: {
-          DEFAULT: 'var(--color-popover)', /* white */
-          foreground: 'var(--color-popover-foreground)', /* gray-800 */
+          DEFAULT: 'var(--color-popover)', 
+          foreground: 'var(--color-popover-foreground)', 
         },
         card: {
-          DEFAULT: 'var(--color-card)', /* white */
-          foreground: 'var(--color-card-foreground)', /* gray-800 */
+          DEFAULT: 'var(--color-card)', 
+          foreground: 'var(--color-card-foreground)', 
         },
         success: {
-          DEFAULT: 'var(--color-success)', /* emerald-500 */
-          foreground: 'var(--color-success-foreground)', /* white */
+          DEFAULT: 'var(--color-success)', 
+          foreground: 'var(--color-success-foreground)', 
         },
         warning: {
-          DEFAULT: 'var(--color-warning)', /* amber-500 */
-          foreground: 'var(--color-warning-foreground)', /* gray-800 */
+          DEFAULT: 'var(--color-warning)', 
+          foreground: 'var(--color-warning-foreground)', 
         },
         error: {
-          DEFAULT: 'var(--color-error)', /* red-500 */
-          foreground: 'var(--color-error-foreground)', /* white */
+          DEFAULT: 'var(--color-error)', 
+          foreground: 'var(--color-error-foreground)', 
         },
       },
       borderRadius: {

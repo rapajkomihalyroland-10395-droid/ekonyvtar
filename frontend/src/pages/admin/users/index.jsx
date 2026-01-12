@@ -1,12 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, UserPlus } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 import UserListTable from "./components/UserListTable";
+import AddUserModal from "./components/AddUserModal";
 
 const AdminUsers = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState("all");
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [searchParams] = useSearchParams();
 
-  // Mock data
+  useEffect(() => {
+    if (searchParams.get("action") === "new") {
+      setIsAddModalOpen(true);
+    }
+  }, [searchParams]);
+
+  
   const users = [
     {
       id: 1,
@@ -53,7 +63,10 @@ const AdminUsers = () => {
             Felhasználók listázása, jogosultságok és kölcsönzések
           </p>
         </div>
-        <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90">
+        <button
+          onClick={() => setIsAddModalOpen(true)}
+          className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90"
+        >
           <UserPlus className="mr-2 h-4 w-4" />
           Új felhasználó
         </button>
@@ -85,6 +98,11 @@ const AdminUsers = () => {
       </div>
 
       <UserListTable users={users} isLoading={false} />
+
+      <AddUserModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+      />
     </div>
   );
 };

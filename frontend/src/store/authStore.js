@@ -1,5 +1,7 @@
 let token;
 let user;
+let isAdmin = false;
+
 export const setAccessToken = (newToken) => {
   if (!newToken) {
     token = null;
@@ -26,15 +28,29 @@ export const deleteAccessToken = () => {
 export const SetUser = (newUser) => {
   if (!newUser) {
     user = null;
+    isAdmin = false;
     return;
   }
   user = newUser;
+  
+  if (newUser.admin !== undefined) {
+    isAdmin = newUser.admin;
+  }
 };
 
 export const GetUser = () => {
   return user;
 };
 
+export const GetIsAdmin = () => {
+  return isAdmin;
+};
+
+export const SetIsAdmin = (value) => {
+  isAdmin = value;
+};
+
 export const DeleteUser = () => {
   user = null;
+  isAdmin = false;
 };

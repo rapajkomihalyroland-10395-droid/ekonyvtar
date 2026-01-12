@@ -26,7 +26,7 @@ const StatCard = ({ title, value, icon: Icon, trend, trendUp, colorClass }) => (
 );
 
 const DashboardCards = () => {
-  // Mock data - replace with real API data later
+  
   const stats = [
     {
       title: 'Aktív kölcsönzések',
@@ -41,7 +41,7 @@ const DashboardCards = () => {
       value: '8',
       icon: AlertCircle,
       trend: '-2%',
-      trendUp: true, // actually good that it's down, but visually green usually means "good" or "up". Let's assume green is good direction.
+      trendUp: true, 
       colorClass: 'bg-red-50 text-red-600'
     },
     {
@@ -53,7 +53,7 @@ const DashboardCards = () => {
     {
       title: 'Összes könyv',
       value: '2,845',
-      icon: BookOpen, // Or Library
+      icon: BookOpen, 
       trend: '+5',
       trendUp: true,
       colorClass: 'bg-purple-50 text-purple-600'

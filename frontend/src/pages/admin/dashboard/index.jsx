@@ -27,7 +27,7 @@ const AdminDashboard = () => {
               <TrendingUp className="mr-2 h-5 w-5 text-primary" />
               Legnépszerűbb könyvek
             </h3>
-            {/* Placeholder for a chart or list */}
+            {}
             <div className="space-y-4">
               {[1, 2, 3, 4, 5].map((i) => (
                 <div
@@ -61,7 +61,7 @@ const AdminDashboard = () => {
               Mai visszahozások
             </h3>
             <div className="space-y-3">
-              {/* Mock list */}
+              {}
               {[1, 2, 3].map((i) => (
                 <div
                   key={i}
@@ -78,8 +78,8 @@ const AdminDashboard = () => {
                   </div>
                 </div>
               ))}
-              {/* Empty state if needed */}
-              {/* <p className="text-sm text-gray-500 text-center py-4">Nincs mára várható visszahozás.</p> */}
+              {}
+              {}
             </div>
           </div>
         </div>

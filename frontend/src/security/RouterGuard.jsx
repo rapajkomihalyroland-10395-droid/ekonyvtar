@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { getAuthHeader, setAccessToken, SetUser } from "../store/authStore.js";
+import { getAuthHeader, setAccessToken, SetUser, SetIsAdmin } from "../store/authStore.js";
 import api from "../axios_url/baseURL.js";
 
 const RouterGuard = ({ children }) => {
@@ -21,6 +21,9 @@ const RouterGuard = ({ children }) => {
           setAccessToken(response.data.accessToken);
           if (response.data?.user) {
             SetUser(response.data.user);
+            if (response.data.user.admin) {
+              SetIsAdmin(true);
+            }
           }
           setAuthorized(true);
         } else {

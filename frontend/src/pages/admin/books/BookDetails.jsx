@@ -9,7 +9,7 @@ const BookDetails = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("details");
 
-  // Mock data
+  
   const book = {
     id: 1,
     title: "Harry Potter és a Bölcsek Köve",
@@ -45,7 +45,7 @@ const BookDetails = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {}
       <div className="flex items-center gap-4">
         <button
           onClick={() => navigate("/admin/books")}
@@ -74,7 +74,7 @@ const BookDetails = () => {
         </div>
       </div>
 
-      {/* Tabs */}
+      {}
       <div className="border-b border-gray-200">
         <nav className="flex space-x-8">
           <button
@@ -104,7 +104,7 @@ const BookDetails = () => {
         </nav>
       </div>
 
-      {/* Content */}
+      {}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         {activeTab === "details" && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

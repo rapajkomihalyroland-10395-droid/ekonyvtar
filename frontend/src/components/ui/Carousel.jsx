@@ -36,7 +36,7 @@ const Carousel = ({ children, className = "" }) => {
 
   return (
     <div className={`relative group ${className}`}>
-      {/* Left Arrow */}
+      {}
       {showLeftArrow && (
         <div className="absolute left-0 top-1/2 -translate-y-1/2 z-10 -ml-4">
           <Button
@@ -62,7 +62,7 @@ const Carousel = ({ children, className = "" }) => {
           }
         `}
       </style>
-      {/* Scroll Container */}
+      {}
       <div
         ref={scrollContainerRef}
         className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4 px-1"
@@ -71,7 +71,7 @@ const Carousel = ({ children, className = "" }) => {
         {children}
       </div>
 
-      {/* Right Arrow */}
+      {}
       {showRightArrow && (
         <div className="absolute right-0 top-1/2 -translate-y-1/2 z-10 -mr-4">
           <Button

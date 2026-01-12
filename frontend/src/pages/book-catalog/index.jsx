@@ -34,7 +34,7 @@ const BookCatalog = () => {
   const [selectedBook, setSelectedBook] = useState(null);
   const [showRentalModal, setShowRentalModal] = useState(false);
 
-  /* -------------------- API FETCH -------------------- */
+  
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -85,7 +85,7 @@ const BookCatalog = () => {
     fetchBooks();
   }, []);
 
-  /* -------------------- FILTER + SEARCH + SORT -------------------- */
+  
 
   useEffect(() => {
     let result = [...apiBooks];
@@ -98,7 +98,7 @@ const BookCatalog = () => {
       return Number.isFinite(n) ? n : null;
     };
 
-    // Search
+    
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       result = result.filter(
@@ -108,12 +108,12 @@ const BookCatalog = () => {
       );
     }
 
-    // Category
+    
     if (filters.category !== "all") {
       result = result.filter((b) => b.categoryId === filters.category);
     }
 
-    // Year range (from-to)
+    
     const yearFrom = filters.yearFrom ? Number(filters.yearFrom) : null;
     const yearTo = filters.yearTo ? Number(filters.yearTo) : null;
     if (Number.isFinite(yearFrom)) {
@@ -123,12 +123,12 @@ const BookCatalog = () => {
       result = result.filter((b) => Number(b.publicationYear) <= yearTo);
     }
 
-    // Availability
+    
     if (filters.availability.length) {
       result = result.filter((b) => filters.availability.includes(b.status));
     }
 
-    // Min rating
+    
     const minRating = parseRating(filters.minRating);
     const maxRating = parseRating(filters.maxRating);
     const min = minRating !== null ? minRating : null;
@@ -140,12 +140,12 @@ const BookCatalog = () => {
       result = result.filter((b) => Number(b.rating) >= lower);
     }
 
-    // Max rating
+    
     if (upper !== null) {
       result = result.filter((b) => Number(b.rating) <= upper);
     }
 
-    // Sorting
+    
     switch (sortBy) {
       case "popularity":
         result.sort((a, b) => b.reviewCount - a.reviewCount);
@@ -172,7 +172,7 @@ const BookCatalog = () => {
     setFilteredBooks(result);
   }, [apiBooks, searchQuery, filters, sortBy]);
 
-  /* -------------------- HANDLERS -------------------- */
+  
 
   const handleClearFilters = () => {
     setFilters({
@@ -196,7 +196,7 @@ const BookCatalog = () => {
     navigate("/rental-checkout", { state: { book } });
   };
 
-  /* -------------------- RENDER -------------------- */
+  
 
   return (
     <div className="min-h-screen bg-background">
