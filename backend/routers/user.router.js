@@ -25,6 +25,10 @@ import {
   Query_UserTypes,
 } from "../controllers/user/user.detailQuery.js";
 
+import { SearchUserNameByCharacters } from "../controllers/user/user.search.js";
+
+import { SearchBookByCharacters } from "../controllers/books/book.search.js";
+
 const userRouter = Router();
 
 //TOPLISTÁK
@@ -52,8 +56,17 @@ userRouter
   .get(AuthMiddleware, GetARentalByID);
 
 //Felhasználó Micro Queries
-userRouter.route("/get-classes").get(Query_Classes);
-userRouter.route("/get-schools").get(Query_Schools);
-userRouter.route("/get-user-types").get(Query_UserTypes);
+userRouter.route("/get-classes").get(AuthMiddleware, Query_Classes);
+userRouter.route("/get-schools").get(AuthMiddleware, Query_Schools);
+userRouter.route("/get-user-types").get(AuthMiddleware, Query_UserTypes);
+
+//Könyv és Felhasználó keresés (kölcsönzés)
+userRouter
+  .route("/search-name-by-character")
+  .post(AuthMiddleware, SearchUserNameByCharacters);
+
+userRouter
+  .route("/search-book-by-character")
+  .post(AuthMiddleware, SearchBookByCharacters);
 
 export default userRouter;

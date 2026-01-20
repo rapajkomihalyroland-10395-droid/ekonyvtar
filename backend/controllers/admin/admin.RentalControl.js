@@ -45,14 +45,52 @@ export const BookLoan = async (req, res) => {
   try {
     const { user_id, book_id, end_loan } = req.body;
 
-    
-
-    if (!book)
+    if (!user_id || !book_id || !end_loan) {
       return res
         .status(400)
-        .json({ message: "Ez a könyv már nem található rendszerünkben" });
+        .json({ message: "Minden mező kitöltése kötelező!" });
+    }
 
-    
+    const result = await prisma.$transaction(async (tx) => {
+      const book = await tx.konyv.findUnique({
+        where: { id: Number(book_id) },
+      });
+
+      if (!book) {
+        throw new Error("A könyv nem található!");
+      }
+
+      if (book.keszlet <= 0) {
+        throw new Error("A könyv nincs készleten!");
+      }
+
+      const user = await tx.felhasznalo.findUnique({
+        where: { id: Number(user_id) },
+      });
+
+      if (!user) {
+        throw new Error("A felhasználó nem található!");
+      }
+
+      const loan = await tx.berles.create({
+        data: {
+          felhasznalo_id: Number(user_id),
+          konyv_id: Number(book_id),
+          berles_kezdete: new Date(),
+          berles_vege: new Date(end_loan),
+          visszahozva: false,
+        },
+      });
+
+      await tx.konyv.update({
+        where: { id: Number(book_id) },
+        data: { keszlet: { decrement: 1 } },
+      });
+
+      return loan;
+    });
+
+    return res.status(201).json({ message: "Sikeres kölcsönzés!", result });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

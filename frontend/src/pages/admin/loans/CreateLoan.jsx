@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Search,
   User,
@@ -9,83 +9,95 @@ import {
   X,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import api from "../../../axios_url/baseURL.js";
+import { getAuthHeader } from "store/authStore";
 
 const CreateLoan = () => {
   const navigate = useNavigate();
-  const [step, setStep] = useState(1);
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedBook, setSelectedBook] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [books, setBooks] = useState([]);
   const [searchUser, setSearchUser] = useState("");
   const [searchBook, setSearchBook] = useState("");
   const [dueDate, setDueDate] = useState(
-    new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]
+    new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
   );
 
-  
-  const users = [
-    {
-      id: 1,
-      name: "Kiss Péter",
-      email: "kiss.peter@student.school.hu",
-      role: "Diák",
-    },
-    {
-      id: 2,
-      name: "Nagy Anna",
-      email: "nagy.anna@student.school.hu",
-      role: "Diák",
-    },
-    {
-      id: 3,
-      name: "Dr. Kovács János",
-      email: "kovacs.janos@teacher.school.hu",
-      role: "Tanár",
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!searchUser.trim()) {
+        setUsers([]);
+        return;
+      }
 
-  const books = [
-    {
-      id: 1,
-      title: "Harry Potter és a Bölcsek Köve",
-      author: "J.K. Rowling",
-      isbn: "9789638386894",
-      available: 3,
-    },
-    {
-      id: 2,
-      title: "A Gyűrűk Ura",
-      author: "J.R.R. Tolkien",
-      isbn: "9789630793660",
-      available: 0,
-    },
-    {
-      id: 3,
-      title: "Egri csillagok",
-      author: "Gárdonyi Géza",
-      isbn: "9789631193321",
-      available: 10,
-    },
-  ];
+      try {
+        const response = await api.post(
+          "/search-name-by-character",
+          {
+            name: searchUser,
+          },
+          {
+            headers: getAuthHeader(),
+          },
+        );
 
-  const filteredUsers = users.filter(
-    (user) =>
-      user.name.toLowerCase().includes(searchUser.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchUser.toLowerCase())
-  );
+        setUsers(response.data);
+      } catch (error) {
+        console.error("Failed to fetch users:", error);
+      }
+    };
 
-  const filteredBooks = books.filter(
-    (book) =>
-      book.title.toLowerCase().includes(searchBook.toLowerCase()) ||
-      book.author.toLowerCase().includes(searchBook.toLowerCase())
-  );
+    fetchData();
+  }, [searchUser]);
 
-  const handleCreateLoan = () => {
-    console.log({
-      user: selectedUser,
-      book: selectedBook,
-      dueDate,
-    });
-    navigate("/admin/dashboard");
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!searchBook.trim()) {
+        setBooks([]);
+        return;
+      }
+
+      try {
+        const response = await api.post(
+          "/search-book-by-character",
+          {
+            book: searchBook,
+          },
+          {
+            headers: getAuthHeader(),
+          },
+        );
+
+        setBooks(response.data);
+      } catch (error) {
+        console.error("Failed to fetch books:", error);
+      }
+    };
+
+    fetchData();
+  }, [searchBook]);
+
+  const filteredBooks = books;
+
+  const handleCreateLoan = async () => {
+    try {
+      await api.post(
+        "/book-loan",
+        {
+          user_id: selectedUser.id,
+          book_id: selectedBook.id,
+          end_loan: dueDate,
+        },
+        {
+          headers: getAuthHeader(),
+        },
+      );
+      navigate("/admin");
+    } catch (error) {
+      console.error("Loan creation failed:", error);
+      alert(error.response?.data?.message || "Hiba történt a kölcsönzés során");
+    }
   };
 
   return (
@@ -155,18 +167,18 @@ const CreateLoan = () => {
                     />
                   </div>
                   <div className="border rounded-lg divide-y divide-gray-100 max-h-60 overflow-y-auto">
-                    {filteredUsers.map((user) => (
+                    {users.map((user) => (
                       <button
                         key={user.id}
                         onClick={() => setSelectedUser(user)}
                         className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors text-left"
                       >
                         <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium">
-                          {user.name.charAt(0)}
+                          {user.nev.charAt(0)}
                         </div>
                         <div>
                           <p className="font-medium text-gray-900">
-                            {user.name}
+                            {user.nev}
                           </p>
                           <p className="text-sm text-gray-500">{user.email}</p>
                         </div>
@@ -180,11 +192,11 @@ const CreateLoan = () => {
               ) : (
                 <div className="flex items-center gap-4 p-4 bg-primary/5 rounded-lg border border-primary/10">
                   <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg">
-                    {selectedUser.name.charAt(0)}
+                    {selectedUser.nev.charAt(0)}
                   </div>
                   <div>
                     <p className="font-bold text-gray-900">
-                      {selectedUser.name}
+                      {selectedUser.nev}
                     </p>
                     <p className="text-sm text-gray-600">
                       {selectedUser.email}
@@ -244,31 +256,41 @@ const CreateLoan = () => {
                     {filteredBooks.map((book) => (
                       <button
                         key={book.id}
-                        disabled={book.available === 0}
+                        disabled={book.keszlet === 0}
                         onClick={() => setSelectedBook(book)}
                         className={`w-full flex items-center gap-3 p-3 transition-colors text-left ${
-                          book.available === 0
+                          book.keszlet === 0
                             ? "opacity-50 cursor-not-allowed bg-gray-50"
                             : "hover:bg-gray-50"
                         }`}
                       >
-                        <div className="w-10 h-14 bg-gray-200 rounded shadow-sm flex-shrink-0" />
+                        <div className="w-10 h-14 bg-gray-200 rounded shadow-sm flex-shrink-0">
+                          {book.kep ? (
+                            <img
+                              src={book.kep}
+                              alt={book.cim}
+                              className="w-full h-full object-cover rounded"
+                            />
+                          ) : null}
+                        </div>
                         <div className="flex-1">
                           <p className="font-medium text-gray-900">
-                            {book.title}
+                            {book.cim}
                           </p>
-                          <p className="text-sm text-gray-500">{book.author}</p>
+                          <p className="text-sm text-gray-500">
+                            {book.szerzo?.nev || "Ismeretlen szerző"}
+                          </p>
                         </div>
                         <div className="text-right">
                           <span
                             className={`text-xs font-medium px-2 py-1 rounded ${
-                              book.available > 0
+                              book.keszlet > 0
                                 ? "bg-green-100 text-green-700"
                                 : "bg-red-100 text-red-700"
                             }`}
                           >
-                            {book.available > 0
-                              ? `${book.available} elérhető`
+                            {book.keszlet > 0
+                              ? `${book.keszlet} elérhető`
                               : "Nincs készleten"}
                           </span>
                         </div>
@@ -278,16 +300,24 @@ const CreateLoan = () => {
                 </div>
               ) : (
                 <div className="flex items-center gap-4 p-4 bg-primary/5 rounded-lg border border-primary/10">
-                  <div className="w-12 h-16 bg-gray-200 rounded shadow-sm flex-shrink-0" />
+                  <div className="w-12 h-16 bg-gray-200 rounded shadow-sm flex-shrink-0">
+                    {selectedBook.kep ? (
+                      <img
+                        src={selectedBook.kep}
+                        alt={selectedBook.cim}
+                        className="w-full h-full object-cover rounded"
+                      />
+                    ) : null}
+                  </div>
                   <div>
                     <p className="font-bold text-gray-900">
-                      {selectedBook.title}
+                      {selectedBook.cim}
                     </p>
                     <p className="text-sm text-gray-600">
-                      {selectedBook.author}
+                      {selectedBook.szerzo?.nev || "Ismeretlen szerző"}
                     </p>
                     <p className="text-xs text-gray-500 mt-1">
-                      ISBN: {selectedBook.isbn}
+                      ISBN: {selectedBook.ISBN}
                     </p>
                   </div>
                   <Check className="ml-auto text-primary h-6 w-6" />
@@ -310,7 +340,7 @@ const CreateLoan = () => {
                 <div>
                   <p className="text-sm font-medium text-gray-500">Kölcsönző</p>
                   <p className="text-gray-900 font-medium">
-                    {selectedUser ? selectedUser.name : "-"}
+                    {selectedUser ? selectedUser.nev : "-"}
                   </p>
                 </div>
               </div>
@@ -320,7 +350,7 @@ const CreateLoan = () => {
                 <div>
                   <p className="text-sm font-medium text-gray-500">Könyv</p>
                   <p className="text-gray-900 font-medium">
-                    {selectedBook ? selectedBook.title : "-"}
+                    {selectedBook ? selectedBook.cim : "-"}
                   </p>
                 </div>
               </div>
