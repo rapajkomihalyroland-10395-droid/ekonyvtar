@@ -95,10 +95,12 @@ const AdminBooks = () => {
 
       <BookListTable books={books} isLoading={false} />
 
-      <AddBookModal
-        isOpen={isAddModalOpen}
-        onClose={() => setIsAddModalOpen(false)}
-      />
+      {isAddModalOpen && (
+        <AddBookModal
+          isOpen={isAddModalOpen}
+          onClose={() => setIsAddModalOpen(false)}
+        />
+      )}
     </div>
   );
 };

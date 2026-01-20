@@ -1,4 +1,6 @@
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
+import "dotenv/config";
 
 const prisma = new PrismaClient();
 
@@ -30,32 +32,81 @@ export const GetUserByName = async (req, res) => {
   }
 };
 
-/*
-    VÁRNI KELL A KRÉTÁBÓL MEGKAPOTT EXCEL FÁJLT!
-
 export const CreateUser = async (req, res) => {
   try {
+    const {
+      nev,
+      nyers_jelszo,
+      telefonszam,
+      szuletesi_datum,
+      lakcim,
+      admin,
+      iskola_id,
+      osztaly_id,
+      felhasznalo_tipus_id,
+      email,
+    } = req.body;
 
-    
+    if (
+      !nev ||
+      !nyers_jelszo || //-> hashelni
+      !telefonszam ||
+      !szuletesi_datum ||
+      !lakcim ||
+      !admin ||
+      !iskola_id || //-> azonosítani
+      !osztaly_id || //-> azonosítani
+      !felhasznalo_tipus_id ||
+      !email // csekkolni
+    ) {
+      return res.status(400).json({ message: "Hiányzó elemek" });
+    }
 
+    const result = await prisma.$transaction(async (tx) => {
+      const IsEmailExist = await tx.felhasznalo.findFirst({
+        where: { email: email },
+      });
 
+      if (IsEmailExist)
+        throw new Error(
+          "Ilyen email cím már hozzá van rendelve egy felhasználóhoz",
+        );
+
+      const HashJelszo = bcrypt.hash(nyers_jelszo, process.env.SALT);
+
+      const NewUser = await tx.create({
+        data: {
+          nev: nev,
+          belepesi_azonosito_hash: HashJelszo,
+          telefonszam: telefonszam,
+          szuletesi_datum: szuletesi_datum,
+          lakcim: lakcim,
+          admin: Boolean(admin),
+          iskola_id: Number(iskola_id),
+          osztaly_id: Number(osztaly_id),
+          felhasznalo_tipus_id: Number(felhasznalo_tipus_id),
+          email: email,
+        },
+      });
+
+      return NewUser;
+    });
+
+    return res.status(200).json({
+      message: "Sikeres felhasználó felvitel",
+      result: result,
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
-}; 
-
+};
 
 export const ModifyUser = async (req, res) => {
   try {
-
-    
-
-
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
-}; 
-*/
+};
 
 export const DeleteUser = async (req, res) => {
   try {
@@ -86,7 +137,7 @@ export const DeleteUser = async (req, res) => {
     const ActiveBorrowBooks = {
       felhasznalo: Username,
       konyvek: UserBorrowStatus.filter((x) => x.visszahozva === false).map(
-        (x) => x.konyv
+        (x) => x.konyv,
       ),
     };
 

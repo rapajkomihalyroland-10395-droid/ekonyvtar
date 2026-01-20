@@ -99,10 +99,12 @@ const AdminUsers = () => {
 
       <UserListTable users={users} isLoading={false} />
 
-      <AddUserModal
-        isOpen={isAddModalOpen}
-        onClose={() => setIsAddModalOpen(false)}
-      />
+      {isAddModalOpen && (
+        <AddUserModal
+          isOpen={isAddModalOpen}
+          onClose={() => setIsAddModalOpen(false)}
+        />
+      )}
     </div>
   );
 };

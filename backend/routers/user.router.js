@@ -19,6 +19,12 @@ import { GetARentalByID } from "../controllers/user/user.Details.js";
 
 import { GetAllCategories } from "../controllers/books/get.all.categories.js";
 
+import {
+  Query_Classes,
+  Query_Schools,
+  Query_UserTypes,
+} from "../controllers/user/user.detailQuery.js";
+
 const userRouter = Router();
 
 //TOPLISTÁK
@@ -44,5 +50,10 @@ userRouter.route("/get-all-categories").get(AuthMiddleware, GetAllCategories);
 userRouter
   .route("/get-a-rental/:felhasznalo_id")
   .get(AuthMiddleware, GetARentalByID);
+
+//Felhasználó Micro Queries
+userRouter.route("/get-classes").get(Query_Classes);
+userRouter.route("/get-schools").get(Query_Schools);
+userRouter.route("/get-user-types").get(Query_UserTypes);
 
 export default userRouter;

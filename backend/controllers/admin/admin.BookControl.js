@@ -6,7 +6,6 @@ export const CreateNewBook = async (req, res) => {
   try {
     const {
       cim,
-      kep,
       leiras,
       szerzo,
       kiado,
@@ -20,10 +19,16 @@ export const CreateNewBook = async (req, res) => {
       magassag_cm,
     } = req.body;
 
+    const kep = req.file ? req.file.filename : null;
+
+    if (!kep) {
+      return res.status(400).json({ message: "Kötelező képet feltölteni!" });
+    }
+
     let error;
 
     const result = await prisma.$transaction(async (tx) => {
-      const image_url = await tx.konyv.findUnique({
+      const image_url = await tx.konyv.findFirst({
         where: { kep: kep },
       });
       if (image_url) throw new Error("Ez a fájl már foglalt");
@@ -91,23 +96,13 @@ export const CreateNewBook = async (req, res) => {
           kategoria_id: kategoriaID,
           ISBN: ISBN,
           konyvtar_nyilvantartasi_szam: konyvtar_nyilvantartasi_szam,
-          keszlet: keszlet,
-          kolcsonozheto: kolcsonozheto,
-          beszerzesi_ar: beszerzesi_ar,
-          kiadas_ev: kiadas_ev,
-          magassag_cm: magassag_cm,
+          keszlet: Number(keszlet),
+          kolcsonozheto: kolcsonozheto === "true" || kolcsonozheto === true,
+          beszerzesi_ar: Number(beszerzesi_ar),
+          kiadas_ev: Number(kiadas_ev),
+          magassag_cm: Number(magassag_cm),
         },
       });
-
-      /*const newBook = {
-        SZ_ID: szerzoID,
-        szerzo: szerzo,
-        KATE: kategoriaID,
-        kategoria: kategoria,
-        KIAD: kategoriaID,
-        kategoria: kategoria,
-      };*/
-
       return newBook;
     });
 
@@ -256,5 +251,3 @@ export const UpdateBookDetail = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
-
-

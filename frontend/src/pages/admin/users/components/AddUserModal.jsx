@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   X,
   User,
@@ -12,6 +12,9 @@ import {
   Building,
 } from "lucide-react";
 
+import api from "../../../../axios_url/baseURL.js";
+import { getAuthHeader } from "store/authStore";
+
 const AddUserModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
@@ -24,9 +27,16 @@ const AddUserModal = ({ isOpen, onClose }) => {
     isAdmin: false,
     school: "",
     classId: "",
-    userType: "student", 
+    userType: "",
     password: "",
   });
+  const [iskolak, setIskola] = useState([]);
+  const [osztalyok, setOsztaly] = useState([]);
+  const [felhasznalo_tipusok, setFelhasznaloTipus] = useState([]);
+
+  const isStudent =
+    felhasznalo_tipusok.find((t) => t.id == formData.userType)?.megnevezes ===
+    "Diák";
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -35,6 +45,30 @@ const AddUserModal = ({ isOpen, onClose }) => {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
+
+  useEffect(() => {
+    const Get_Class_School_UserTypes = async () => {
+      try {
+        const [classes, schools, userTypes] = await Promise.all([
+          api.get("/get-classes", { headers: getAuthHeader() }),
+          api.get("/get-schools", { headers: getAuthHeader() }),
+          api.get("/get-user-types", { headers: getAuthHeader() }),
+        ]);
+
+        if (!classes || !schools || !userTypes) console.log("Hiba");
+
+        setOsztaly(classes.data);
+        setIskola(schools.data);
+        setFelhasznaloTipus(userTypes.data);
+
+        console.log(classes, schools, userTypes);
+      } catch (error) {
+        return error;
+      }
+    };
+
+    Get_Class_School_UserTypes();
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -163,9 +197,11 @@ const AddUserModal = ({ isOpen, onClose }) => {
                   onChange={handleChange}
                 >
                   <option value="">Válassz iskolát...</option>
-                  <option value="school1">Budapesti Műszaki Technikum</option>
-                  <option value="school2">Eötvös József Gimnázium</option>
-                  <option value="school3">Kossuth Lajos Szakközépiskola</option>
+                  {iskolak.map((iskola) => (
+                    <option key={iskola.id} value={iskola.id}>
+                      {iskola.neve}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -182,14 +218,17 @@ const AddUserModal = ({ isOpen, onClose }) => {
                   value={formData.userType}
                   onChange={handleChange}
                 >
-                  <option value="student">Diák</option>
-                  <option value="teacher">Tanár</option>
-                  <option value="other">Egyéb dolgozó</option>
+                  <option value="">Válassz típust...</option>
+                  {felhasznalo_tipusok.map((tipus) => (
+                    <option key={tipus.id} value={tipus.id}>
+                      {tipus.megnevezes}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
 
-            {formData.userType === "student" && (
+            {isStudent && (
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">
                   Osztály
@@ -203,14 +242,11 @@ const AddUserModal = ({ isOpen, onClose }) => {
                     onChange={handleChange}
                   >
                     <option value="">Válassz osztályt...</option>
-                    <option value="9a">9.A</option>
-                    <option value="9b">9.B</option>
-                    <option value="10a">10.A</option>
-                    <option value="10b">10.B</option>
-                    <option value="11a">11.A</option>
-                    <option value="11b">11.B</option>
-                    <option value="12a">12.A</option>
-                    <option value="12b">12.B</option>
+                    {osztalyok.map((osztaly) => (
+                      <option key={osztaly.id} value={osztaly.id}>
+                        {osztaly.nev} | {osztaly.tagozat}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
