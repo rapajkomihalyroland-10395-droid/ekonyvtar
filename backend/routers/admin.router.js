@@ -10,6 +10,7 @@ import {
   IncreaseStock,
   GetBookByID,
   UpdateBookDetail,
+  GetAllBook,
 } from "../controllers/admin/admin.BookControl.js";
 
 import {
@@ -34,6 +35,7 @@ adminRouter
   .post(AuthMiddleware, upload.single("coverImage"), CreateNewBook);
 adminRouter.route("/increase-stock").post(AuthMiddleware, IncreaseStock);
 adminRouter.route("/get-a-book/:id").get(AuthMiddleware, GetBookByID);
+adminRouter.route("/get-all-books").get( GetAllBook);
 adminRouter.route("/update-a-book/:id").patch(AuthMiddleware, UpdateBookDetail);
 
 //BÉRLÉSEK

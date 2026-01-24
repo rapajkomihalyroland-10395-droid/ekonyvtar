@@ -3,12 +3,16 @@ import { Search, Filter, Plus } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 import BookListTable from "./components/BookListTable";
 import AddBookModal from "./components/AddBookModal";
+import api from "../../../axios_url/baseURL.js";
+import { getAuthHeader } from "store/authStore";
 
 const AdminBooks = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [books, setBooks] = useState([]);
   const [searchParams] = useSearchParams();
+
 
   useEffect(() => {
     if (searchParams.get("action") === "new") {
@@ -16,39 +20,22 @@ const AdminBooks = () => {
     }
   }, [searchParams]);
 
-  
-  const books = [
-    {
-      id: 1,
-      title: "Harry Potter és a Bölcsek Köve",
-      author: "J.K. Rowling",
-      isbn: "9789638386894",
-      category: "Fantasy",
-      status: "active",
-      availableCopies: 3,
-      totalCopies: 5,
-    },
-    {
-      id: 2,
-      title: "A Gyűrűk Ura",
-      author: "J.R.R. Tolkien",
-      isbn: "9789630793660",
-      category: "Fantasy",
-      status: "active",
-      availableCopies: 0,
-      totalCopies: 2,
-    },
-    {
-      id: 3,
-      title: "Egri csillagok",
-      author: "Gárdonyi Géza",
-      isbn: "9789631193321",
-      category: "Történelmi regény",
-      status: "maintenance",
-      availableCopies: 10,
-      totalCopies: 12,
-    },
-  ];
+  useEffect(() => {
+    const GetBooks = async () => {
+      const response = await api.get("/get-all-books", {
+        headers: getAuthHeader(),
+      });
+
+      if (response.data != [] || response.data != null) setBooks(response.data);
+    };
+
+    try {
+      GetBooks();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
 
   return (
     <div className="space-y-6">

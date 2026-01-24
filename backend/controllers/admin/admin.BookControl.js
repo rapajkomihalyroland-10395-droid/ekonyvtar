@@ -132,8 +132,7 @@ export const CreateNewBook = async (req, res) => {
   "beszerzesi_ar": 3490,
   "kiadas_ev": 2021,
   "magassag_cm": 21
-}
- */
+}*/
 
 export const IncreaseStock = async (req, res) => {
   try {
@@ -247,6 +246,35 @@ export const UpdateBookDetail = async (req, res) => {
     return res
       .status(200)
       .json({ message: "Sikeres frissités", result: result });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const GetAllBook = async (req, res) => {
+  try {
+    let books = {};
+    const result = await prisma.konyv.findMany({
+      include: {
+        szerzo: true,
+        kategoria: true,
+      },
+    });
+    if (result) {
+      books = result.map((r) => ({
+        id: r.id,
+        cim: r.cim,
+        ISBN: r.ISBN,
+        author: r.szerzo.nev,
+        category: r.kategoria.nev,
+        keszlet: r.keszlet,
+      }));
+    }
+
+    if (books.length === 0) {
+      return res.status(404).json({ message: "Nincs könyv" });
+    }
+    return res.status(200).json(books);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
