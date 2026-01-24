@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 export const BookSearching = async (req, res) => {
   try {
     const { book_name } = req.params;
+    const host = req.protocol + "://" + req.get("host");
 
     const result = await prisma.konyv.findMany({
       where: {
@@ -18,7 +19,12 @@ export const BookSearching = async (req, res) => {
       take: 10,
     });
 
-    return res.status(200).json(result);
+    const books = result.map((book) => ({
+      ...book,
+      kep: book.kep ? `${host}/uploads/${book.kep}` : null,
+    }));
+
+    return res.status(200).json(books);
   } catch (error) {
     return res.status(404).json({ error: error.message });
   }
@@ -111,6 +117,7 @@ export const UserLoanIntention = async (req, res) => {
 export const GetBookDetails = async (req, res) => {
   try {
     const { id } = req.params;
+    const host = req.protocol + "://" + req.get("host");
 
     const book = await prisma.konyv.findUnique({
       where: { id: Number(id) },
@@ -129,7 +136,12 @@ export const GetBookDetails = async (req, res) => {
     if (!book)
       return res.status(404).json({ message: "A könyv nem található" });
 
-    return res.status(200).json(book);
+    const result = {
+      ...book,
+      kep: book.kep ? `${host}/uploads/${book.kep}` : null,
+    };
+
+    return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

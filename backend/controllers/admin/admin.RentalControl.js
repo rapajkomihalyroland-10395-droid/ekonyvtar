@@ -104,13 +104,20 @@ export const GetLoanById = async (req, res) => {
     const result = await prisma.berles.findMany({
       where: { konyv_id: Number(id) },
       include: {
-        felhasznalo: true,
+        felhasznalo: {
+          include: {
+            felhasznalotipus: true,
+          },
+        },
       },
     });
 
     const loan = result.map((r) => ({
       id: r.id,
       felhasznalo: r.felhasznalo.nev,
+      felhasznalo_tipus: r.felhasznalo.felhasznalotipus
+        ? r.felhasznalo.felhasznalotipus.megnevezes
+        : "Ismeretlen",
       berles_kezdete: r.berles_kezdete,
       berles_vege: r.berles_vege,
       visszahozva: r.visszahozva,

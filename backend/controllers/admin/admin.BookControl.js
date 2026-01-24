@@ -165,6 +165,7 @@ export const IncreaseStock = async (req, res) => {
 export const GetBookByID = async (req, res) => {
   try {
     const { id } = req.params;
+    const host = req.protocol + "://" + req.get("host");
 
     let book;
 
@@ -203,6 +204,7 @@ export const GetBookByID = async (req, res) => {
       kolcsonozheto: result.kolcsonozheto,
       beszerzesi_ar: result.beszerzesi_ar,
       magassag_cm: result.magassag_cm,
+      kep: result.kep ? `${host}/uploads/${result.kep}` : null,
     };
 
     return res.status(200).json(book);
@@ -215,12 +217,11 @@ export const UpdateBookDetail = async (req, res) => {
   try {
     const {
       cim,
-      kep,
       leiras,
       szerzo,
       kiado,
       kategoria,
-      ISBN,
+      isbn,
       konyvtar_nyilvantartasi_szam,
       keszlet,
       kolcsonozheto,
@@ -231,29 +232,85 @@ export const UpdateBookDetail = async (req, res) => {
 
     const { id } = req.params;
 
-    const result = await prisma.konyv.update({
-      where: { id: Number(id) },
-      data: {
-        cim: cim,
-        kep: kep,
-        leiras: leiras,
-        szerzo_id: szerzo,
-        kiado_id: kiado,
-        kategoria_id: kategoria,
-        ISBN: Number(kiadas_ev),
-        konyvtar_nyilvantartasi_szam: Number(konyvtar_nyilvantartasi_szam),
-        keszlet: Number(keszlet),
-        kolcsonozheto: kolcsonozheto,
-        beszerzesi_ar: Number(beszerzesi_ar),
-        kiadas_ev: Number(kiadas_ev),
-        magassag_cm: Number(magassag_cm),
-      },
+    const kep = req.file ? req.file.filename : req.body.kep;
+
+    const result = await prisma.$transaction(async (tx) => {
+      let szerzoID;
+      if (szerzo) {
+        const existingSzerzo = await tx.szerzo.findFirst({
+          where: { nev: szerzo },
+        });
+        if (existingSzerzo) {
+          szerzoID = existingSzerzo.id;
+        } else {
+          const newSzerzo = await tx.szerzo.create({
+            data: { nev: szerzo },
+          });
+          szerzoID = newSzerzo.id;
+        }
+      }
+
+      let kiadoID;
+      if (kiado) {
+        const existingKiado = await tx.kiado.findFirst({
+          where: { nev: kiado },
+        });
+        if (existingKiado) {
+          kiadoID = existingKiado.id;
+        } else {
+          const newKiado = await tx.kiado.create({
+            data: { nev: kiado },
+          });
+          kiadoID = newKiado.id;
+        }
+      }
+
+      let kategoriaID;
+      if (kategoria) {
+        const existingKategoria = await tx.kategoria.findFirst({
+          where: { nev: kategoria },
+        });
+        if (existingKategoria) {
+          kategoriaID = existingKategoria.id;
+        } else {
+          const newKategoria = await tx.kategoria.create({
+            data: { nev: kategoria },
+          });
+          kategoriaID = newKategoria.id;
+        }
+      }
+
+      const updateData = {};
+      if (cim) updateData.cim = cim;
+      if (kep) updateData.kep = kep;
+      if (leiras) updateData.leiras = leiras;
+      if (szerzoID) updateData.szerzo_id = szerzoID;
+      if (kiadoID) updateData.kiado_id = kiadoID;
+      if (kategoriaID) updateData.kategoria_id = kategoriaID;
+      if (isbn) updateData.ISBN = isbn;
+      if (konyvtar_nyilvantartasi_szam)
+        updateData.konyvtar_nyilvantartasi_szam = konyvtar_nyilvantartasi_szam;
+      if (keszlet) updateData.keszlet = Number(keszlet);
+      if (kolcsonozheto !== undefined)
+        updateData.kolcsonozheto =
+          kolcsonozheto === "true" || kolcsonozheto === true;
+      if (beszerzesi_ar) updateData.beszerzesi_ar = Number(beszerzesi_ar);
+      if (kiadas_ev) updateData.kiadas_ev = Number(kiadas_ev);
+      if (magassag_cm) updateData.magassag_cm = Number(magassag_cm);
+
+      const updatedBook = await tx.konyv.update({
+        where: { id: Number(id) },
+        data: updateData,
+      });
+
+      return updatedBook;
     });
 
     return res
       .status(200)
-      .json({ message: "Sikeres frissités", result: result });
+      .json({ message: "Sikeres frissítés", result: result });
   } catch (error) {
+    console.error("Update error:", error);
     return res.status(500).json({ message: error.message });
   }
 };

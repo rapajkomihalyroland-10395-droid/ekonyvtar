@@ -37,7 +37,7 @@ adminRouter
 adminRouter.route("/increase-stock").post(AuthMiddleware, IncreaseStock);
 adminRouter.route("/get-a-book/:id").get(AuthMiddleware, GetBookByID);
 adminRouter.route("/get-all-books").get(AuthMiddleware, GetAllBook);
-adminRouter.route("/update-a-book/:id").patch(AuthMiddleware, UpdateBookDetail);
+adminRouter.route("/update-a-book/:id").patch(AuthMiddleware, upload.single("kep"), UpdateBookDetail);
 
 //BÉRLÉSEK
 adminRouter.route("/get-all-rentals").get(AuthMiddleware, GetAllRentals);

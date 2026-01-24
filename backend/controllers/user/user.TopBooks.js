@@ -4,6 +4,7 @@ const prisma = new PrismaClient();
 
 export const TopBooks = async (req, res) => {
   try {
+    const host = req.protocol + "://" + req.get("host");
     const books = await prisma.berles.findMany({
       select: {
         konyv: {
@@ -32,7 +33,7 @@ export const TopBooks = async (req, res) => {
         acc[key] = {
           id: key,
           cim: book.konyv.cim,
-          kep: book.konyv.kep,
+          kep: book.konyv.kep ? `${host}/uploads/${book.konyv.kep}` : null,
           leiras: book.konyv.leiras,
           keszlet: book.konyv.keszlet,
           kolcsonozheto: book.konyv.kolcsonozheto,
@@ -105,6 +106,7 @@ export const TopAuthor = async (req, res) => {
 
 export const TopByStars = async (req, res) => {
   try {
+    const host = req.protocol + "://" + req.get("host");
     const books = await prisma.konyv.findMany({
       where: {
         csillag_ertekeles: { gte: 4.8 },
@@ -167,7 +169,7 @@ export const TopByCategory = async (req, res) => {
           id: key,
           kategoria: book.konyv.kategoria.nev,
           cim: book.konyv.cim,
-          kep: book.konyv.kep,
+          kep: book.konyv.kep ? `${host}/uploads/${book.konyv.kep}` : null,
           leiras: book.konyv.leiras,
           szerzo: book.konyv.szerzo.nev,
           kiado: book.konyv.kiado.nev,
