@@ -16,6 +16,7 @@ import {
 import {
   GetAllRentals,
   BookLoan,
+  GetLoanById,
 } from "../controllers/admin/admin.RentalControl.js";
 
 import { upload } from "../middlewares/image.middleware.js";
@@ -35,11 +36,12 @@ adminRouter
   .post(AuthMiddleware, upload.single("coverImage"), CreateNewBook);
 adminRouter.route("/increase-stock").post(AuthMiddleware, IncreaseStock);
 adminRouter.route("/get-a-book/:id").get(AuthMiddleware, GetBookByID);
-adminRouter.route("/get-all-books").get( GetAllBook);
+adminRouter.route("/get-all-books").get(AuthMiddleware, GetAllBook);
 adminRouter.route("/update-a-book/:id").patch(AuthMiddleware, UpdateBookDetail);
 
 //BÉRLÉSEK
 adminRouter.route("/get-all-rentals").get(AuthMiddleware, GetAllRentals);
-adminRouter.route("/book-loan").post(BookLoan);
+adminRouter.route("/book-loan").post(AuthMiddleware, BookLoan);
+adminRouter.route("/get-a-loan/:id").get( GetLoanById);
 
 export default adminRouter;

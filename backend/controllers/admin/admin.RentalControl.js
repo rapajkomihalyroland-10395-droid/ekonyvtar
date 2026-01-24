@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { addAbortListener } from "events";
 
 const prisma = new PrismaClient();
 
@@ -93,5 +94,30 @@ export const BookLoan = async (req, res) => {
     return res.status(201).json({ message: "Sikeres kölcsönzés!", result });
   } catch (error) {
     return res.status(500).json({ error: error.message });
+  }
+};
+
+export const GetLoanById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await prisma.berles.findMany({
+      where: { konyv_id: Number(id) },
+      include: {
+        felhasznalo: true,
+      },
+    });
+
+    const loan = result.map((r) => ({
+      id: r.id,
+      felhasznalo: r.felhasznalo.nev,
+      berles_kezdete: r.berles_kezdete,
+      berles_vege: r.berles_vege,
+      visszahozva: r.visszahozva,
+    }));
+
+    return !result ? res.status(404) : res.status(200).json(loan);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
   }
 };

@@ -1,47 +1,86 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Save, Trash2, BookOpen, History, Plus } from "lucide-react";
 import StatusBadge from "../components/StatusBadge.jsx";
 import { cn } from "../../../utils/cn";
+import api from "../../../axios_url/baseURL.js";
+import { getAuthHeader } from "store/authStore.js";
+import { get } from "react-hook-form";
 
 const BookDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("details");
+  const [book, setBook] = useState([]);
+  const [loans, setLoans] = useState([]);
 
-  
-  const book = {
-    id: 1,
-    title: "Harry Potter és a Bölcsek Köve",
-    author: "J.K. Rowling",
-    isbn: "9789638386894",
-    publisher: "Animus Kiadó",
-    year: "2000",
-    category: "Fantasy",
-    description: "A Harry Potter-sorozat első kötete...",
-    copies: 5,
-    location: "A3-12",
-    status: "active",
-  };
-
-  const loans = [
+  /*const loans = [
     {
       id: 101,
-      user: "Kiss Péter",
-      date: "2024.01.10",
-      deadline: "2024.01.24",
-      returned: null,
-      status: "active",
+      felhasznalo: "Kiss Péter",
+      berles_kezdete: "2024.01.10",
+      berles_vege: "2024.01.24",
+      visszahozva: null,
     },
     {
       id: 102,
-      user: "Nagy Anna",
-      date: "2023.12.01",
-      deadline: "2023.12.15",
-      returned: "2023.12.14",
-      status: "closed",
+      felhasznalo: "Nagy Anna",
+      berles_kezdete: "2023.12.01",
+      berles_vege: "2023.12.15",
+      visszahozva: "2023.12.14",
     },
-  ];
+  ];*/
+
+  {
+    /*const book = {
+    id: 1,
+    cim: "Harry Potter és a Bölcsek Köve",
+    szerzo: "J.K. Rowling",
+    isbn: "9789638386894",
+    kiado: "Animus Kiadó",
+    kiadas_ev: "2000",
+    leiras: "A Harry Potter-sorozat első kötete...",
+    kategoria: "Fantasy",
+    keszlet: 5,
+    konyvtar_nyilvantartasi_szam: "LIB-2024-001",
+    kolcsonozheto: true,
+    beszerzesi_ar: 3990,
+    magassag_cm: 21,
+    status: "active",
+  }; */
+  }
+
+  useEffect(() => {
+    const GetBook = async () => {
+      try {
+        const response = await api.get(`/get-a-book/${Number(id)}`, {
+          headers: getAuthHeader(),
+        });
+
+        if (response.data) setBook(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    GetBook();
+  }, [id]);
+
+  useEffect(() => {
+    const GetLoans = async () => {
+      try {
+        const response = await api.get(`/get-a-loan/${id}`, {
+          headers: getAuthHeader(),
+        });
+
+        if (response.data) setLoans(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    GetLoans();
+  }, [id]);
 
   return (
     <div className="space-y-6">
@@ -54,9 +93,9 @@ const BookDetails = () => {
           <ArrowLeft size={20} />
         </button>
         <div className="flex-1">
-          <h1 className="text-2xl font-bold text-gray-900">{book.title}</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{book.cim}</h1>
           <div className="flex items-center gap-3 text-sm text-gray-500 mt-1">
-            <span>{book.author}</span>
+            <span>{book.szerzo}</span>
             <span>•</span>
             <span className="font-mono">{book.isbn}</span>
             <StatusBadge status={book.status} />
@@ -74,40 +113,33 @@ const BookDetails = () => {
         </div>
       </div>
 
-      {}
       <div className="border-b border-gray-200">
         <nav className="flex space-x-8">
-          <button
-            onClick={() => setActiveTab("details")}
-            className={cn(
-              "py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2",
-              activeTab === "details"
-                ? "border-primary text-primary"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-            )}
-          >
-            <BookOpen size={16} />
-            Alapadatok
-          </button>
-          <button
-            onClick={() => setActiveTab("loans")}
-            className={cn(
-              "py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2",
-              activeTab === "loans"
-                ? "border-primary text-primary"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-            )}
-          >
-            <History size={16} />
-            Kölcsönzések
-          </button>
+          {[
+            { id: "details", label: "Alapadatok", icon: BookOpen },
+            { id: "loans", label: "Kölcsönzések", icon: History },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                "py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2",
+                activeTab === tab.id
+                  ? "border-primary text-primary"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
+              )}
+            >
+              <tab.icon size={16} />
+              {tab.label}
+            </button>
+          ))}
         </nav>
       </div>
 
       {}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         {activeTab === "details" && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div key={book.id} className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-foreground">
@@ -115,7 +147,7 @@ const BookDetails = () => {
                 </label>
                 <input
                   type="text"
-                  defaultValue={book.title}
+                  defaultValue={book.cim}
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 />
               </div>
@@ -125,19 +157,31 @@ const BookDetails = () => {
                 </label>
                 <input
                   type="text"
-                  defaultValue={book.author}
+                  defaultValue={book.szerzo}
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-foreground">
-                  ISBN
-                </label>
-                <input
-                  type="text"
-                  defaultValue={book.isbn}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-foreground">
+                    ISBN
+                  </label>
+                  <input
+                    type="text"
+                    defaultValue={book.isbn}
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-foreground">
+                    Kategória
+                  </label>
+                  <input
+                    type="text"
+                    defaultValue={book.kategoria}
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  />
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -146,7 +190,7 @@ const BookDetails = () => {
                   </label>
                   <input
                     type="text"
-                    defaultValue={book.publisher}
+                    defaultValue={book.kiado}
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   />
                 </div>
@@ -156,10 +200,20 @@ const BookDetails = () => {
                   </label>
                   <input
                     type="text"
-                    defaultValue={book.year}
+                    defaultValue={book.kiadas_ev}
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   />
                 </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-foreground">
+                  Könyvtári nyilvántartási szám
+                </label>
+                <input
+                  type="text"
+                  defaultValue={book.konyvtar_nyilvantartasi_szam}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                />
               </div>
             </div>
             <div className="space-y-4">
@@ -167,29 +221,57 @@ const BookDetails = () => {
                 <label className="text-sm font-medium">Leírás</label>
                 <textarea
                   className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                  defaultValue={book.description}
+                  defaultValue={book.leiras}
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-foreground">
-                    Példányszám
+                    Készlet
                   </label>
                   <input
                     type="number"
-                    defaultValue={book.copies}
+                    defaultValue={book.keszlet}
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-foreground">
-                    Polc / Hely
+                    Beszerzési ár (Ft)
                   </label>
                   <input
-                    type="text"
-                    defaultValue={book.location}
+                    type="number"
+                    defaultValue={book.beszerzesi_ar}
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-foreground">
+                    Magasság (cm)
+                  </label>
+                  <input
+                    type="number"
+                    defaultValue={book.magassag_cm}
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  />
+                </div>
+                <div className="space-y-2 flex items-center pt-6">
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="kolcsonozheto"
+                      defaultChecked={book.kolcsonozheto}
+                      className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                    />
+                    <label
+                      htmlFor="kolcsonozheto"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-foreground"
+                    >
+                      Kölcsönözhető
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -214,16 +296,13 @@ const BookDetails = () => {
                       Felhasználó
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Kölcsönzés dátuma
+                      Bérlés kezdete
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Határidő
+                      Bérlés vége
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Visszahozva
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Státusz
                     </th>
                   </tr>
                 </thead>
@@ -231,28 +310,24 @@ const BookDetails = () => {
                   {loans.map((loan) => (
                     <tr key={loan.id}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {loan.user}
+                        {loan.felhasznalo}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {loan.date}
+                        {loan.berles_kezdete}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {loan.deadline}
+                        {loan.berles_vege}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {loan.returned || "-"}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        <span
-                          className={cn(
-                            "px-2 inline-flex text-xs leading-5 font-semibold rounded-full",
-                            loan.status === "active"
-                              ? "bg-green-100 text-green-800"
-                              : "bg-gray-100 text-gray-800"
-                          )}
-                        >
-                          {loan.status === "active" ? "Aktív" : "Lezárt"}
-                        </span>
+                        {!loan.visszahozva ? (
+                          <span className="inline-flex items-center rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
+                            Kikölcsönözve
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                            Visszahozva
+                          </span>
+                        )}
                       </td>
                     </tr>
                   ))}

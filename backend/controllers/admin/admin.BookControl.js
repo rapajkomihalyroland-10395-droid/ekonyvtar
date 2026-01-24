@@ -183,22 +183,29 @@ export const GetBookByID = async (req, res) => {
         kategoria: true,
       },
     });
-
-    book = {
-      szerzo: result.szerzo.nev,
-      cim: result.cim,
-      kiado: result.kiado.nev,
-      kategoria: result.kategoria.nev,
-      berles: result.berles.map((x) => ({
+    /*berles: result.berles.map((x) => ({
         nev: x.felhasznalo.nev,
         lakcim: x.felhasznalo.lakcim,
         osztaly: x.felhasznalo.osztaly.nev,
         kikolcsozes_stat:
           x.visszahozva != false ? x.berles_kezdete : "Visszahozott",
-      })),
+      })), */
+    book = {
+      cim: result.cim,
+      szerzo: result.szerzo.nev,
+      isbn: result.ISBN,
+      kiado: result.kiado.nev,
+      kiadas_ev: result.kiadas_ev,
+      leiras: result.leiras,
+      kategoria: result.kategoria.nev,
+      keszlet: result.keszlet,
+      konyvtar_nyilvantartasi_szam: result.konyvtar_nyilvantartasi_szam,
+      kolcsonozheto: result.kolcsonozheto,
+      beszerzesi_ar: result.beszerzesi_ar,
+      magassag_cm: result.magassag_cm,
     };
 
-    return res.status(200).json({ book });
+    return res.status(200).json(book);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
