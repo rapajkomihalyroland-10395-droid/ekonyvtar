@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { addAbortListener } from "events";
 
 const prisma = new PrismaClient();
 
@@ -102,22 +101,15 @@ export const GetLoanById = async (req, res) => {
     const { id } = req.params;
 
     const result = await prisma.berles.findMany({
-      where: { konyv_id: Number(id) },
+      where: { felhasznalo_id: Number(id) },
       include: {
-        felhasznalo: {
-          include: {
-            felhasznalotipus: true,
-          },
-        },
+        konyv: true,
       },
     });
 
     const loan = result.map((r) => ({
       id: r.id,
-      felhasznalo: r.felhasznalo.nev,
-      felhasznalo_tipus: r.felhasznalo.felhasznalotipus
-        ? r.felhasznalo.felhasznalotipus.megnevezes
-        : "Ismeretlen",
+      konyv: r.konyv.cim,
       berles_kezdete: r.berles_kezdete,
       berles_vege: r.berles_vege,
       visszahozva: r.visszahozva,

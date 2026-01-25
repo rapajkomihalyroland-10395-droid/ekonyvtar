@@ -6,27 +6,57 @@ const prisma = new PrismaClient();
 
 export const GetAllUsers = async (req, res) => {
   try {
-    const result = await prisma.felhasznalo.findMany({});
+    const result = await prisma.felhasznalo.findMany({
+      include: { felhasznalotipus: true, berles: true },
+    });
 
-    return res.status(200).json(result);
+    const user = result.map((u) => ({
+      id: u.id,
+      nev: u.nev,
+      szerepkor: u.felhasznalotipus.megnevezes,
+      aktiv_kolcsonzes: u.berles.some(
+        (b) =>
+          b.visszahozva === false &&
+          new Date(b.berles_vege).getTime() > Date.now(),
+      ),
+    }));
+
+    return res.status(200).json(user);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
 
-export const GetUserByName = async (req, res) => {
+export const GetUserByID = async (req, res) => {
   try {
-    const { name } = req.params;
+    const { id } = req.params;
 
-    const result = await prisma.felhasznalo.findMany({
-      where: {
-        nev: {
-          contains: name,
-        },
+    const result = await prisma.felhasznalo.findFirst({
+      where: { id: Number(id) },
+      include: {
+        felhasznalotipus: true,
+        osztaly: true,
+        iskola: true,
       },
     });
 
-    return res.status(200).json(result);
+    if (!result) {
+      return res.status(404).json({ message: "Felhasználó nem található" });
+    }
+
+    const user = {
+      nev: result.nev,
+      telefonszam: result.telefonszam,
+      szuletesi_datum: result.szuletesi_datum,
+      lakcim: result.lakcim,
+      admin: result.admin,
+      iskola: result.iskola.neve ,
+      osztaly: result.osztaly.nev,
+      felhasznalo_tipus: result.felhasznalotipus.megnevezes,
+      email: result.email,
+    };
+
+    return res.status(200).json(user);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

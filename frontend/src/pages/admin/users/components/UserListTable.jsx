@@ -26,57 +26,34 @@ const UserListTable = ({ users, isLoading }) => {
             <tr key={user.id} className="hover:bg-gray-50 transition-colors">
               <td className="px-6 py-4">
                 <div>
-                  <div className="font-medium text-gray-900">{user.name}</div>
+                  <div className="font-medium text-gray-900">{user.nev}</div>
                   <div className="text-xs text-gray-500 mt-0.5">
                     {user.email}
                   </div>
                 </div>
               </td>
               <td className="px-6 py-4">
-                <StatusBadge status={user.role} />
+                <StatusBadge status={user.szerepkor} />
               </td>
               <td className="px-6 py-4 text-center">
                 <span
                   className={
-                    user.activeLoans > 0
-                      ? "font-medium text-gray-900"
-                      : "text-gray-400"
+                    user.aktiv_kolcsonzes ?
+                      "font-medium text-gray-900"
+                    : "text-gray-400"
                   }
                 >
-                  {user.activeLoans}
+                  {user.aktiv_kolcsonzes ? "van aktív kölcsönzése" : "nincsen"}
                 </span>
-                {user.overdueLoans > 0 && (
-                  <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">
-                    {user.overdueLoans} lejárt
-                  </span>
-                )}
               </td>
               <td className="px-6 py-4 text-right">
                 <div className="flex items-center justify-end gap-2">
-                  <button
-                    className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
-                    title="Üzenet küldése"
-                  >
-                    <Mail size={18} />
-                  </button>
                   <button
                     onClick={() => navigate(`/admin/users/${user.id}`)}
                     className="p-1.5 text-gray-500 hover:text-primary hover:bg-primary/10 rounded transition-colors"
                     title="Megtekintés"
                   >
                     <Eye size={18} />
-                  </button>
-                  <button
-                    className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
-                    title="Szerkesztés"
-                  >
-                    <Edit2 size={18} />
-                  </button>
-                  <button
-                    className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
-                    title="Törlés"
-                  >
-                    <Trash2 size={18} />
                   </button>
                 </div>
               </td>

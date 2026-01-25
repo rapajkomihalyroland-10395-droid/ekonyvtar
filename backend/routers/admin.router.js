@@ -1,8 +1,7 @@
 import { Router } from "express";
 import {
   GetAllUsers,
-  GetUserByName,
-  DeleteUser,
+  GetUserByID,
 } from "../controllers/admin/admin.UserControl.js";
 
 import {
@@ -27,8 +26,8 @@ const adminRouter = Router();
 
 //FELHASZNÁLOK
 adminRouter.route("/users").get(AuthMiddleware, GetAllUsers);
-adminRouter.route("/users/:name").get(AuthMiddleware, GetUserByName);
-adminRouter.route("/user/:id").get(AuthMiddleware, DeleteUser);
+adminRouter.route("/users/:id").get(AuthMiddleware, GetUserByID);
+//adminRouter.route("/user/:id").get(AuthMiddleware, DeleteUser);
 
 //KÖNYVEK
 adminRouter
@@ -37,11 +36,13 @@ adminRouter
 adminRouter.route("/increase-stock").post(AuthMiddleware, IncreaseStock);
 adminRouter.route("/get-a-book/:id").get(AuthMiddleware, GetBookByID);
 adminRouter.route("/get-all-books").get(AuthMiddleware, GetAllBook);
-adminRouter.route("/update-a-book/:id").patch(AuthMiddleware, upload.single("kep"), UpdateBookDetail);
+adminRouter
+  .route("/update-a-book/:id")
+  .patch(AuthMiddleware, upload.single("kep"), UpdateBookDetail);
 
 //BÉRLÉSEK
 adminRouter.route("/get-all-rentals").get(AuthMiddleware, GetAllRentals);
 adminRouter.route("/book-loan").post(AuthMiddleware, BookLoan);
-adminRouter.route("/get-a-loan/:id").get( GetLoanById);
+adminRouter.route("/get-a-loan/:id").get(GetLoanById);
 
 export default adminRouter;

@@ -3,12 +3,15 @@ import { Search, UserPlus } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 import UserListTable from "./components/UserListTable";
 import AddUserModal from "./components/AddUserModal";
+import { getAuthHeader } from "store/authStore";
+import api from "../../../axios_url/baseURL.js";
 
 const AdminUsers = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState("all");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [searchParams] = useSearchParams();
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     if (searchParams.get("action") === "new") {
@@ -16,41 +19,19 @@ const AdminUsers = () => {
     }
   }, [searchParams]);
 
-  
-  const users = [
-    {
-      id: 1,
-      name: "Kiss Péter",
-      email: "kiss.peter@student.school.hu",
-      role: "diák",
-      activeLoans: 2,
-      overdueLoans: 0,
-    },
-    {
-      id: 2,
-      name: "Nagy Anna",
-      email: "nagy.anna@student.school.hu",
-      role: "diák",
-      activeLoans: 1,
-      overdueLoans: 1,
-    },
-    {
-      id: 3,
-      name: "Dr. Kovács János",
-      email: "kovacs.janos@teacher.school.hu",
-      role: "tanár",
-      activeLoans: 0,
-      overdueLoans: 0,
-    },
-    {
-      id: 4,
-      name: "Admin Admin",
-      email: "admin@school.hu",
-      role: "admin",
-      activeLoans: 0,
-      overdueLoans: 0,
-    },
-  ];
+  useEffect(() => {
+    const GetUsers = async () => {
+      const response = await api.get("/users", { headers: getAuthHeader() });
+
+      if (response.data) setUsers(response.data);
+    };
+
+    try {
+      GetUsers();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   return (
     <div className="space-y-6">

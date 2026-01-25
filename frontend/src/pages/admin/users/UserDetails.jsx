@@ -1,50 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  ArrowLeft,
-  Save,
-  Trash2,
-  User,
-  History,
-  Mail,
-  Send,
-} from "lucide-react";
+import { ArrowLeft, Save, User, History, Mail, Send } from "lucide-react";
 import StatusBadge from "../components/StatusBadge.jsx";
 import { cn } from "../../../utils/cn";
+import { getAuthHeader } from "store/authStore.js";
+import api from "../../../axios_url/baseURL.js";
 
 const UserDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("details");
+  const [user, setUser] = useState([]);
+  const [loans, setLoan] = useState([]);
 
-  
-  const user = {
-    id: 1,
-    name: "Kiss Péter",
-    email: "kiss.peter@student.school.hu",
-    role: "diák",
-    class: "11.B",
-    phone: "+36 30 123 4567",
-    joined: "2022.09.01",
-    activeLoans: 2,
-  };
+  useEffect(() => {
+    const GetUserAndLoans = async () => {
+      const [user, loan] = await Promise.all([
+        api.get(`/users/${id}`, { headers: getAuthHeader() }),
+        api.get(`/get-a-loan/${id}`, { headers: getAuthHeader() }),
+      ]);
 
-  const loans = [
-    {
-      id: 101,
-      book: "Harry Potter és a Bölcsek Köve",
-      date: "2024.01.10",
-      deadline: "2024.01.24",
-      status: "active",
-    },
-    {
-      id: 103,
-      book: "Egri csillagok",
-      date: "2024.01.05",
-      deadline: "2024.01.19",
-      status: "active",
-    },
-  ];
+      if (!user || !loan) console.log("Hiba!");
+
+      setUser(user.data);
+      setLoan(loan.data);
+    };
+
+    try {
+      GetUserAndLoans();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [id]);
 
   return (
     <div className="space-y-6">
@@ -57,7 +44,7 @@ const UserDetails = () => {
           <ArrowLeft size={20} />
         </button>
         <div className="flex-1">
-          <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{user.nev}</h1>
           <div className="flex items-center gap-3 text-sm text-gray-500 mt-1">
             <span className="font-mono">{user.email}</span>
             <span>•</span>
@@ -65,10 +52,6 @@ const UserDetails = () => {
           </div>
         </div>
         <div className="flex gap-2">
-          <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200">
-            <Trash2 size={16} className="mr-2" />
-            Törlés
-          </button>
           <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90">
             <Save size={16} className="mr-2" />
             Mentés
@@ -85,7 +68,7 @@ const UserDetails = () => {
               "py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2",
               activeTab === "details"
                 ? "border-primary text-primary"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
             )}
           >
             <User size={16} />
@@ -97,7 +80,7 @@ const UserDetails = () => {
               "py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2",
               activeTab === "loans"
                 ? "border-primary text-primary"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
             )}
           >
             <History size={16} />
@@ -109,7 +92,7 @@ const UserDetails = () => {
               "py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2",
               activeTab === "messages"
                 ? "border-primary text-primary"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
             )}
           >
             <Mail size={16} />
@@ -129,7 +112,7 @@ const UserDetails = () => {
                 </label>
                 <input
                   type="text"
-                  defaultValue={user.name}
+                  defaultValue={user.nev}
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 />
               </div>
@@ -150,7 +133,7 @@ const UserDetails = () => {
                   </label>
                   <input
                     type="text"
-                    defaultValue={user.class}
+                    defaultValue={user.osztaly}
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   />
                 </div>
@@ -160,31 +143,71 @@ const UserDetails = () => {
                   </label>
                   <input
                     type="text"
-                    defaultValue={user.phone}
+                    defaultValue={user.telefonszam}
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   />
                 </div>
               </div>
-            </div>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Szerepkör</label>
-                <select className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                  <option value="student">Diák</option>
-                  <option value="teacher">Tanár</option>
-                  <option value="admin">Adminisztrátor</option>
-                </select>
-              </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-foreground">
-                  Csatlakozás dátuma
+                  Lakcím
                 </label>
                 <input
                   type="text"
-                  defaultValue={user.joined}
-                  disabled
+                  defaultValue={user.lakcim}
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 />
+              </div>
+            </div>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">
+                  Szerepkör (Felhasználó Típus)
+                </label>
+                <input
+                  type="text"
+                  defaultValue={user.felhasznalo_tipus}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-foreground">
+                  Születési dátum
+                </label>
+                <input
+                  type="text"
+                  defaultValue={
+                    user.szuletesi_datum
+                      ? new Date(user.szuletesi_datum).toLocaleDateString()
+                      : ""
+                  }
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-foreground">
+                  Iskola
+                </label>
+                <input
+                  type="text"
+                  defaultValue={user.iskola}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                />
+              </div>
+              <div className="flex items-center space-x-2 mt-8">
+                <input
+                  type="checkbox"
+                  id="admin"
+                  checked={user.admin || false}
+                  readOnly
+                  className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                />
+                <label
+                  htmlFor="admin"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Adminisztrátor
+                </label>
               </div>
             </div>
           </div>
@@ -218,16 +241,26 @@ const UserDetails = () => {
                   {loans.map((loan) => (
                     <tr key={loan.id}>
                       <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                        {loan.book}
+                        {loan.konyv}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {loan.date}
+                        {new Date(loan.berles_kezdete).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {loan.deadline}
+                        {new Date(loan.berles_vege).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        <StatusBadge status={loan.status} />
+                        <span
+                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            !loan.visszahozva
+                              ? "bg-green-100 text-green-800"
+                              : "bg-gray-100 text-gray-800"
+                          }`}
+                        >
+                          {!loan.visszahozva
+                            ? "Aktív kölcsönzés"
+                            : "Visszahozva"}
+                        </span>
                       </td>
                     </tr>
                   ))}
