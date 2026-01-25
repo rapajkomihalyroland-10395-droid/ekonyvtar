@@ -1,11 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Save, Trash2, BookOpen, History, Plus } from "lucide-react";
-import StatusBadge from "../components/StatusBadge.jsx";
+import { ArrowLeft, Save, BookOpen, History,  } from "lucide-react";
 import { cn } from "../../../utils/cn";
 import api from "../../../axios_url/baseURL.js";
 import { getAuthHeader } from "store/authStore.js";
-import { get } from "react-hook-form";
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -358,10 +356,6 @@ const BookDetails = () => {
           <div className="space-y-6">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-medium">Kölcsönzési előzmények</h3>
-              <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-9 rounded-md px-3 bg-primary text-primary-foreground hover:bg-primary/90">
-                <Plus size={16} className="mr-2" />
-                Új kölcsönzés
-              </button>
             </div>
 
             <div className="overflow-hidden rounded-lg border border-gray-200">
