@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Search, UserPlus } from "lucide-react";
+import { UserPlus } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 import UserListTable from "./components/UserListTable";
 import AddUserModal from "./components/AddUserModal";
@@ -7,8 +7,6 @@ import { getAuthHeader } from "store/authStore";
 import api from "../../../axios_url/baseURL.js";
 
 const AdminUsers = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterRole, setFilterRole] = useState("all");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [searchParams] = useSearchParams();
   const [users, setUsers] = useState([]);
