@@ -113,14 +113,14 @@ const UserListTable = ({ users, isLoading }) => {
     <div className="flex items-center justify-between gap-3 p-4 border-t border-gray-200">
           <button
             type="button"
-            //onClick={previousPage}
+            onClick={previousPage}
             className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3"
           >
             Előző
           </button>
           <button
             type="button"
-            //onClick={nextPage}
+            onClick={nextPage}
             className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3"
           >
             Következő
