@@ -538,7 +538,10 @@ CREATE TABLE `uzenetek` (
   `cimzett_ids` text,
   `allapot` varchar(50) DEFAULT 'UJ',
   `letrehozva` datetime DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_hungarian_ci;
+
 
 --
 -- Dumping data for table `uzenetek`

@@ -124,10 +124,11 @@ export const TopByStars = async (req, res) => {
       take: 25,
     });
 
+    /*kep: book.konyv.kep ? `${host}/uploads/${book.konyv.kep}` : null, */
     const formattedBooks = books.map((book) => ({
       id: book.id,
       cim: book.cim,
-      kep: book.kep,
+      kep: book.kep ? `${host}/uploads/${book.kep}` : null,
       leiras: book.leiras,
       csillag_ertekeles: book.csillag_ertekeles,
       szerzo: book.szerzo.nev,
@@ -143,6 +144,7 @@ export const TopByStars = async (req, res) => {
 
 export const TopByCategory = async (req, res) => {
   try {
+    const host = req.protocol + "://" + req.get("host");
     const books = await prisma.berles.findMany({
       select: {
         id: true,

@@ -28,7 +28,6 @@ const MainPage = () => {
           api.get("/top-by-category", { headers: getAuthHeader() }),
           api.get("/top-by-stars", { headers: getAuthHeader() }),
         ]);
-
         setTopBooks(bookRes.data);
         setTopAuthors(authorRes.data);
         setTopCategory(categoryRes.data);
