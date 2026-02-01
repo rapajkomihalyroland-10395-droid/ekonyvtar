@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Save, BookOpen, History,  } from "lucide-react";
+import { ArrowLeft, Save, BookOpen, History } from "lucide-react";
 import { cn } from "../../../utils/cn";
 import api from "../../../axios_url/baseURL.js";
 import { getAuthHeader } from "store/authStore.js";
@@ -102,7 +102,6 @@ const BookDetails = () => {
 
   return (
     <div className="space-y-6">
-      {}
       <div className="flex items-center gap-4">
         <button
           onClick={() => navigate("/admin/books")}
@@ -144,7 +143,6 @@ const BookDetails = () => {
         </nav>
       </div>
 
-      {}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         {activeTab === "details" && (
           <div key={book.id} className="grid grid-cols-1 md:grid-cols-2 gap-6">

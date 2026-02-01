@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 21, 2025 at 10:29 AM
+-- Generation Time: Feb 01, 2026 at 11:30 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.26
 
@@ -116,7 +116,28 @@ INSERT INTO `berles` (`id`, `felhasznalo_id`, `konyv_id`, `berles_kezdete`, `ber
 (73, 4, 23, '2025-12-05', '2025-12-15', 0),
 (74, 5, 24, '2025-12-10', '2025-12-20', 1),
 (75, 1, 25, '2025-01-05', '2025-01-15', 1),
-(76, 2, 26, '2025-02-10', '2025-02-20', 1);
+(76, 2, 26, '2025-02-10', '2025-02-20', 1),
+(77, 18, 1, '2025-10-01', '2025-11-15', 1),
+(78, 18, 2, '2024-10-05', '2024-10-19', 1),
+(79, 18, 3, '2024-10-10', '2024-10-24', 0),
+(80, 18, 4, '2024-10-12', '2024-10-26', 0),
+(81, 18, 5, '2024-10-15', '2024-10-29', 1),
+(82, 18, 6, '2024-10-20', '2024-11-03', 0),
+(83, 18, 7, '2024-10-22', '2024-11-05', 1),
+(84, 18, 8, '2024-10-25', '2024-11-08', 0),
+(85, 18, 9, '2024-10-28', '2024-11-11', 0),
+(86, 18, 10, '2024-11-01', '2024-11-15', 1),
+(87, 18, 11, '2024-11-03', '2024-11-17', 0),
+(88, 18, 12, '2024-11-05', '2024-11-19', 1),
+(89, 18, 13, '2024-11-07', '2024-11-21', 0),
+(90, 18, 14, '2024-11-10', '2024-11-24', 0),
+(91, 18, 15, '2024-11-12', '2024-11-26', 1),
+(92, 18, 16, '2024-11-15', '2024-11-29', 0),
+(93, 3, 15, '2026-01-20', '2026-02-03', 0),
+(94, 1, 39, '2026-01-20', '2026-02-03', 0),
+(95, 1, 3, '2026-01-20', '2026-02-03', 0),
+(96, 1, 3, '2026-01-20', '2026-02-03', 0),
+(97, 3, 3, '2026-01-20', '2023-05-15', 0);
 
 -- --------------------------------------------------------
 
@@ -145,12 +166,12 @@ CREATE TABLE `felhasznalo` (
 --
 
 INSERT INTO `felhasznalo` (`id`, `nev`, `belepesi_azonosito_hash`, `telefonszam`, `szuletesi_datum`, `lakcim`, `admin`, `iskola_id`, `osztaly_id`, `felhasznalo_tipus_id`, `email`, `jwt_token_expires_at`, `jwt_refresh_token`) VALUES
-(1, 'Kovács János', '$2a$10$fKyT4XU0HCoLGsgUTN.XterJYoDZh8aX6qA0Yr0.3QIEKdzMqTUeia', '+3612345678', '2008-05-15', 'Budapest, Fő utca 1.', 0, 1, 1, 1, 'kovacs.janos@example.com', NULL, NULL),
+(1, 'Kovács János', '$2a$10$fKyT4XU0HCoLGsgUTN.XterJYoDZh8aX6qA0Yr0.3QIEKdzMqTUeia', '+3612345678', '2008-05-15', 'Budapest, Fő utca 1.', 1, 1, 1, 1, 'kovacs.janos@example.com', NULL, NULL),
 (2, 'Nagy Eszter', '$2y$10$def456', '+3623456789', '2007-11-22', 'Budapest, Kossuth tér 5.', 0, 2, 2, 2, 'nagy.eszter@example.com', NULL, NULL),
 (3, 'Kis Péter', '$2y$10$ghi789', '+3634567890', '2005-03-10', 'Budapest, Petőfi utca 10.', 0, 3, 3, 2, 'kis.peter@example.com', NULL, NULL),
 (4, 'Tóth Anna', '$2y$10$jkl012', '+3645678901', '2004-08-30', 'Budapest, Rákóczi út 15.', 1, 2, 4, 3, 'toth.anna@example.com', NULL, NULL),
 (5, 'Szabó Gábor', '$2y$10$mno345', '+3656789012', '2009-01-25', 'Budapest, Andrássy út 20.', 0, 1, 1, 1, 'szabo.gabor@example.com', NULL, NULL),
-(18, 'Kovács János', '$2a$10$fKyT4XU0HCoLGsgUTN.XterJYoDZh8aX6qA0Yr0.3QIEKdzMqTUei', '+3612345678', '2008-05-15', 'Budapest, Fő utca 1.', 0, 1, 1, 1, 'kovacs@example.com', '2025-12-23 19:23:43', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTgsImlhdCI6MTc2NTkxMzAyMiwiZXhwIjoxNzY2NTE3ODIyfQ.EFz2nfFZ1gSsZdA-wBWKztivN3xhZSOqBjtUX8vrlXQ');
+(18, 'Kovács János', '$2b$10$dt0HYvPips8VfNMFC/kBp.NH82hZgRf6bnIfQQr1ms5AJ5flsPBWK', '+3612345678', '2008-05-15', 'Budapest, Fő utca 1.', 1, 1, 1, 1, 'kovacs@example.com', '2025-12-01 11:03:41', NULL);
 
 -- --------------------------------------------------------
 
@@ -238,7 +259,8 @@ INSERT INTO `kategoria` (`id`, `nev`) VALUES
 (25, 'Képregény'),
 (26, 'Verseskötet'),
 (27, 'Novella'),
-(28, 'Dráma');
+(28, 'Dráma'),
+(32, 'novel');
 
 -- --------------------------------------------------------
 
@@ -281,7 +303,8 @@ INSERT INTO `kiado` (`id`, `nev`, `szekhely`) VALUES
 (22, 'Kolibri', 'Budapest'),
 (23, 'Cser', 'Budapest'),
 (24, 'Napraforgó', 'Budapest'),
-(25, 'Manó Könyvek', 'Budapest');
+(25, 'Manó Könyvek', 'Budapest'),
+(29, 'asdfasdf', NULL);
 
 -- --------------------------------------------------------
 
@@ -416,6 +439,34 @@ INSERT INTO `konyv` (`id`, `cim`, `kep`, `leiras`, `szerzo_id`, `kiado_id`, `kat
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `konyv_kerelem`
+--
+
+CREATE TABLE `konyv_kerelem` (
+  `id` int NOT NULL,
+  `felhasznalo_id` int NOT NULL,
+  `konyv_id` int DEFAULT NULL,
+  `cim` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci NOT NULL,
+  `szerzo` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci DEFAULT NULL,
+  `kiado` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci DEFAULT NULL,
+  `ISBN` varchar(13) CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci DEFAULT NULL,
+  `megjegyzes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci,
+  `allapot` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci NOT NULL DEFAULT 'FUGGO',
+  `admin_valasz` text CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci,
+  `letrehozva` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `elbiralva` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_hungarian_ci;
+
+--
+-- Dumping data for table `konyv_kerelem`
+--
+
+INSERT INTO `konyv_kerelem` (`id`, `felhasznalo_id`, `konyv_id`, `cim`, `szerzo`, `kiado`, `ISBN`, `megjegyzes`, `allapot`, `admin_valasz`, `letrehozva`, `elbiralva`) VALUES
+(3, 18, 1, 'A Harry Potter és a bölcsek köve', 'J.K. Rowling', 'Móra Könyvkiadó', '9789639556041', NULL, 'Folyamatban', NULL, '2026-01-03 13:05:26', NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `login_attempts`
 --
 
@@ -432,7 +483,68 @@ CREATE TABLE `login_attempts` (
 --
 
 INSERT INTO `login_attempts` (`id`, `device_id`, `success`, `lockout_until`, `attempts_count`) VALUES
-(2, 'device_67890', 0, '2025-12-06 20:30:00', 3);
+(47, 'device_apiv9rfzo_1766576337999', 1, NULL, 0),
+(48, 'device_jw7jmg1qi_1766585881031', 1, NULL, 0),
+(49, 'device_0cvdbsbhm_1766589133946', 1, NULL, 0),
+(50, 'device_uogm86ndl_1766589209891', 1, NULL, 0),
+(51, 'device_lnyee04dw_1766589386793', 1, NULL, 0),
+(52, 'device_69qzq6wt3_1766589494010', 1, NULL, 0),
+(53, 'device_fijjr16r7_1766589580409', 1, NULL, 0),
+(54, 'device_z1h1pmk6v_1766590219160', 1, NULL, 0),
+(55, 'device_8w2j7kv7k_1766590678421', 1, NULL, 0),
+(56, 'device_tqlv27a6y_1766592027233', 1, NULL, 0),
+(57, 'device_qxb8ihonr_1766592080691', 1, NULL, 0),
+(58, 'device_ixjd6hhy6_1766592165958', 1, NULL, 0),
+(59, 'device_7gt52hgfv_1766665112716', 1, NULL, 0),
+(60, 'device_axukr923q_1766665292491', 1, NULL, 0),
+(61, 'device_4eyde2bzp_1766665922872', 1, NULL, 0),
+(62, 'device_b7brl8y8k_1766666015380', 1, NULL, 0),
+(63, 'device_puqxeh5li_1766667154522', 1, NULL, 0),
+(64, 'device_63jbc7w42_1766667276897', 1, NULL, 0),
+(65, 'device_qg510bc64_1766667361005', 1, NULL, 0),
+(66, 'device_6swgsyh1p_1766667443963', 1, NULL, 0),
+(67, 'device_0paf9dir5_1766667502961', 1, NULL, 0),
+(68, 'device_ddovgvb81_1766669630272', 1, NULL, 0),
+(69, 'device_ej1c94a7x_1766669730689', 1, NULL, 0),
+(70, 'device_zl6twyznv_1766670819846', 1, NULL, 0),
+(71, 'device_qpnl5kth9_1766671214814', 1, NULL, 0),
+(72, 'device_gdtd0hwc8_1766675007653', 1, NULL, 0),
+(73, 'device_d2xxid6hv_1766675071687', 1, NULL, 0),
+(74, 'device_dxnj3oybj_1766675743949', 1, NULL, 0),
+(75, 'device_zyfif49vt_1766675777061', 1, NULL, 0),
+(76, 'device_ylqenovoi_1766676073073', 1, NULL, 0),
+(77, 'device_in8huw39t_1766758579070', 1, NULL, 0),
+(78, 'device_xpsfudm7v_1766758691494', 1, NULL, 0),
+(79, 'device_yzo7dz4d1_1766758697553', 1, NULL, 0),
+(80, 'device_06cbeedd9_1766758706812', 1, NULL, 0),
+(81, 'device_3jtpodwao_1766758685244', 1, NULL, 0),
+(82, 'device_6bq9pz73g_1766758785222', 1, NULL, 0),
+(83, 'device_ix3zsy33j_1766758800209', 1, NULL, 0),
+(84, 'device_61mkr68ei_1766758801174', 1, NULL, 0),
+(85, 'device_yww91wf17_1766758801536', 1, NULL, 0),
+(86, 'device_8j78yflqe_1766758801777', 1, NULL, 0),
+(87, 'device_07rbo7cgf_1766758802264', 1, NULL, 0),
+(88, 'device_15edm82t1_1766758802619', 1, NULL, 0),
+(89, 'device_lg1z905fn_1766758802813', 1, NULL, 0),
+(90, 'device_g196j0vep_1766758803196', 1, NULL, 0),
+(91, 'device_ohe9w3gla_1766758803556', 1, NULL, 0),
+(92, 'device_8tkptqc9v_1766758744121', 1, NULL, 0),
+(93, 'device_bhz16edly_1766758854034', 1, NULL, 0),
+(94, 'device_28z245dx9_1766758880040', 1, NULL, 0),
+(95, 'device_mn1p2pbhz_1766759634936', 1, NULL, 0),
+(96, 'device_bqyx7xpn8_1766759658389', 1, NULL, 0),
+(97, 'device_hi079rj0i_1766759723493', 1, NULL, 0),
+(98, 'device_1u6kottr5_1766759747949', 1, NULL, 0),
+(99, 'device_eau7fxwk1_1766759762958', 1, NULL, 0),
+(100, 'device_2gw5o9qxb_1766760329924', 1, NULL, 0),
+(101, 'device_da136bpp6_1766760399847', 1, NULL, 0),
+(102, 'device_pu7fj0p1q_1767195304122', 1, NULL, 0),
+(103, 'device_frp6kgb4f_1767380665129', 1, NULL, 0),
+(104, 'device_xuzjor2yb_1768056146907', 1, NULL, 0),
+(105, 'device_djfb42caw_1768241203510', 1, NULL, 0),
+(106, 'device_qsqds3u64_1768903779658', 1, NULL, 0),
+(107, 'device_hi8jjixeu_1769271658542', 1, NULL, 0),
+(108, 'device_u5z54o8ci_1769945194276', 1, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -521,7 +633,8 @@ INSERT INTO `szerzo` (`id`, `nev`) VALUES
 (25, 'Ernest Hemingway'),
 (26, 'Franz Kafka'),
 (27, 'Albert Camus'),
-(28, 'Jane Austen');
+(28, 'Jane Austen'),
+(32, 'asdasdasd');
 
 -- --------------------------------------------------------
 
@@ -538,10 +651,7 @@ CREATE TABLE `uzenetek` (
   `cimzett_ids` text,
   `allapot` varchar(50) DEFAULT 'UJ',
   `letrehozva` datetime DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB
-DEFAULT CHARSET=utf8mb4
-COLLATE=utf8mb4_hungarian_ci;
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `uzenetek`
@@ -634,6 +744,14 @@ ALTER TABLE `konyv`
   ADD KEY `kategoria_id` (`kategoria_id`);
 
 --
+-- Indexes for table `konyv_kerelem`
+--
+ALTER TABLE `konyv_kerelem`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_kerelem_felhasznalo` (`felhasznalo_id`),
+  ADD KEY `fk_kerelem_konyv` (`konyv_id`);
+
+--
 -- Indexes for table `login_attempts`
 --
 ALTER TABLE `login_attempts`
@@ -677,7 +795,7 @@ ALTER TABLE `velemeny`
 -- AUTO_INCREMENT for table `berles`
 --
 ALTER TABLE `berles`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
 
 --
 -- AUTO_INCREMENT for table `felhasznalo`
@@ -701,25 +819,31 @@ ALTER TABLE `iskola`
 -- AUTO_INCREMENT for table `kategoria`
 --
 ALTER TABLE `kategoria`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `kiado`
 --
 ALTER TABLE `kiado`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `konyv`
 --
 ALTER TABLE `konyv`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
+
+--
+-- AUTO_INCREMENT for table `konyv_kerelem`
+--
+ALTER TABLE `konyv_kerelem`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `login_attempts`
 --
 ALTER TABLE `login_attempts`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
 
 --
 -- AUTO_INCREMENT for table `osztaly`
@@ -731,7 +855,7 @@ ALTER TABLE `osztaly`
 -- AUTO_INCREMENT for table `szerzo`
 --
 ALTER TABLE `szerzo`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `uzenetek`
@@ -771,6 +895,13 @@ ALTER TABLE `konyv`
   ADD CONSTRAINT `konyv_ibfk_1` FOREIGN KEY (`szerzo_id`) REFERENCES `szerzo` (`id`),
   ADD CONSTRAINT `konyv_ibfk_2` FOREIGN KEY (`kiado_id`) REFERENCES `kiado` (`id`),
   ADD CONSTRAINT `konyv_ibfk_3` FOREIGN KEY (`kategoria_id`) REFERENCES `kategoria` (`id`);
+
+--
+-- Constraints for table `konyv_kerelem`
+--
+ALTER TABLE `konyv_kerelem`
+  ADD CONSTRAINT `fk_kerelem_felhasznalo` FOREIGN KEY (`felhasznalo_id`) REFERENCES `felhasznalo` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_kerelem_konyv` FOREIGN KEY (`konyv_id`) REFERENCES `konyv` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `uzenetek`

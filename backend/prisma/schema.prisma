@@ -14,8 +14,8 @@ model berles {
   berles_kezdete DateTime?   @db.Date
   berles_vege    DateTime?   @db.Date
   visszahozva    Boolean?
-  felhasznalo    felhasznalo @relation(fields: [felhasznalo_id], references: [id], onUpdate: Restrict, map: "berles_ibfk_1")
-  konyv          konyv       @relation(fields: [konyv_id], references: [id], onUpdate: Restrict, map: "berles_ibfk_2")
+  felhasznalo    felhasznalo @relation(fields: [felhasznalo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "berles_ibfk_1")
+  konyv          konyv       @relation(fields: [konyv_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "berles_ibfk_2")
 
   @@index([felhasznalo_id], map: "felhasznalo_id")
   @@index([konyv_id], map: "konyv_id")
@@ -36,9 +36,10 @@ model felhasznalo {
   jwt_token_expires_at    DateTime?         @db.DateTime(0)
   jwt_refresh_token       String?           @db.VarChar(255)
   berles                  berles[]
-  iskola                  iskola?           @relation(fields: [iskola_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "felhasznalo_ibfk_1")
-  osztaly                 osztaly?          @relation(fields: [osztaly_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "felhasznalo_ibfk_2")
-  felhasznalotipus        felhasznalotipus? @relation(fields: [felhasznalo_tipus_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "felhasznalo_ibfk_3")
+  iskola                  iskola?           @relation(fields: [iskola_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "felhasznalo_ibfk_1")
+  osztaly                 osztaly?          @relation(fields: [osztaly_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "felhasznalo_ibfk_2")
+  felhasznalotipus        felhasznalotipus? @relation(fields: [felhasznalo_tipus_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "felhasznalo_ibfk_3")
+  konyv_kerelem           konyv_kerelem[]
   uzenetek                uzenetek[]
   velemeny                velemeny[]
 
@@ -76,25 +77,26 @@ model kiado {
 }
 
 model konyv {
-  id                           Int        @id @default(autoincrement())
-  cim                          String     @db.VarChar(255)
-  kep                          String?    @db.VarChar(255)
-  leiras                       String?    @db.VarChar(255)
+  id                           Int             @id @default(autoincrement())
+  cim                          String          @db.VarChar(255)
+  kep                          String?         @db.VarChar(255)
+  leiras                       String?         @db.VarChar(255)
   szerzo_id                    Int?
   kiado_id                     Int?
   kategoria_id                 Int?
-  ISBN                         String?    @unique(map: "ISBN") @db.VarChar(13)
-  konyvtar_nyilvantartasi_szam String?    @unique(map: "konyvtar_nyilvantartasi_szam") @db.VarChar(255)
-  keszlet                      Int?       @default(1)
-  kolcsonozheto                Boolean?   @default(true)
-  beszerzesi_ar                Decimal?   @db.Decimal(10, 2)
-  kiadas_ev                    Int?       @db.SmallInt
-  magassag_cm                  Decimal?   @db.Decimal(5, 2)
-  csillag_ertekeles            Decimal?   @default(0.0) @db.Decimal(2, 1)
+  ISBN                         String?         @unique(map: "ISBN") @db.VarChar(13)
+  konyvtar_nyilvantartasi_szam String?         @unique(map: "konyvtar_nyilvantartasi_szam") @db.VarChar(255)
+  keszlet                      Int?            @default(1)
+  kolcsonozheto                Boolean?        @default(true)
+  beszerzesi_ar                Decimal?        @db.Decimal(10, 2)
+  kiadas_ev                    Int?            @db.SmallInt
+  magassag_cm                  Decimal?        @db.Decimal(5, 2)
+  csillag_ertekeles            Decimal?        @default(0.0) @db.Decimal(2, 1)
   berles                       berles[]
-  szerzo                       szerzo?    @relation(fields: [szerzo_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "konyv_ibfk_1")
-  kiado                        kiado?     @relation(fields: [kiado_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "konyv_ibfk_2")
-  kategoria                    kategoria? @relation(fields: [kategoria_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "konyv_ibfk_3")
+  szerzo                       szerzo?         @relation(fields: [szerzo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "konyv_ibfk_1")
+  kiado                        kiado?          @relation(fields: [kiado_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "konyv_ibfk_2")
+  kategoria                    kategoria?      @relation(fields: [kategoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "konyv_ibfk_3")
+  konyv_kerelem                konyv_kerelem[]
   velemeny                     velemeny[]
 
   @@index([kategoria_id], map: "kategoria_id")
@@ -128,7 +130,7 @@ model uzenetek {
   cimzett_ids       String?                    @db.Text
   allapot           String?                    @default("UJ") @db.VarChar(50)
   letrehozva        DateTime?                  @default(now()) @db.DateTime(0)
-  felhasznalo       felhasznalo                @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "uzenetek_ibfk_1")
+  felhasznalo       felhasznalo                @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "uzenetek_ibfk_1")
 
   @@index([user_id], map: "user_id")
 }
@@ -139,8 +141,8 @@ model velemeny {
   velemeny_szovege String?     @db.Text
   felhasznalo_id   Int
   konyv_id         Int
-  felhasznalo      felhasznalo @relation(fields: [felhasznalo_id], references: [id], onUpdate: Restrict, map: "velemeny_ibfk_1")
-  konyv            konyv       @relation(fields: [konyv_id], references: [id], onUpdate: Restrict, map: "velemeny_ibfk_2")
+  felhasznalo      felhasznalo @relation(fields: [felhasznalo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "velemeny_ibfk_1")
+  konyv            konyv       @relation(fields: [konyv_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "velemeny_ibfk_2")
 
   @@unique([felhasznalo_id, konyv_id], map: "unique_velemeny")
   @@index([konyv_id], map: "velemeny_ibfk_2")
@@ -154,6 +156,26 @@ model login_attempts {
   attempts_count Int       @default(0)
 
   @@index([device_id], map: "device_id")
+}
+
+model konyv_kerelem {
+  id             Int         @id @default(autoincrement())
+  felhasznalo_id Int
+  konyv_id       Int?
+  cim            String      @db.VarChar(255)
+  szerzo         String?     @db.VarChar(255)
+  kiado          String?     @db.VarChar(255)
+  ISBN           String?     @db.VarChar(13)
+  megjegyzes     String?     @db.Text
+  allapot        String      @default("FUGGO") @db.VarChar(50)
+  admin_valasz   String?     @db.Text
+  letrehozva     DateTime    @default(now()) @db.DateTime(0)
+  elbiralva      DateTime?   @db.DateTime(0)
+  felhasznalo    felhasznalo @relation(fields: [felhasznalo_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_kerelem_felhasznalo")
+  konyv          konyv?      @relation(fields: [konyv_id], references: [id], onUpdate: NoAction, map: "fk_kerelem_konyv")
+
+  @@index([felhasznalo_id], map: "fk_kerelem_felhasznalo")
+  @@index([konyv_id], map: "fk_kerelem_konyv")
 }
 
 enum uzenetek_cimzett_szerepkor {

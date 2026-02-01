@@ -40,7 +40,6 @@ function BooksTable({ books }) {
 
   return (
     <div>
-      {/* SEARCH */}
       <input
         type="text"
         placeholder="Keresés könyv címre..."
@@ -48,7 +47,6 @@ function BooksTable({ books }) {
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      {/* TÁBLÁZAT */}
       <table>
         <thead>
           <tr>
@@ -72,7 +70,6 @@ function BooksTable({ books }) {
         </tbody>
       </table>
 
-      {/* PAGINATION */}
       <div style={{ marginTop: 12 }}>
         <button onClick={previousPage} disabled={isPrevDisabled}>
           Előző

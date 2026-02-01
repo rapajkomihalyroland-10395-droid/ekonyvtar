@@ -18,6 +18,11 @@ import AdminBooks from "./pages/admin/books/index.jsx";
 import AdminBookDetails from "./pages/admin/books/BookDetails.jsx";
 import AdminUsers from "./pages/admin/users/index.jsx";
 import AdminUserDetails from "./pages/admin/users/UserDetails.jsx";
+import AdminUserTypes from "./pages/admin/user-types/index.jsx";
+import AdminSchools from "./pages/admin/schools/index.jsx";
+import AdminCategories from "./pages/admin/categories/index.jsx";
+import AdminPublishers from "./pages/admin/publishers/index.jsx";
+import AdminClasses from "./pages/admin/classes/index.jsx";
 import CreateLoan from "./pages/admin/loans/CreateLoan.jsx";
 
 import RouterGuard from "security/RouterGuard";
@@ -100,6 +105,26 @@ const router = createBrowserRouter([
         path: "loans/new",
         element: <CreateLoan />,
       },
+      {
+        path: "user-types",
+        element: <AdminUserTypes />,
+      },
+      {
+        path: "schools",
+        element: <AdminSchools />,
+      },
+      {
+        path: "categories",
+        element: <AdminCategories />,
+      },
+      {
+        path: "publishers",
+        element: <AdminPublishers />,
+      },
+      {
+        path: "classes",
+        element: <AdminClasses />,
+      },
     ],
   },
   {
@@ -113,5 +138,5 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} future={{ v7_startTransition: true }} />
+  <RouterProvider router={router} future={{ v7_startTransition: true }} />,
 );

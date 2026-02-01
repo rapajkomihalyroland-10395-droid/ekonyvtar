@@ -41,9 +41,7 @@ const AddBookModal = ({ isOpen, onClose }) => {
     setFormData((prev) => ({
       ...prev,
       [name]:
-        type === "checkbox" ? checked
-        : type === "file" ? files[0]
-        : value,
+        type === "checkbox" ? checked : type === "file" ? files[0] : value,
     }));
   };
 
@@ -102,7 +100,6 @@ const AddBookModal = ({ isOpen, onClose }) => {
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Bal oszlop - Alapadatok */}
             <div className="space-y-6">
               <h3 className="font-semibold text-gray-900 border-b pb-2">
                 Alapadatok
@@ -204,7 +201,6 @@ const AddBookModal = ({ isOpen, onClose }) => {
               </div>
             </div>
 
-            {/* Jobb oszlop - Technikai adatok */}
             <div className="space-y-6">
               <h3 className="font-semibold text-gray-900 border-b pb-2">
                 Technikai adatok
@@ -320,9 +316,9 @@ const AddBookModal = ({ isOpen, onClose }) => {
                       <Upload className="h-6 w-6 text-primary" />
                     </div>
                     <span className="text-sm text-gray-500">
-                      {formData.coverImage ?
-                        formData.coverImage.name
-                      : "Kattints vagy húzd ide a képet"}
+                      {formData.coverImage
+                        ? formData.coverImage.name
+                        : "Kattints vagy húzd ide a képet"}
                     </span>
                   </div>
                 </div>
