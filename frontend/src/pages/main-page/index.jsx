@@ -1,25 +1,26 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, use } from "react";
 import api from "../../axios_url/baseURL.js";
 import { getAuthHeader } from "../../store/authStore.js";
 import Header from "../../components/ui/Header";
 import Carousel from "../../components/ui/Carousel";
 import { Search, BookOpen } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 import SectionHeader from "./components/SectionHeader";
 import BookCard from "./components/BookCard";
 import AuthorCard from "./components/AuthorCard";
 import CategoryCard from "./components/CategoryCard";
 
+
 const MainPage = () => {
   const [topBooks, setTopBooks] = useState([]);
   const [topAuthors, setTopAuthors] = useState([]);
   const [topByCategory, setTopCategory] = useState([]);
   const [topByStars, setTopStars] = useState([]);
-  const [loading, setLoading] = useState(false);
+  let navigate = useNavigate();
 
   useEffect(() => {
     const GetData = async () => {
-      setLoading(true);
 
       try {
         const [bookRes, authorRes, categoryRes, starsRes] = await Promise.all([
@@ -34,8 +35,6 @@ const MainPage = () => {
         setTopStars(starsRes.data);
       } catch (error) {
         console.log(error.message);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -61,11 +60,7 @@ const MainPage = () => {
               könyvtárunkban.
             </p>
             <div className="flex gap-4">
-              <button className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8 gap-2">
-                <Search size={20} />
-                Keresés
-              </button>
-              <button className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 rounded-md px-8 gap-2">
+              <button onClick={() => navigate("/book-catalog")} className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 rounded-md px-8 gap-2">
                 <BookOpen size={20} />
                 Katalógus
               </button>

@@ -10,21 +10,21 @@ import RecommendedBookCard from "./components/RecommendedBookCard";
 import NotificationItem from "./components/NotificationItem";
 import { GetUser, getAuthHeader } from "store/authStore";
 import api from "../../axios_url/baseURL.js";
+import RentalTermsPanel from "pages/rental-checkout/components/RentalTermsPanel";
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [showAllHistory, setShowAllHistory] = useState(false);
-  const [showAllNotifications, setShowAllNotifications] = useState(false);
-  const [notifications, setNotifications] = useState([]);
+  const [showAllActiveHistory, setShowAllActiveHistory] = useState(false);
+  /*const [showAllNotifications, setShowAllNotifications] = useState(false);*/
+  /*const [notifications, setNotifications] = useState([]);*/
   const user = GetUser();
 
   const [rentals, setRentals] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const GetRentals = async () => {
-      setLoading(true);
       try {
         const response = await api.get(`/get-a-rental/${user.id}`, {
           headers: getAuthHeader(),
@@ -33,71 +33,19 @@ const StudentDashboard = () => {
         setRentals(response.data);
       } catch (error) {
         console.log(error.message);
-      } finally {
-        setLoading(false);
       }
     };
 
     GetRentals();
   }, []);
 
-  const recommendedBooks = [
-    {
-      id: 9,
-      title: "The Alchemist",
-      author: "Paulo Coelho",
-      cover:
-        "https://img.rocket.new/generatedImages/rocket_gen_img_1525ec42c-1764671436555.png",
-      coverAlt:
-        "Philosophical novel cover with desert landscape and golden sun symbolizing journey and self-discovery",
-      rating: 4.7,
-      category: "Fiction",
-      reason: "Based on your interest in philosophical fiction",
-    },
-    {
-      id: 10,
-      title: "Sapiens",
-      author: "Yuval Noah Harari",
-      cover:
-        "https://img.rocket.new/generatedImages/rocket_gen_img_1595fa70e-1764671436550.png",
-      coverAlt:
-        "Non-fiction book cover with evolutionary imagery and human silhouettes in earth tones",
-      rating: 4.6,
-      category: "Non-Fiction",
-      reason: "Popular among readers who enjoyed your recent reads",
-    },
-    {
-      id: 11,
-      title: "The Midnight Library",
-      author: "Matt Haig",
-      cover:
-        "https://img.rocket.new/generatedImages/rocket_gen_img_169c7b89f-1765628171562.png",
-      coverAlt:
-        "Contemporary fiction cover showing mystical library with glowing books and starry night atmosphere",
-      rating: 4.5,
-      category: "Fiction",
-      reason: "New arrival matching your reading preferences",
-    },
-    {
-      id: 12,
-      title: "Educated",
-      author: "Tara Westover",
-      cover:
-        "https://img.rocket.new/generatedImages/rocket_gen_img_172743291-1764646535440.png",
-      coverAlt:
-        "Memoir cover with mountain landscape and open book symbolizing education and transformation",
-      rating: 4.8,
-      category: "Biography",
-      reason: "Highly rated by students with similar interests",
-    },
-  ];
-
   const activeRentals = rentals?.filter(
-    (rental) => rental.visszahozva === false || rental.visszahozva === 0
+    (rental) => rental.visszahozva === false || rental.visszahozva === 0,
   );
+  const activeHistory = activeRentals;
 
   const rentalHistory = rentals.filter(
-    (rental) => rental.visszahozva == true || rental.visszahozva == 1
+    (rental) => rental.visszahozva == true || rental.visszahozva == 1,
   );
 
   const handleRenew = (rentalId) => {
@@ -108,9 +56,11 @@ const StudentDashboard = () => {
     alert(`Book rated ${rating} stars for rental ID: ${rentalId}`);
   };
 
-  const handleDismissNotification = (notificationId) => {
+  /*const handleDismissNotification = (notificationId) => {
     setNotifications(notifications?.filter((n) => n?.id !== notificationId));
-  };
+  };*/
+
+  const expired_books_count = rentals.filter((x) => new Date(x.berles_vege).getTime() < Date.now() && x.visszahozva == false).length;
 
   const handleSearch = (e) => {
     e?.preventDefault();
@@ -122,9 +72,12 @@ const StudentDashboard = () => {
   const displayedHistory = showAllHistory
     ? rentalHistory
     : rentalHistory?.slice(0, 3);
-  const displayedNotifications = showAllNotifications
+  const displayedActiveHistory = showAllActiveHistory
+    ? activeHistory
+    : activeHistory?.slice(0, 3);
+  /*const displayedNotifications = showAllNotifications
     ? notifications
-    : notifications?.slice(0, 3);
+    : notifications?.slice(0, 3);*/
 
   return (
     <>
@@ -164,10 +117,7 @@ const StudentDashboard = () => {
                   className="absolute right-3 top-1/2 -translate-y-1/2 p-2 hover:bg-muted rounded-md transition-colors duration-200"
                   aria-label="Keresés"
                 >
-                  <Search
-                    size={20}
-                    className="text-muted-foreground"
-                  />
+                  <Search size={20} className="text-muted-foreground" />
                 </button>
               </div>
             </form>
@@ -184,16 +134,33 @@ const StudentDashboard = () => {
                     </span>
                   </div>
 
-                  {activeRentals?.length > 0 ? (
-                    <div className="space-y-4">
-                      {rentals?.map((rental) => (
-                        <CurrentRentalCard
-                          key={rental?.id}
-                          rental={rental}
-                          onRenew={handleRenew}
-                        />
-                      ))}
-                    </div>
+                  {activeHistory?.length > 0 ? (
+                    <>
+                      <div className="space-y-4">
+                        {displayedActiveHistory?.map((rental) => (
+                          <CurrentRentalCard
+                            key={rental?.id}
+                            rental={rental}
+                            onRenew={handleRenew}
+                          />
+                        ))}
+                      </div>
+
+                      {activeHistory?.length > 3 && (
+                        <div className="mt-4 text-center">
+                          <button
+                            onClick={() =>
+                              setShowAllActiveHistory(!showAllActiveHistory)
+                            }
+                            className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+                          >
+                            {showAllActiveHistory
+                              ? "Kevesebb mutatása"
+                              : `Összes megtekintése (${activeHistory?.length - 3})`}
+                          </button>
+                        </div>
+                      )}
+                    </>
                   ) : (
                     <div className="bg-card border border-border rounded-lg p-8 text-center">
                       <BookOpen
@@ -201,7 +168,7 @@ const StudentDashboard = () => {
                         className="mx-auto mb-4 text-muted-foreground"
                       />
                       <p className="text-muted-foreground mb-4">
-                        Nincsenek aktív kölcsönzéseid
+                        Nincsenek jelenlegi kölcsönzésed
                       </p>
                       <button
                         onClick={() => navigate("/book-catalog")}
@@ -241,7 +208,7 @@ const StudentDashboard = () => {
                           >
                             {showAllHistory
                               ? "Kevesebb mutatása"
-                              : `Összes megtekintése (${rentalHistory?.length})`}
+                              : `Összes megtekintése (${rentalHistory?.length - 3})`}
                           </button>
                         </div>
                       )}
@@ -264,37 +231,16 @@ const StudentDashboard = () => {
                   <div className="grid grid-cols-2 lg:grid-cols-1 gap-4">
                     <QuickAccessWidget
                       title="Lejárt Könyvek"
-                      value="1"
+                      value={`${expired_books_count}`}
                       subtitle="Azonnali visszavétel"
                       icon="AlertCircle"
                       iconColor="bg-error/10"
                       badge="Teendő"
                       onClick={() => {}}
                     />
-
-                    <QuickAccessWidget
-                      title="Fennálló Tartozás"
-                      value="500 Ft"
-                      subtitle="Egyenleg rendezése"
-                      icon="DollarSign"
-                      iconColor="bg-warning/10"
-                      badge=""
-                      onClick={() => {}}
-                    />
-
-                    <QuickAccessWidget
-                      title="Kívánságlista"
-                      value="8"
-                      subtitle="Elolvasandó könyvek"
-                      icon="Heart"
-                      iconColor="bg-success/10"
-                      badge=""
-                      onClick={() => navigate("/book-catalog")}
-                    />
-
                     <QuickAccessWidget
                       title="Elolvasott Könyvek"
-                      value="12"
+                      value={`${rentalHistory.length}`}
                       subtitle="Ebben a tanévben"
                       icon="BookCheck"
                       iconColor="bg-primary/10"
@@ -304,7 +250,7 @@ const StudentDashboard = () => {
                   </div>
                 </section>
 
-                <section>
+                {/*<section>
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-xl font-heading font-bold text-foreground">
                       Értesítések
@@ -354,30 +300,9 @@ const StudentDashboard = () => {
                       </p>
                     </div>
                   )}
-                </section>
+                </section> */}
               </div>
             </div>
-
-            <section>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-heading font-bold text-foreground">
-                  Neked Ajánlott
-                </h2>
-                <button
-                  onClick={() => navigate("/book-catalog")}
-                  className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 gap-2"
-                >
-                  Összes megtekintése
-                  <ArrowRight size={16} />
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {recommendedBooks?.map((book) => (
-                  <RecommendedBookCard key={book?.id} book={book} />
-                ))}
-              </div>
-            </section>
           </div>
         </main>
       </div>

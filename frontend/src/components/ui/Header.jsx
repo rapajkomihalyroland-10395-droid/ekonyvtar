@@ -77,7 +77,7 @@ const Header = () => {
                 }`}
                 aria-current={isActivePath(item?.path) ? 'page' : undefined}
               >
-                <Icon name={item?.icon} size={18} />
+                <Icon name={item?.icon} size={18} /> 
                 <span>{item?.label}</span>
               </button>
             ))}
