@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 export const GetARentalByID = async (req, res) => {
   try {
     const { felhasznalo_id } = req.params;
+    const host = req.protocol + "://" + req.get("host");
 
     const IsUserHaveRental = await prisma.berles.findMany({
       where: { felhasznalo_id: Number(felhasznalo_id) },
@@ -26,7 +27,7 @@ export const GetARentalByID = async (req, res) => {
       berles_kezdete: book.berles_kezdete,
       berles_vege: book.berles_vege,
       visszahozva: book.visszahozva,
-      kep: book.konyv.kep,
+      kep: book.konyv.kep ? `${host}/uploads/${book.konyv.kep}` : null,
     }));
 
     return res.json(normalized);
