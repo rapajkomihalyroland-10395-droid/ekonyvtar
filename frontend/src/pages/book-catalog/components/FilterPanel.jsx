@@ -91,7 +91,8 @@ const FilterPanel = ({
     onFilterChange("availability", checked ? [status] : []);
   };
 
-  const inputClassName = "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
+  const inputClassName =
+    "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
 
   return (
     <>
@@ -117,7 +118,17 @@ const FilterPanel = ({
             className="p-2 rounded-md hover:bg-muted transition-colors duration-200"
             aria-label="Close filters"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <path d="M18 6 6 18" />
               <path d="m6 6 18 18" />
             </svg>
@@ -133,7 +144,18 @@ const FilterPanel = ({
               onClick={onClearFilters}
               className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 px-3"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="mr-2"
+              >
                 <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
                 <path d="M3 3v5h5" />
               </svg>
@@ -143,13 +165,17 @@ const FilterPanel = ({
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Category</label>
+              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                Category
+              </label>
               <select
                 className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1"
                 value={filters?.category || ""}
                 onChange={(e) => onFilterChange("category", e.target.value)}
               >
-                <option value="" disabled>Select category</option>
+                <option value="" disabled>
+                  Select category
+                </option>
                 {categories.map((cat) => (
                   <option key={cat.value} value={cat.value}>
                     {cat.label}
@@ -207,7 +233,7 @@ const FilterPanel = ({
                     htmlFor="available"
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
-                    Elérhető
+                    Előrendelhető
                   </label>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -217,31 +243,17 @@ const FilterPanel = ({
                     className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
                     checked={filters?.availability?.[0] === "checked-out"}
                     onChange={(e) =>
-                      handleAvailabilityChange("checked-out", e?.target?.checked)
+                      handleAvailabilityChange(
+                        "checked-out",
+                        e?.target?.checked,
+                      )
                     }
                   />
                   <label
                     htmlFor="checked-out"
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
-                    Kikölcsönözve
-                  </label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="reserved"
-                    className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                    checked={filters?.availability?.[0] === "reserved"}
-                    onChange={(e) =>
-                      handleAvailabilityChange("reserved", e?.target?.checked)
-                    }
-                  />
-                  <label
-                    htmlFor="reserved"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    Foglalt
+                    Készleten
                   </label>
                 </div>
               </div>
@@ -260,13 +272,13 @@ const FilterPanel = ({
                   onChange={(e) =>
                     onFilterChange(
                       "minRating",
-                      sanitizeRating(e?.target?.value)
+                      sanitizeRating(e?.target?.value),
                     )
                   }
                   onBlur={(e) =>
                     onFilterChange(
                       "minRating",
-                      normalizeRating(e?.target?.value)
+                      normalizeRating(e?.target?.value),
                     )
                   }
                   placeholder="min"
@@ -280,13 +292,13 @@ const FilterPanel = ({
                   onChange={(e) =>
                     onFilterChange(
                       "maxRating",
-                      sanitizeRating(e?.target?.value)
+                      sanitizeRating(e?.target?.value),
                     )
                   }
                   onBlur={(e) =>
                     onFilterChange(
                       "maxRating",
-                      normalizeRating(e?.target?.value)
+                      normalizeRating(e?.target?.value),
                     )
                   }
                   placeholder="max"

@@ -6,15 +6,12 @@ import Header from "../../components/ui/Header";
 import CurrentRentalCard from "./components/CurrentRentalCard";
 import RentalHistoryItem from "./components/RentalHistoryItem";
 import QuickAccessWidget from "./components/QuickAccessWidget";
-import RecommendedBookCard from "./components/RecommendedBookCard";
-import NotificationItem from "./components/NotificationItem";
 import { GetUser, getAuthHeader } from "store/authStore";
 import api from "../../axios_url/baseURL.js";
 import RentalTermsPanel from "pages/rental-checkout/components/RentalTermsPanel";
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState("");
   const [showAllHistory, setShowAllHistory] = useState(false);
   const [showAllActiveHistory, setShowAllActiveHistory] = useState(false);
   /*const [showAllNotifications, setShowAllNotifications] = useState(false);*/
@@ -98,29 +95,11 @@ const StudentDashboard = () => {
                 Üdvözöljük, {user?.nev}! 👋
               </h1>
               <p className="text-muted-foreground">
-                Itt található a kölcsönzési aktivitásod és ajánlásaid.
+                Itt található a kölcsönzési aktivitásod és volt bérléseid.
               </p>
             </div>
 
-            <form onSubmit={handleSearch} className="mb-8">
-              <div className="relative max-w-2xl">
-                <input
-                  type="search"
-                  placeholder="Keresés cím, szerző vagy ISBN alapján..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e?.target?.value)}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pr-12"
-                />
 
-                <button
-                  type="submit"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2 hover:bg-muted rounded-md transition-colors duration-200"
-                  aria-label="Keresés"
-                >
-                  <Search size={20} className="text-muted-foreground" />
-                </button>
-              </div>
-            </form>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
               <div className="lg:col-span-2 space-y-6">
@@ -236,7 +215,7 @@ const StudentDashboard = () => {
                       icon="AlertCircle"
                       iconColor="bg-error/10"
                       badge="Teendő"
-                      onClick={() => {}}
+                      onClick={() => { }}
                     />
                     <QuickAccessWidget
                       title="Elolvasott Könyvek"
@@ -245,7 +224,7 @@ const StudentDashboard = () => {
                       icon="BookCheck"
                       iconColor="bg-primary/10"
                       badge=""
-                      onClick={() => {}}
+                      onClick={() => { }}
                     />
                   </div>
                 </section>

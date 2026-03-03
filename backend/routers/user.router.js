@@ -13,6 +13,7 @@ import {
   UserLoanIntention,
   ReaderOpinion,
   GetBookDetails,
+  GetBooksForBookCatalog,
 } from "../controllers/user/user.BooksAction.js";
 
 import { GetARentalByID } from "../controllers/user/user.Details.js";
@@ -30,6 +31,9 @@ import { SearchUserNameByCharacters } from "../controllers/user/user.search.js";
 import { SearchBookByCharacters } from "../controllers/books/book.search.js";
 
 const userRouter = Router();
+
+//ÖSSZ KÖNYV LEKÉRÉSE
+userRouter.route("/user-get-books").get(AuthMiddleware, GetBooksForBookCatalog);
 
 //TOPLISTÁK
 userRouter.route("/top-books").get(AuthMiddleware, TopBooks);

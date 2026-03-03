@@ -162,3 +162,32 @@ const userHasPendingLoanRequest = async (user_id, book_id) => {
 
   return !!request;
 };
+// /user-get-books?take=10&skip=20
+export const GetBooksForBookCatalog = async (req, res) => {
+  try {
+    const skip = parseInt(req.query.skip) || 0;
+    const take = parseInt(req.query.take) || 10;
+
+    const books = await prisma.konyv.findMany({
+      skip: skip,
+      take: take,
+      
+      include: {
+        szerzo: true,
+        kiado: true,
+        kategoria: true,
+      },
+    });
+
+    const host = req.protocol + "://" + req.get("host");
+    const formattedBooks = books.map((book) => ({
+      ...book,
+      kep: book.kep ? `${host}/uploads/${book.kep}` : null,
+    }));
+
+    return res.status(200).json(formattedBooks);
+  } catch (error) {
+    console.error("Error fetching books:", error);
+    return res.status(500).json({ error: error.message });
+  }
+};

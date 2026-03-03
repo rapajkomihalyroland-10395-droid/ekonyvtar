@@ -4,11 +4,11 @@ import Header from "../../components/ui/Header";
 import Button from "../../components/ui/Button";
 import FilterPanel from "./components/FilterPanel";
 import SearchBar from "./components/SearchBar";
-import SortControls from "./components/SortControls";
 import BookGrid from "./components/BookGrid";
 import RentalModal from "./components/RentalModal";
 import api from "../../axios_url/baseURL.js";
 import { getAuthHeader } from "../../store/authStore.js";
+import { set } from "date-fns";
 
 const BookCatalog = () => {
   const navigate = useNavigate();
@@ -20,13 +20,14 @@ const BookCatalog = () => {
   const [filteredBooks, setFilteredBooks] = useState([]);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortBy, setSortBy] = useState("relevance");
+
+  const [skip, setSkip] = useState(0);
 
   const [filters, setFilters] = useState({
     category: "all",
     yearFrom: "",
     yearTo: "",
-    availability: ["available"],
+    availability: ["elérhető"],
     minRating: "",
     maxRating: "",
   });
@@ -34,46 +35,43 @@ const BookCatalog = () => {
   const [selectedBook, setSelectedBook] = useState(null);
   const [showRentalModal, setShowRentalModal] = useState(false);
 
-  
-
   useEffect(() => {
     const fetchBooks = async () => {
       setLoading(true);
 
       try {
-        const response = await api.get("/top-books", {
-          headers: getAuthHeader(),
-        });
+        const response = await api.get(
+          `/user-get-books?skip=${skip}&take=${10}`,
+          {
+            headers: getAuthHeader(),
+          },
+        );
 
         const books = (response.data || []).map((b) => {
           const popularity = Number(b.elofordulas ?? 0);
           const inventory = Number(b.keszlet ?? 0);
-          const borrowable = b.kolcsonozheto !== false;
-          const status = !borrowable
-            ? "reserved"
-            : inventory > 0
-            ? "available"
-            : "checked-out";
+          const status = inventory > 0 ? "elérhető" : "előrendelhető";
 
           return {
             id: b.id,
             title: b.cim,
-            author: b.szerzo,
+            author: b.szerzo?.nev || "Ismeretlen szerző",
             coverImage: b.kep,
             coverImageAlt: b.cim,
             rating:
-              Number.parseFloat(String(b.csillagok ?? 0).replace(/,/g, ".")) ||
-              0,
+              Number.parseFloat(
+                String(b.csillag_ertekeles ?? 0).replace(/,/g, "."),
+              ) || 0,
             reviewCount: popularity,
             status,
-            category: b.kategoria,
+            category: b.kategoria?.nev || "Ismeretlen kategória",
             categoryId: b.kategoria_id,
             publicationYear: b.kiadas_ev,
           };
         });
 
-        setApiBooks(books);
-        setFilteredBooks(books);
+        setApiBooks((previous) => [...previous, ...books]);
+        setFilteredBooks((previous) => [...previous, ...books]);
       } catch (error) {
         setApiBooks([]);
         setFilteredBooks([]);
@@ -83,37 +81,32 @@ const BookCatalog = () => {
     };
 
     fetchBooks();
-  }, []);
-
-  
+  }, [skip]);
 
   useEffect(() => {
     let result = [...apiBooks];
 
     const parseRating = (value) => {
       if (!value && value !== 0) return null;
-      const s = String(value).replace(/,/g, ".").trim();
+      const s = String(value).replace(/,/g, ".").trim(); //stringé alakítás replace-al globálisan nézzük és a vesszőket pontokra cseréljük + a szóközt elől hátul levágjuk
       if (!s) return null;
       const n = Number.parseFloat(s);
       return Number.isFinite(n) ? n : null;
     };
 
-    
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       result = result.filter(
         (b) =>
           b.title.toLowerCase().includes(q) ||
-          b.author.toLowerCase().includes(q)
+          b.author.toLowerCase().includes(q),
       );
     }
 
-    
     if (filters.category !== "all") {
       result = result.filter((b) => b.categoryId === filters.category);
     }
 
-    
     const yearFrom = filters.yearFrom ? Number(filters.yearFrom) : null;
     const yearTo = filters.yearTo ? Number(filters.yearTo) : null;
     if (Number.isFinite(yearFrom)) {
@@ -123,16 +116,15 @@ const BookCatalog = () => {
       result = result.filter((b) => Number(b.publicationYear) <= yearTo);
     }
 
-    
     if (filters.availability.length) {
       result = result.filter((b) => filters.availability.includes(b.status));
     }
 
-    
     const minRating = parseRating(filters.minRating);
     const maxRating = parseRating(filters.maxRating);
     const min = minRating !== null ? minRating : null;
     const max = maxRating !== null ? maxRating : null;
+    //Beírt értékek helyes vizsgálata a tól ne legyen nagyobb az ig és fordítva az ig ne legyen kisebb mint mint a tól
     const lower = min !== null && max !== null ? Math.min(min, max) : min;
     const upper = min !== null && max !== null ? Math.max(min, max) : max;
 
@@ -140,51 +132,23 @@ const BookCatalog = () => {
       result = result.filter((b) => Number(b.rating) >= lower);
     }
 
-    
     if (upper !== null) {
       result = result.filter((b) => Number(b.rating) <= upper);
     }
 
-    
-    switch (sortBy) {
-      case "popularity":
-        result.sort((a, b) => b.reviewCount - a.reviewCount);
-        break;
-      case "newest":
-        result.sort((a, b) => b.publicationYear - a.publicationYear);
-        break;
-      case "oldest":
-        result.sort((a, b) => a.publicationYear - b.publicationYear);
-        break;
-      case "title-asc":
-        result.sort((a, b) => a.title.localeCompare(b.title));
-        break;
-      case "title-desc":
-        result.sort((a, b) => b.title.localeCompare(a.title));
-        break;
-      case "rating":
-        result.sort((a, b) => b.rating - a.rating);
-        break;
-      default:
-        break;
-    }
-
     setFilteredBooks(result);
-  }, [apiBooks, searchQuery, filters, sortBy]);
-
-  
+  }, [apiBooks, searchQuery, filters]);
 
   const handleClearFilters = () => {
     setFilters({
       category: "all",
       yearFrom: "",
       yearTo: "",
-      availability: ["available"],
+      availability: ["elérhető"],
       minRating: "",
       maxRating: "",
     });
     setSearchQuery("");
-    setSortBy("relevance");
   };
 
   const handleRentNow = (book) => {
@@ -195,8 +159,6 @@ const BookCatalog = () => {
   const handleConfirmRental = (book) => {
     navigate("/rental-checkout", { state: { book } });
   };
-
-  
 
   return (
     <div className="min-h-screen bg-background">
@@ -239,8 +201,6 @@ const BookCatalog = () => {
                 </span>{" "}
                 books
               </p>
-
-              <SortControls sortBy={sortBy} onSortChange={setSortBy} />
             </div>
           </div>
 
@@ -254,9 +214,21 @@ const BookCatalog = () => {
             {!loading && filteredBooks.length > 0 && (
               <div className="mt-8 flex justify-center">
                 <button
+                  onClick={() => setSkip((prev) => prev + 10)}
                   className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="mr-2"
+                  >
                     <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
                     <path d="M21 3v5h-5" />
                     <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />

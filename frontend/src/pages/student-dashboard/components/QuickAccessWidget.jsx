@@ -14,7 +14,6 @@ const iconMap = {
 };
 
 const QuickAccessWidget = ({ title, value, subtitle, icon, iconColor, onClick, badge }) => {
-  const navigate = useNavigate();
 
   const handleClick = () => {
     if (onClick) {
@@ -25,14 +24,14 @@ const QuickAccessWidget = ({ title, value, subtitle, icon, iconColor, onClick, b
   const IconComponent = iconMap[icon] || FileText;
 
   return (
-    <div 
+    <div
       className="bg-card border border-border rounded-lg p-4 hover:shadow-md transition-all duration-200 cursor-pointer group"
       onClick={handleClick}
     >
       <div className="flex items-start justify-between mb-3">
         <div className={`flex items-center justify-center w-10 h-10 rounded-lg ${iconColor || 'bg-primary/10'}`}>
-          <IconComponent 
-            size={20} 
+          <IconComponent
+            size={20}
             className={`${iconColor && iconColor.includes('bg-') ? 'text-primary' : ''}`}
             style={{ color: iconColor && !iconColor.includes('bg-') ? iconColor : undefined }}
           />
