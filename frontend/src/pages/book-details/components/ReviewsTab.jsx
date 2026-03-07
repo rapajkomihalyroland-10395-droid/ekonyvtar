@@ -1,6 +1,13 @@
 import React, { useState } from "react";
+import AddReview from "./AddReview";
 
-const ReviewsTab = ({ reviews, overallRating, totalReviews }) => {
+const ReviewsTab = ({
+  bookId,
+  reviews,
+  overallRating,
+  totalReviews,
+  onReviewAdded,
+}) => {
   const [sortBy, setSortBy] = useState("recent");
 
   const ratingDistribution = [
@@ -91,6 +98,9 @@ const ReviewsTab = ({ reviews, overallRating, totalReviews }) => {
           <option value="lowest">Lowest Rating</option>
         </select>
       </div>
+
+      <AddReview bookId={bookId} onReviewAdded={onReviewAdded} />
+
       <div className="space-y-6">
         {reviews?.map((review) => (
           <div

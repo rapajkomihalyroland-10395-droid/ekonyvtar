@@ -120,3 +120,46 @@ export const GetLoanById = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const GetTodaysReturns = async (req, res) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const result = await prisma.berles.findMany({
+      where: {
+        berles_vege: {
+          gte: today,
+          lt: tomorrow,
+        },
+        visszahozva: true,
+      },
+      include: {
+        felhasznalo: {
+          select: {
+            nev: true,
+          },
+        },
+        konyv: {
+          select: {
+            cim: true,
+          },
+        },
+      },
+    });
+
+    const returns = result.map((r) => ({
+      id: r.id,
+      user: r.felhasznalo.nev,
+      book: r.konyv.cim,
+      deadline: r.berles_vege,
+    }));
+
+    return res.status(200).json(returns);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};

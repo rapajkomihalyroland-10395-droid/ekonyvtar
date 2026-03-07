@@ -44,6 +44,10 @@ const BookDetails = () => {
     navigate("/book-catalog");
   };
 
+  const handleReviewAdded = (newReview) => {
+    setReviewsData((prev) => [newReview, ...prev]);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -254,9 +258,11 @@ const BookDetails = () => {
                   </summary>
                   <div className="px-4 py-4 border-t border-border">
                     <ReviewsTab
+                      bookId={bookData?.id}
                       reviews={reviewsData}
                       overallRating={Number(bookData?.csillag_ertekeles)}
                       totalReviews={bookData?.velemeny?.length}
+                      onReviewAdded={handleReviewAdded}
                     />
                   </div>
                 </details>
@@ -268,9 +274,11 @@ const BookDetails = () => {
                 )}
                 {activeTab === "reviews" && (
                   <ReviewsTab
+                    bookId={bookData?.id}
                     reviews={reviewsData}
                     overallRating={Number(bookData?.csillag_ertekeles)}
                     totalReviews={bookData?.velemeny?.length}
+                    onReviewAdded={handleReviewAdded}
                   />
                 )}
               </div>

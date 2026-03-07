@@ -1,5 +1,9 @@
 import { Router } from "express";
 import {
+  TopBooks,
+} from "../controllers/user/user.TopBooks.js";
+
+import {
   GetAllUsers,
   GetUserByID,
 } from "../controllers/admin/admin.UserControl.js";
@@ -16,6 +20,7 @@ import {
   GetAllRentals,
   BookLoan,
   GetLoanById,
+  GetTodaysReturns,
 } from "../controllers/admin/admin.RentalControl.js";
 
 import {
@@ -98,6 +103,10 @@ adminRouter
 //BÉRLÉSEK
 adminRouter.route("/get-all-rentals").get(AuthMiddleware, GetAllRentals);
 adminRouter.route("/book-loan").post(AuthMiddleware, BookLoan);
-adminRouter.route("/get-a-loan/:id").get(GetLoanById);
+adminRouter.route("/get-a-loan/:id").get(AuthMiddleware, GetLoanById);
+adminRouter.route("/todays-returns").get(AuthMiddleware, GetTodaysReturns);
+
+//TOPLISTÁK
+adminRouter.route("/top-books-by-rental").get(AuthMiddleware, TopBooks);
 
 export default adminRouter;
