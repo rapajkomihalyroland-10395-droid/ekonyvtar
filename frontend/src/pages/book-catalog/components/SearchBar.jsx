@@ -99,7 +99,7 @@ const SearchBar = ({ onSearch, searchQuery }) => {
         </svg>
         <input
           type="search"
-          placeholder="Search by title, author, or ISBN..."
+          placeholder="Keresés cím, szerző vagy ISBN alapján..."
           value={localQuery}
           onChange={handleInputChange}
           onFocus={() => localQuery?.length >= 2 && setShowSuggestions(true)}

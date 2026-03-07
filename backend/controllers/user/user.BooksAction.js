@@ -165,13 +165,7 @@ const userHasPendingLoanRequest = async (user_id, book_id) => {
 // /user-get-books?take=10&skip=20
 export const GetBooksForBookCatalog = async (req, res) => {
   try {
-    const skip = parseInt(req.query.skip) || 0;
-    const take = parseInt(req.query.take) || 10;
-
     const books = await prisma.konyv.findMany({
-      skip: skip,
-      take: take,
-      
       include: {
         szerzo: true,
         kiado: true,

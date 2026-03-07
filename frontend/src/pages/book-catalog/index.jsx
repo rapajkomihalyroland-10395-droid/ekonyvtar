@@ -8,7 +8,6 @@ import BookGrid from "./components/BookGrid";
 import RentalModal from "./components/RentalModal";
 import api from "../../axios_url/baseURL.js";
 import { getAuthHeader } from "../../store/authStore.js";
-import { set } from "date-fns";
 
 const BookCatalog = () => {
   const navigate = useNavigate();
@@ -21,13 +20,11 @@ const BookCatalog = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [skip, setSkip] = useState(0);
-
   const [filters, setFilters] = useState({
     category: "all",
     yearFrom: "",
-    yearTo: "",
-    availability: ["elérhető"],
+    inStockOnly: false,
+    preOrderOnly: false,
     minRating: "",
     maxRating: "",
   });
@@ -40,12 +37,9 @@ const BookCatalog = () => {
       setLoading(true);
 
       try {
-        const response = await api.get(
-          `/user-get-books?skip=${skip}&take=${10}`,
-          {
-            headers: getAuthHeader(),
-          },
-        );
+        const response = await api.get("/user-get-books", {
+          headers: getAuthHeader(),
+        });
 
         const books = (response.data || []).map((b) => {
           const popularity = Number(b.elofordulas ?? 0);
@@ -70,8 +64,8 @@ const BookCatalog = () => {
           };
         });
 
-        setApiBooks((previous) => [...previous, ...books]);
-        setFilteredBooks((previous) => [...previous, ...books]);
+        setApiBooks(books);
+        setFilteredBooks(books);
       } catch (error) {
         setApiBooks([]);
         setFilteredBooks([]);
@@ -81,7 +75,7 @@ const BookCatalog = () => {
     };
 
     fetchBooks();
-  }, [skip]);
+  }, []);
 
   useEffect(() => {
     let result = [...apiBooks];
@@ -104,20 +98,20 @@ const BookCatalog = () => {
     }
 
     if (filters.category !== "all") {
-      result = result.filter((b) => b.categoryId === filters.category);
+      result = result.filter((b) => b.categoryId === Number(filters.category));
     }
 
     const yearFrom = filters.yearFrom ? Number(filters.yearFrom) : null;
-    const yearTo = filters.yearTo ? Number(filters.yearTo) : null;
     if (Number.isFinite(yearFrom)) {
-      result = result.filter((b) => Number(b.publicationYear) >= yearFrom);
-    }
-    if (Number.isFinite(yearTo)) {
-      result = result.filter((b) => Number(b.publicationYear) <= yearTo);
+      result = result.filter((b) => Number(b.publicationYear) === yearFrom);
     }
 
-    if (filters.availability.length) {
-      result = result.filter((b) => filters.availability.includes(b.status));
+    if (filters.inStockOnly && !filters.preOrderOnly) {
+      result = result.filter((b) => b.status === "elérhető");
+    }
+
+    if (filters.preOrderOnly && !filters.inStockOnly) {
+      result = result.filter((b) => b.status === "előrendelhető");
     }
 
     const minRating = parseRating(filters.minRating);
@@ -143,8 +137,8 @@ const BookCatalog = () => {
     setFilters({
       category: "all",
       yearFrom: "",
-      yearTo: "",
-      availability: ["elérhető"],
+      inStockOnly: false,
+      preOrderOnly: false,
       minRating: "",
       maxRating: "",
     });
@@ -183,7 +177,7 @@ const BookCatalog = () => {
                 className="lg:hidden"
                 iconName="SlidersHorizontal"
               >
-                Filters
+                Szűrők
               </Button>
 
               <SearchBar searchQuery={searchQuery} onSearch={setSearchQuery} />
@@ -191,52 +185,29 @@ const BookCatalog = () => {
 
             <div className="flex justify-between">
               <p className="text-sm text-muted-foreground">
-                Showing{" "}
                 <span className="font-medium text-foreground">
                   {filteredBooks.length}
                 </span>{" "}
-                of{" "}
+                könyv megjelenítve az összes{" "}
                 <span className="font-medium text-foreground">
                   {apiBooks.length}
                 </span>{" "}
-                books
+                könyvből
               </p>
             </div>
           </div>
 
           <div className="px-4 lg:px-6 py-6">
-            <BookGrid
-              books={filteredBooks}
-              loading={loading}
-              onRentNow={handleRentNow}
-            />
-
-            {!loading && filteredBooks.length > 0 && (
-              <div className="mt-8 flex justify-center">
-                <button
-                  onClick={() => setSkip((prev) => prev + 10)}
-                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="mr-2"
-                  >
-                    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
-                    <path d="M21 3v5h-5" />
-                    <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
-                    <path d="M8 16H3v5" />
-                  </svg>
-                  Load More Books
-                </button>
+            {loading ? (
+              <div className="flex justify-center items-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
               </div>
+            ) : (
+              <BookGrid
+                books={filteredBooks}
+                loading={loading}
+                onRentNow={handleRentNow}
+              />
             )}
           </div>
         </div>

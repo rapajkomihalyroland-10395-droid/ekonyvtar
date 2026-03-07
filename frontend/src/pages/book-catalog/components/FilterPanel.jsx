@@ -87,10 +87,6 @@ const FilterPanel = ({
     return clamped % 1 === 0 ? `${clamped.toFixed(1)}` : `${clamped}`;
   };
 
-  const handleAvailabilityChange = (status, checked) => {
-    onFilterChange("availability", checked ? [status] : []);
-  };
-
   const inputClassName =
     "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
 
@@ -104,19 +100,19 @@ const FilterPanel = ({
         />
       )}
       <aside
-        className={`fixed lg:static top-16 right-0 bottom-0 w-80 bg-card border-l lg:border-l-0 lg:border-r border-border shadow-overlay lg:shadow-none z-40 transform transition-transform duration-300 lg:transform-none overflow-y-auto ${
+        className={`fixed lg:sticky top-16 lg:top-20 right-0 bottom-0 lg:h-[calc(100vh-5rem)] w-80 bg-card border-l lg:border-l-0 lg:border-r border-border shadow-overlay lg:shadow-none z-40 transform transition-transform duration-300 lg:transform-none overflow-y-auto ${
           isOpen ? "translate-x-0" : "translate-x-full lg:translate-x-0"
         }`}
         aria-label="Book filters"
       >
         <div className="sticky top-0 bg-card border-b border-border p-4 flex items-center justify-between lg:hidden z-10">
           <h2 className="text-lg font-heading font-semibold text-foreground">
-            Filters
+            Szűrők
           </h2>
           <button
             onClick={onClose}
             className="p-2 rounded-md hover:bg-muted transition-colors duration-200"
-            aria-label="Close filters"
+            aria-label="Szűrők bezárása"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -138,7 +134,7 @@ const FilterPanel = ({
         <div className="p-4 space-y-6">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-medium text-foreground">
-              {resultCount} {resultCount === 1 ? "Book" : "Books"} Found
+              {resultCount} {resultCount === 1 ? "könyv" : "könyv"} található
             </h3>
             <button
               onClick={onClearFilters}
@@ -159,14 +155,14 @@ const FilterPanel = ({
                 <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
                 <path d="M3 3v5h5" />
               </svg>
-              Clear
+              Törlés
             </button>
           </div>
 
           <div className="space-y-4">
             <div className="space-y-2">
               <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Category
+                Kategória
               </label>
               <select
                 className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1"
@@ -174,7 +170,7 @@ const FilterPanel = ({
                 onChange={(e) => onFilterChange("category", e.target.value)}
               >
                 <option value="" disabled>
-                  Select category
+                  Válassz kategóriát
                 </option>
                 {categories.map((cat) => (
                   <option key={cat.value} value={cat.value}>
@@ -186,7 +182,7 @@ const FilterPanel = ({
 
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">
-                Publication Year
+                Kiadás éve
               </label>
               <div className="grid grid-cols-2 gap-2">
                 <input
@@ -200,37 +196,26 @@ const FilterPanel = ({
                   placeholder="tól"
                   className={inputClassName}
                 />
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  pattern="\d*"
-                  value={filters?.yearTo}
-                  onChange={(e) =>
-                    onFilterChange("yearTo", sanitizeYear(e?.target?.value))
-                  }
-                  placeholder="ig"
-                  className={inputClassName}
-                />
               </div>
             </div>
 
             <div className="space-y-3">
               <label className="text-sm font-medium text-foreground">
-                Elérhetőség
+                Készlet
               </label>
               <div className="space-y-2">
                 <div className="flex items-center space-x-2">
                   <input
                     type="checkbox"
-                    id="available"
+                    id="pre-order-only"
                     className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                    checked={filters?.availability?.[0] === "available"}
+                    checked={filters?.preOrderOnly || false}
                     onChange={(e) =>
-                      handleAvailabilityChange("available", e?.target?.checked)
+                      onFilterChange("preOrderOnly", e?.target?.checked)
                     }
                   />
                   <label
-                    htmlFor="available"
+                    htmlFor="pre-order-only"
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
                     Előrendelhető
@@ -239,21 +224,18 @@ const FilterPanel = ({
                 <div className="flex items-center space-x-2">
                   <input
                     type="checkbox"
-                    id="checked-out"
+                    id="in-stock-only"
                     className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                    checked={filters?.availability?.[0] === "checked-out"}
+                    checked={filters?.inStockOnly || false}
                     onChange={(e) =>
-                      handleAvailabilityChange(
-                        "checked-out",
-                        e?.target?.checked,
-                      )
+                      onFilterChange("inStockOnly", e?.target?.checked)
                     }
                   />
                   <label
-                    htmlFor="checked-out"
+                    htmlFor="in-stock-only"
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
-                    Készleten
+                    Elérhető
                   </label>
                 </div>
               </div>
@@ -268,7 +250,7 @@ const FilterPanel = ({
                   type="text"
                   inputMode="decimal"
                   pattern="[0-9]*[\.]?[0-9]*"
-                  value={filters?.minRating}
+                  value={filters?.minRating || ""}
                   onChange={(e) =>
                     onFilterChange(
                       "minRating",
@@ -288,7 +270,7 @@ const FilterPanel = ({
                   type="text"
                   inputMode="decimal"
                   pattern="[0-9]*[\.]?[0-9]*"
-                  value={filters?.maxRating}
+                  value={filters?.maxRating || ""}
                   onChange={(e) =>
                     onFilterChange(
                       "maxRating",

@@ -109,16 +109,12 @@ const BookCard = ({ book, onRentNow }) => {
         )}
 
         <img
-          src={book?.coverImage}
+          src={book?.coverImage || "/assets/images/no_image.png"}
           alt={book?.coverImageAlt || book?.title}
           className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ${
             imageLoaded ? "opacity-100" : "opacity-0"
           }`}
           onLoad={() => setImageLoaded(true)}
-          onError={(e) => {
-            e.target.src = "/assets/images/no_image.png";
-            setImageLoaded(true);
-          }}
         />
 
         <div className="absolute top-2 right-2">
@@ -212,7 +208,7 @@ const BookCard = ({ book, onRentNow }) => {
         </div>
 
         <div className="flex items-center gap-2 pt-2">
-          {book?.status === "available" ? (
+          {book?.status === "elérhető" ? (
             <button
               onClick={(e) => {
                 e?.stopPropagation();
@@ -220,7 +216,7 @@ const BookCard = ({ book, onRentNow }) => {
               }}
               className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-3"
             >
-              Rent Now
+              Kölcsönzés
             </button>
           ) : (
             <button
