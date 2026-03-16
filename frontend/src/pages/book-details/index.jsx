@@ -59,12 +59,12 @@ const BookDetails = () => {
   if (!bookData) {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center">
-        <h2 className="text-2xl font-bold mb-4">Book not found</h2>
+        <h2 className="text-2xl font-bold mb-4">A könyv nem található</h2>
         <button
           onClick={handleBackToCatalog}
           className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
         >
-          Back to Catalog
+          Vissza a katalógushoz
         </button>
       </div>
     );
@@ -94,7 +94,7 @@ const BookDetails = () => {
               <path d="m12 19-7-7 7-7" />
               <path d="M19 12H5" />
             </svg>
-            Back to Catalog
+            Vissza a katalógushoz
           </button>
 
           <div className="flex flex-col lg:flex-row gap-8">
@@ -127,7 +127,7 @@ const BookDetails = () => {
                       <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
                       <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
                     </svg>
-                    <span>Synopsis</span>
+                    <span>Tartalom</span>
                   </button>
                   <button
                     onClick={() => setActiveTab("reviews")}
@@ -150,7 +150,7 @@ const BookDetails = () => {
                     >
                       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                     </svg>
-                    <span>Reviews</span>
+                    <span>Vélemények</span>
                   </button>
                 </div>
               </div>
@@ -184,7 +184,7 @@ const BookDetails = () => {
                         <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
                       </svg>
                       <span className="font-medium text-foreground">
-                        Synopsis
+                        Tartalom
                       </span>
                     </div>
                     <svg
@@ -236,7 +236,7 @@ const BookDetails = () => {
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                       </svg>
                       <span className="font-medium text-foreground">
-                        Reviews
+                        Vélemények
                       </span>
                     </div>
                     <svg

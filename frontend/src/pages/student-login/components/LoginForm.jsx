@@ -59,7 +59,7 @@ const LoginForm = () => {
 
   const handleForgotPassword = () => {
     alert(
-      "Password recovery feature coming soon. Please contact your school librarian for assistance."
+      "A jelszó-visszaállítási funkció hamarosan elérhető lesz. Kérjük, forduljon az iskola könyvtárosához segítségért."
     );
   };
 
@@ -69,22 +69,22 @@ const LoginForm = () => {
 
       if (status === 429) {
         return (
-          data?.message || "Too many failed attempts. Please try again later."
+          data?.message || "Túl sok sikertelen kísérlet történt. Kérjük, próbálja meg később újra."
         );
       }
 
       if (status === 401) {
-        return data?.message || "Invalid email or password.";
+        return data?.message || "A megadott e-mail-cím vagy jelszó érvénytelen.";
       }
 
-      return data?.message || "An error occurred. Please try again.";
+      return data?.message || "Hiba történt. Kérjük, próbálja meg újra!";
     }
 
     if (error.request) {
-      return "Network error. Please check your connection and try again.";
+      return "Hálózati hiba. Kérjük, ellenőrizze az internetkapcsolatát, majd próbálja meg újra.";
     }
 
-    return "Login failed. Please try again.";
+    return "A bejelentkezés nem sikerült. Kérjük, próbálja meg újra.";
   };
 
   const getAttemptsInfo = (error) => {
@@ -153,7 +153,7 @@ const LoginForm = () => {
 
       <div className="space-y-2">
         <label className="text-sm font-medium text-foreground">
-          Email Address <span className="text-error">*</span>
+          E-mail-cím <span className="text-error">*</span>
         </label>
         <input
           type="email"
@@ -175,7 +175,7 @@ const LoginForm = () => {
 
       <div className="space-y-2 relative">
         <label className="text-sm font-medium text-foreground">
-          Password <span className="text-error">*</span>
+        Jelszó <span className="text-error">*</span>
         </label>
         <div className="relative">
           <input
@@ -213,7 +213,7 @@ const LoginForm = () => {
           className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
           disabled={isSubmitting}
         >
-          Forgot Password?
+          Elfelejtette a jelszavát?
         </button>
       </div>
 
@@ -226,10 +226,10 @@ const LoginForm = () => {
         {isSubmitting ? (
           <>
             <Loader2 size={20} className="mr-2 animate-spin" />
-            Signing in...
+            Bejelentkezés...
           </>
         ) : (
-          "Sign In"
+          "Bejelentkezés"
         )}
       </button>
     </form>

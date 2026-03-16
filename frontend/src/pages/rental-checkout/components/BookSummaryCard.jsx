@@ -31,7 +31,7 @@ const BookSummaryCard = ({ book, onRemove }) => {
               {book?.title}
             </h3>
             <p className="text-sm text-muted-foreground truncate">
-              by {book?.author}
+              szerző: {book?.author}
             </p>
           </div>
           <button
@@ -46,11 +46,11 @@ const BookSummaryCard = ({ book, onRemove }) => {
         <div className="flex items-center gap-4 text-sm">
           <div className="flex items-center gap-1 text-muted-foreground">
             <Calendar size={14} />
-            <span>{book?.rentalDays} days</span>
+            <span>{book?.rentalDays}Napok</span>
           </div>
           <div className="flex items-center gap-1 text-muted-foreground">
             <Clock size={14} />
-            <span>Due: {calculateDueDate(book?.rentalDays)}</span>
+            <span>Határidő: {calculateDueDate(book?.rentalDays)}</span>
           </div>
         </div>
       </div>

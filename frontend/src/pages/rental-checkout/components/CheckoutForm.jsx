@@ -16,31 +16,31 @@ const CheckoutForm = ({ formData, setFormData, errors }) => {
 
   return (
     <div className="bg-card border border-border rounded-lg p-6">
-      <h2 className="text-lg font-semibold text-foreground mb-4">Checkout Information</h2>
+      <h2 className="text-lg font-semibold text-foreground mb-4">Pénztár információk</h2>
       <div className="space-y-4">
         <div className="space-y-2">
           <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-            Pickup Preference <span className="text-destructive">*</span>
+            Átvételi mód <span className="text-destructive">*</span>
           </label>
           <select
             className={inputClassName}
             value={formData?.pickupPreference}
             onChange={(e) => handleInputChange('pickupPreference', e.target.value)}
           >
-            <option value="" disabled>Choose how you'd like to receive your books</option>
+            <option value="" disabled>Válassza ki, hogyan szeretné megkapni a könyveit</option>
             {pickupOptions.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
             ))}
           </select>
-          <p className="text-sm text-muted-foreground">Choose how you'd like to receive your books</p>
+          <p className="text-sm text-muted-foreground">Válassza ki, hogyan szeretné megkapni a könyveit</p>
           {errors?.pickupPreference && <p className="text-sm font-medium text-destructive">{errors.pickupPreference}</p>}
         </div>
         
         <div className="space-y-2">
           <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-            Special Instructions
+            Különleges utasítások
           </label>
           <input
             type="text"
@@ -49,12 +49,12 @@ const CheckoutForm = ({ formData, setFormData, errors }) => {
             value={formData?.specialInstructions}
             onChange={(e) => handleInputChange('specialInstructions', e?.target?.value)}
           />
-          <p className="text-sm text-muted-foreground">Maximum 200 characters</p>
+          <p className="text-sm text-muted-foreground">Legfeljebb 200 karakter</p>
         </div>
         
         <div className="space-y-2">
           <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-            Contact Phone Number <span className="text-destructive">*</span>
+            Kapcsolattartó telefonszám <span className="text-destructive">*</span>
           </label>
           <input
             type="tel"

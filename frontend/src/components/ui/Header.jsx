@@ -60,7 +60,7 @@ const Header = () => {
                 <Icon name="BookMarked" size={24} color="var(--color-primary)" />
               </div>
               <span className="hidden sm:block text-lg font-heading font-semibold text-foreground">
-                SchoolLibrary Digital
+                eKönyvtár
               </span>
             </Link>
           </div>

@@ -73,7 +73,7 @@ const RentalTermsPanel = () => {
       <div className="mt-4 p-3 bg-accent/10 border border-accent/20 rounded-md">
         <p className="text-xs text-foreground">
           <Info size={14} className="inline mr-1" />
-          By proceeding with checkout, you agree to all rental terms and policies outlined above.
+          A fizetési folyamat folytatásával Ön elfogadja a fentiekben ismertetett összes bérleti feltételt és szabályzatot.
         </p>
       </div>
     </div>

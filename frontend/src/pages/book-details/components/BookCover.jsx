@@ -18,7 +18,7 @@ const BookCover = ({ book }) => {
           <div className="p-4 bg-muted/30">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-muted-foreground">
-                Availability
+                Elérhetőség
               </span>
               <span
                 className={`text-sm font-semibold ${

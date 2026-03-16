@@ -131,7 +131,7 @@ const RentalCheckout = () => {
     return (
       <>
         <Helmet>
-          <title>Rental Checkout - SchoolLibrary Digital</title>
+          <title>Kölcsönzés lezárása - eKönyvtár</title>
           <meta
             name="description"
             content="Complete your book rental checkout process"
@@ -146,16 +146,16 @@ const RentalCheckout = () => {
                 className="mx-auto mb-4 text-muted-foreground"
               />
               <h1 className="text-2xl font-bold text-foreground mb-2">
-                Your Cart is Empty
+                A kosár üres
               </h1>
               <p className="text-muted-foreground mb-6">
-                Add some books to your cart to proceed with checkout
+                Tegyen néhány könyvet a kosárba, hogy folytathassa a fizetési folyamatot
               </p>
               <button
                 onClick={handleContinueShopping}
                 className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
               >
-                Browse Books
+                Könyvek böngészése
               </button>
             </div>
           </div>
@@ -167,7 +167,7 @@ const RentalCheckout = () => {
   return (
     <>
       <Helmet>
-        <title>Rental Checkout - SchoolLibrary Digital</title>
+        <title>Kölcsönzés lezárása - eKönyvtár</title>
         <meta
           name="description"
           content="Complete your book rental checkout process with clear terms and confirmation"
@@ -178,10 +178,10 @@ const RentalCheckout = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="mb-6">
             <h1 className="text-3xl font-bold text-foreground mb-2">
-              Checkout
+              Pénztár
             </h1>
             <p className="text-muted-foreground">
-              Review your selection and complete your rental
+              Ellenőrizze a kiválasztott termékeket, és fejezze be a bérlést
             </p>
           </div>
 
@@ -194,7 +194,7 @@ const RentalCheckout = () => {
             <div className="lg:col-span-2 space-y-6">
               <div className="bg-card border border-border rounded-lg p-6">
                 <h2 className="text-lg font-semibold text-foreground mb-4">
-                  Selected Books
+                  Kiválasztott könyvek
                 </h2>
                 <div className="space-y-3">
                   {selectedBooks?.map((book) => (
@@ -221,7 +221,7 @@ const RentalCheckout = () => {
 
               <div className="bg-card border border-border rounded-lg p-6">
                 <h2 className="text-lg font-semibold text-foreground mb-4">
-                  Pickup Information
+                  Átvételi információk
                 </h2>
                 <div className="space-y-3 text-sm">
                   <div className="flex items-start gap-2">
@@ -231,10 +231,10 @@ const RentalCheckout = () => {
                     />
                     <div>
                       <p className="font-medium text-foreground">
-                        Library Location
+                        A könyvtár helye
                       </p>
                       <p className="text-muted-foreground">
-                        Main Building, 2nd Floor
+                        Főépület, 2. emelet
                       </p>
                     </div>
                   </div>
@@ -245,13 +245,13 @@ const RentalCheckout = () => {
                     />
                     <div>
                       <p className="font-medium text-foreground">
-                        Operating Hours
+                        Nyitvatartási idő
                       </p>
                       <p className="text-muted-foreground">
-                        Mon-Fri: 8:00 AM - 6:00 PM
+                        Hétfő–péntek: 8:00–18:00
                       </p>
                       <p className="text-muted-foreground">
-                        Sat: 9:00 AM - 4:00 PM
+                        Szombat: 9:00–16:00
                       </p>
                     </div>
                   </div>
@@ -262,7 +262,7 @@ const RentalCheckout = () => {
                     />
                     <div>
                       <p className="font-medium text-foreground">
-                        Digital Access
+                        Digitális hozzáférés
                       </p>
                       <p className="text-muted-foreground">
                         Available immediately after checkout
@@ -283,7 +283,7 @@ const RentalCheckout = () => {
                   ) : (
                     <CheckCircle2 size={20} />
                   )}
-                  Confirm Rental
+                  Bérlés megerősítése
                 </button>
 
                 <button
@@ -291,7 +291,7 @@ const RentalCheckout = () => {
                   className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full gap-2"
                 >
                   <ShoppingCart size={20} />
-                  Continue Shopping
+                  Vásárlás folytatása
                 </button>
 
                 <button
@@ -299,7 +299,7 @@ const RentalCheckout = () => {
                   className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full gap-2"
                 >
                   <Bookmark size={20} />
-                  Save for Later
+                  Későbbre elmentés
                 </button>
               </div>
             </div>
@@ -313,14 +313,14 @@ const RentalCheckout = () => {
               <CheckCircle2 size={32} className="text-success" />
             </div>
             <h2 className="text-2xl font-bold text-foreground mb-2">
-              Rental Confirmed!
+              A bérlés megerősítve!
             </h2>
             <p className="text-muted-foreground mb-4">
-              Your books have been successfully checked out. You'll receive a
-              confirmation email shortly.
+              A könyveit sikeresen kikölcsönözte. Hamarosan
+              megerősítő e-mailt fog kapni.
             </p>
             <p className="text-sm text-muted-foreground">
-              Redirecting to your dashboard...
+              Átirányítás a vezérlőpultra...
             </p>
           </div>
         </div>

@@ -45,10 +45,10 @@ const BookGrid = ({ books, loading, onAddToCart, onRentNow }) => {
           </svg>
         </div>
         <h3 className="text-xl font-heading font-semibold text-foreground mb-2">
-          No Books Found
+          Nem találtam könyveket
         </h3>
         <p className="text-muted-foreground text-center max-w-md">
-          We couldn't find any books matching your search criteria. Try adjusting your filters or search terms.
+          Nem találtunk olyan könyvet, amely megfelelne a keresési feltételeinek. Próbálja meg módosítani a szűrőket vagy a keresési kifejezéseket.
         </p>
       </div>
     );

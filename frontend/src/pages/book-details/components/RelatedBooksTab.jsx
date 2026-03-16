@@ -12,7 +12,7 @@ const RelatedBooksTab = ({ relatedBooks }) => {
   return (
     <div>
       <p className="text-sm text-muted-foreground mb-6">
-        Students who rented this book also enjoyed these titles
+        Azok a diákok, akik ezt a könyvet kölcsönözték, ezeket a címeket is szívesen olvasták
       </p>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {relatedBooks?.map((book) => (
@@ -63,7 +63,7 @@ const RelatedBooksTab = ({ relatedBooks }) => {
                     book?.available ? "text-success" : "text-error"
                   }`}
                 >
-                  {book?.available ? "Available" : "Checked Out"}
+                  {book?.available ? "Elérhető" : "Kikölcsönözve"}
                 </span>
               </div>
             </div>

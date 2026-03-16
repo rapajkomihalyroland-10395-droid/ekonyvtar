@@ -56,12 +56,12 @@ const ActionPanel = ({ book }) => {
   return (
     <div className="bg-card rounded-lg shadow-card border border-border p-6 sticky top-20">
       <h3 className="text-lg font-heading font-semibold text-foreground mb-4">
-        Rental Options
+        Bérleti lehetőségek
       </h3>
       <div className="mb-4">
         <div className="flex flex-col mb-2">
           <label className="text-sm font-medium text-foreground mb-1">
-            Rental Duration
+            Bérleti időtartam
           </label>
           <div className="relative">
             <select
@@ -93,7 +93,7 @@ const ActionPanel = ({ book }) => {
           </div>
         </div>
         <p className="text-sm text-muted-foreground">
-          Due date: {calculateDueDate(rentalDuration)}
+          Esedékességi dátum: {calculateDueDate(rentalDuration)}
         </p>
       </div>
       <button

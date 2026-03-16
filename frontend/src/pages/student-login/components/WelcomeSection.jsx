@@ -27,10 +27,10 @@ const WelcomeSection = () => {
     <div className="space-y-6">
       <div className="text-center lg:text-left">
         <h1 className="text-3xl lg:text-4xl font-heading font-bold text-foreground mb-3">
-          Welcome Back to SchoolLibrary Digital
+          Üdvözöljük újra az eKönyvtár oldalán!
         </h1>
         <p className="text-base lg:text-lg text-muted-foreground">
-          Sign in to access your library account and continue your reading journey
+          Jelentkezzen be, hogy hozzáférjen könyvtári fiókjához, és folytassa az olvasást
         </p>
       </div>
       <div className="grid grid-cols-1 gap-4 mt-8">
@@ -58,10 +58,10 @@ const WelcomeSection = () => {
           <Info size={20} className="text-accent flex-shrink-0 mt-0.5" />
           <div>
             <p className="text-sm font-medium text-foreground mb-1">
-              First Time Here?
+              Először jársz itt?
             </p>
             <p className="text-sm text-muted-foreground">
-              New students can create an account using their school email address. Registration takes less than 2 minutes.
+              Az új diákok az iskolai e-mail-címükkel regisztrálhatnak. A regisztráció kevesebb mint 2 percet vesz igénybe.
             </p>
           </div>
         </div>

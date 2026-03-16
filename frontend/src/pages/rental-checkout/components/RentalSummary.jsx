@@ -63,9 +63,9 @@ const RentalSummary = ({ books }) => {
         <div className="flex items-start gap-2 p-3 bg-warning/10 border border-warning/20 rounded-md">
           <AlertCircle size={16} className="text-warning flex-shrink-0 mt-0.5" />
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-medium text-foreground mb-1">Late Fee Policy</p>
+            <p className="text-xs font-medium text-foreground mb-1">Késedelmi díjakra vonatkozó szabályzat</p>
             <p className="text-xs text-muted-foreground">
-              $0.25 per day per book (max $10.00 per book). Please return books on time to avoid charges.
+              0,25 dollár naponta könyvenként (maximum 10,00 dollár könyvenként). Kérjük, a könyveket időben adja vissza, hogy elkerülje a késedelmi díjakat.
             </p>
           </div>
         </div>

@@ -31,8 +31,8 @@ class ErrorBoundary extends React.Component {
               </svg>
             </div>
             <div className="flex flex-col gap-1 text-center">
-              <h1 className="text-2xl font-medium text-neutral-800">Something went wrong</h1>
-              <p className="text-neutral-600 text-base w w-8/12 mx-auto">We encountered an unexpected error while processing your request.</p>
+              <h1 className="text-2xl font-medium text-neutral-800">Valami hiba történt</h1>
+              <p className="text-neutral-600 text-base w w-8/12 mx-auto">Kérésének feldolgozása közben váratlan hiba történt.</p>
             </div>
             <div className="flex justify-center items-center mt-6">
               <button
@@ -42,7 +42,7 @@ class ErrorBoundary extends React.Component {
                 className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded flex items-center gap-2 transition-colors duration-200 shadow-sm"
               >
                 <Icon name="ArrowLeft" size={18} color="#fff" />
-                Back
+                Vissza
               </button>
             </div>
           </div >

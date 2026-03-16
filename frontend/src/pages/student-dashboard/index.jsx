@@ -79,7 +79,7 @@ const StudentDashboard = () => {
   return (
     <>
       <Helmet>
-        <title>My Dashboard - SchoolLibrary Digital</title>
+        <title>A saját irányítópultom - eKönyvtár</title>
         <meta
           name="description"
           content="Manage your library rentals, view reading history, and discover new books on your student dashboard"

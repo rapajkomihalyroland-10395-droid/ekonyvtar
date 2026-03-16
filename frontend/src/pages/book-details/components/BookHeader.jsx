@@ -9,7 +9,7 @@ const BookHeader = ({ book }) => {
             {book?.cim}
           </h1>
           <p className="text-lg text-muted-foreground mb-3">
-            by {book?.szerzo?.nev}
+            Szerző {book?.szerzo?.nev}
           </p>
           <div className="flex items-center gap-2 mb-4">
             <div className="flex items-center gap-1">

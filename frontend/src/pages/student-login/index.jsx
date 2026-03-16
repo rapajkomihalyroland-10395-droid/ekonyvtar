@@ -27,10 +27,10 @@ const StudentLogin = () => {
                       />
                     </div>
                     <h2 className="text-2xl font-heading font-bold text-foreground mb-2">
-                      Student Sign In
+                      Diákok bejelentkezése
                     </h2>
                     <p className="text-sm text-muted-foreground">
-                      Enter your credentials to access your library account
+                      Írja be hitelesítő adatait a könyvtári fiókjához való hozzáféréshez
                     </p>
                   </div>
 
@@ -51,18 +51,18 @@ const StudentLogin = () => {
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground text-center sm:text-left">
-              © {new Date()?.getFullYear()} SchoolLibrary Digital. All rights
-              reserved.
+              © {new Date()?.getFullYear()} eKönyvtár. Minden jog
+              fenntartva.
             </p>
             <div className="flex items-center gap-6">
               <button className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200">
-                Privacy Policy
+                Adatvédelmi irányelvek
               </button>
               <button className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200">
-                Terms of Service
+                Felhasználási feltételek
               </button>
               <button className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200">
-                Help Center
+                Súgó
               </button>
             </div>
           </div>
