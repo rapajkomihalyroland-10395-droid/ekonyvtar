@@ -1,22 +1,24 @@
-import React from 'react';
-import { Checkbox } from '../../../components/ui/Checkbox';
+import React from "react";
 
 const CheckoutForm = ({ formData, setFormData, errors }) => {
   const pickupOptions = [
-    { value: 'library-desk', label: 'Library Circulation Desk' },
-    { value: 'digital-only', label: 'Digital Access Only' },
-    { value: 'locker-pickup', label: 'Self-Service Locker' }
+    { value: "library-desk", label: "Library Circulation Desk" },
+    { value: "digital-only", label: "Digital Access Only" },
+    { value: "locker-pickup", label: "Self-Service Locker" },
   ];
 
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const inputClassName = "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
+  const inputClassName =
+    "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
 
   return (
     <div className="bg-card border border-border rounded-lg p-6">
-      <h2 className="text-lg font-semibold text-foreground mb-4">Pénztár információk</h2>
+      <h2 className="text-lg font-semibold text-foreground mb-4">
+        Pénztár információk
+      </h2>
       <div className="space-y-4">
         <div className="space-y-2">
           <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
@@ -25,19 +27,29 @@ const CheckoutForm = ({ formData, setFormData, errors }) => {
           <select
             className={inputClassName}
             value={formData?.pickupPreference}
-            onChange={(e) => handleInputChange('pickupPreference', e.target.value)}
+            onChange={(e) =>
+              handleInputChange("pickupPreference", e.target.value)
+            }
           >
-            <option value="" disabled>Válassza ki, hogyan szeretné megkapni a könyveit</option>
+            <option value="" disabled>
+              Válassza ki, hogyan szeretné megkapni a könyveit
+            </option>
             {pickupOptions.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
             ))}
           </select>
-          <p className="text-sm text-muted-foreground">Válassza ki, hogyan szeretné megkapni a könyveit</p>
-          {errors?.pickupPreference && <p className="text-sm font-medium text-destructive">{errors.pickupPreference}</p>}
+          <p className="text-sm text-muted-foreground">
+            Válassza ki, hogyan szeretné megkapni a könyveit
+          </p>
+          {errors?.pickupPreference && (
+            <p className="text-sm font-medium text-destructive">
+              {errors.pickupPreference}
+            </p>
+          )}
         </div>
-        
+
         <div className="space-y-2">
           <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
             Különleges utasítások
@@ -47,42 +59,89 @@ const CheckoutForm = ({ formData, setFormData, errors }) => {
             className={inputClassName}
             placeholder="Any special accommodations or notes (optional)"
             value={formData?.specialInstructions}
-            onChange={(e) => handleInputChange('specialInstructions', e?.target?.value)}
+            onChange={(e) =>
+              handleInputChange("specialInstructions", e?.target?.value)
+            }
           />
-          <p className="text-sm text-muted-foreground">Legfeljebb 200 karakter</p>
+          <p className="text-sm text-muted-foreground">
+            Legfeljebb 200 karakter
+          </p>
         </div>
-        
+
         <div className="space-y-2">
           <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-            Kapcsolattartó telefonszám <span className="text-destructive">*</span>
+            Kapcsolattartó telefonszám{" "}
+            <span className="text-destructive">*</span>
           </label>
           <input
             type="tel"
             className={inputClassName}
             placeholder="(555) 123-4567"
             value={formData?.contactPhone}
-            onChange={(e) => handleInputChange('contactPhone', e?.target?.value)}
+            onChange={(e) =>
+              handleInputChange("contactPhone", e?.target?.value)
+            }
           />
-          {errors?.contactPhone && <p className="text-sm font-medium text-destructive">{errors.contactPhone}</p>}
+          {errors?.contactPhone && (
+            <p className="text-sm font-medium text-destructive">
+              {errors.contactPhone}
+            </p>
+          )}
         </div>
-        
+
         <div className="pt-2">
-          <Checkbox
-            label="Send me SMS notifications for due date reminders"
-            description="Receive text alerts 2 days before books are due"
-            checked={formData?.smsNotifications}
-            onChange={(e) => handleInputChange('smsNotifications', e?.target?.checked)}
-          />
+          <div className="flex items-start space-x-2">
+            <input
+              type="checkbox"
+              id="smsNotifications"
+              checked={formData?.smsNotifications}
+              onChange={(e) =>
+                handleInputChange("smsNotifications", e?.target?.checked)
+              }
+              className="mt-1 h-4 w-4 shrink-0 rounded-sm border border-primary text-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+            />
+            <div className="flex-1 space-y-1">
+              <label
+                htmlFor="smsNotifications"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer text-foreground"
+              >
+                Kérek SMS értesítést a határidő közeledtével
+              </label>
+              <p className="text-sm text-muted-foreground">
+                Szöveges riasztást kap 2 nappal a határidő lejárta előtt
+              </p>
+            </div>
+          </div>
         </div>
-        
+
         <div className="pt-1">
-          <Checkbox
-            label="I agree to the rental terms and late fee policies"
-            error={errors?.termsAgreed}
-            checked={formData?.termsAgreed}
-            onChange={(e) => handleInputChange('termsAgreed', e?.target?.checked)}
-            required
-          />
+          <div className="flex items-start space-x-2">
+            <input
+              type="checkbox"
+              id="termsAgreed"
+              checked={formData?.termsAgreed}
+              onChange={(e) =>
+                handleInputChange("termsAgreed", e?.target?.checked)
+              }
+              required
+              className="mt-1 h-4 w-4 shrink-0 rounded-sm border border-primary text-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+            />
+            <div className="flex-1 space-y-1">
+              <label
+                htmlFor="termsAgreed"
+                className={`text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer ${
+                  errors?.termsAgreed ? "text-destructive" : "text-foreground"
+                }`}
+              >
+                Elfogadom a kölcsönzési feltételeket és a késedelmi díj
+                szabályzatát
+                <span className="text-destructive ml-1">*</span>
+              </label>
+              {errors?.termsAgreed && (
+                <p className="text-sm text-destructive">{errors.termsAgreed}</p>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

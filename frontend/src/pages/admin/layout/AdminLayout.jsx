@@ -14,7 +14,6 @@ import {
   Building2,
   GraduationCap,
 } from "lucide-react";
-import { cn } from "../../../utils/cn";
 
 const AdminLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
@@ -37,24 +36,21 @@ const AdminLayout = () => {
     <div className="min-h-screen bg-background flex">
       {}
       <aside
-        className={cn(
-          "fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border shadow-sm transition-transform duration-300 ease-in-out lg:static lg:translate-x-0",
-          !isSidebarOpen && "-translate-x-full lg:w-20",
-        )}
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border shadow-sm transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
+          !isSidebarOpen ? "-translate-x-full lg:w-20" : ""
+        }`}
       >
         <div className="h-16 flex items-center justify-between px-4 border-b border-border">
           <div
-            className={cn(
-              "flex items-center gap-2",
-              !isSidebarOpen && "justify-center w-full",
-            )}
+            className={`flex items-center gap-2 ${
+              !isSidebarOpen ? "justify-center w-full" : ""
+            }`}
           >
             <Library className="h-8 w-8 text-primary" />
             <span
-              className={cn(
-                "font-bold text-xl text-foreground truncate",
-                !isSidebarOpen && "hidden",
-              )}
+              className={`font-bold text-xl text-foreground truncate ${
+                !isSidebarOpen ? "hidden" : ""
+              }`}
             >
               Admin
             </span>
@@ -74,18 +70,16 @@ const AdminLayout = () => {
               to={item.path}
               end={item.path === "/admin"}
               className={({ isActive }) =>
-                cn(
-                  "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   isActive
                     ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                  !isSidebarOpen && "justify-center px-2",
-                )
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                } ${!isSidebarOpen ? "justify-center px-2" : ""}`
               }
               title={!isSidebarOpen ? item.label : undefined}
             >
               <item.icon size={20} />
-              <span className={cn(!isSidebarOpen && "hidden")}>
+              <span className={`${!isSidebarOpen ? "hidden" : ""}`}>
                 {item.label}
               </span>
             </NavLink>
@@ -95,14 +89,13 @@ const AdminLayout = () => {
         <div className="absolute bottom-4 left-0 right-0 px-4">
           <button
             onClick={() => navigate("/")}
-            className={cn(
-              "flex items-center gap-3 w-full px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors",
-              !isSidebarOpen && "justify-center px-2",
-            )}
+            className={`flex items-center gap-3 w-full px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors ${
+              !isSidebarOpen ? "justify-center px-2" : ""
+            }`}
             title={!isSidebarOpen ? "Kilépés" : undefined}
           >
             <LogOut size={20} />
-            <span className={cn(!isSidebarOpen && "hidden")}>
+            <span className={`${!isSidebarOpen ? "hidden" : ""}`}>
               Kilépés a főoldalra
             </span>
           </button>
@@ -119,7 +112,9 @@ const AdminLayout = () => {
           >
             <Menu size={24} />
           </button>
-          <span className="ml-4 font-bold text-lg text-foreground">Könyvtár Admin</span>
+          <span className="ml-4 font-bold text-lg text-foreground">
+            Könyvtár Admin
+          </span>
         </header>
 
         <main className="flex-1 overflow-auto p-4 lg:p-8">

@@ -2,7 +2,6 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Save, User, History, Mail, Send } from "lucide-react";
 import StatusBadge from "../components/StatusBadge.jsx";
-import { cn } from "../../../utils/cn";
 import { getAuthHeader } from "store/authStore.js";
 import api from "../../../axios_url/baseURL.js";
 
@@ -14,7 +13,7 @@ const UserDetails = () => {
   const [user, setUser] = useState([]);
   const [loans, setLoan] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [changed, setChanged] = useState([])
+  const [changed, setChanged] = useState([]);
 
   useEffect(() => {
     const GetUserAndLoans = async () => {
@@ -50,9 +49,7 @@ const UserDetails = () => {
     setCurrentIndex((prev) => Math.max(prev - page_size, 0));
   };
 
-  const handleChange = (e) => {
-    
-  } 
+  const handleChange = (e) => {};
 
   return (
     <>
@@ -80,36 +77,33 @@ const UserDetails = () => {
           <nav className="flex space-x-8">
             <button
               onClick={() => setActiveTab("details")}
-              className={cn(
-                "py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2",
+              className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 ${
                 activeTab === "details"
                   ? "border-primary text-primary"
-                  : "border-transparent text-muted-foreground hover:text-foreground hover:border-border",
-              )}
+                  : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
+              }`}
             >
               <User size={16} />
               Alapadatok
             </button>
             <button
               onClick={() => setActiveTab("loans")}
-              className={cn(
-                "py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2",
+              className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 ${
                 activeTab === "loans"
                   ? "border-primary text-primary"
-                  : "border-transparent text-muted-foreground hover:text-foreground hover:border-border",
-              )}
+                  : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
+              }`}
             >
               <History size={16} />
               Kölcsönzések
             </button>
             <button
               onClick={() => setActiveTab("messages")}
-              className={cn(
-                "py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2",
+              className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 ${
                 activeTab === "messages"
                   ? "border-primary text-primary"
-                  : "border-transparent text-muted-foreground hover:text-foreground hover:border-border",
-              )}
+                  : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
+              }`}
             >
               <Mail size={16} />
               Üzenetek
@@ -130,7 +124,6 @@ const UserDetails = () => {
                     type="text"
                     defaultValue={user.nev}
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  
                   />
                 </div>
                 <div className="space-y-2">

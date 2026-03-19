@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Save, BookOpen, History } from "lucide-react";
-import { cn } from "../../../utils/cn";
 import api from "../../../axios_url/baseURL.js";
 import { getAuthHeader } from "store/authStore.js";
 
@@ -129,12 +128,11 @@ const BookDetails = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={cn(
-                "py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2",
+              className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 ${
                 activeTab === tab.id
                   ? "border-primary text-primary"
-                  : "border-transparent text-muted-foreground hover:text-foreground hover:border-border",
-              )}
+                  : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
+              }`}
             >
               <tab.icon size={16} />
               {tab.label}
