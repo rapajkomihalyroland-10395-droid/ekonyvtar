@@ -105,13 +105,13 @@ const BookDetails = () => {
       <div className="flex items-center gap-4">
         <button
           onClick={() => navigate("/admin/books")}
-          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          className="p-2 hover:bg-muted rounded-full transition-colors text-muted-foreground"
         >
           <ArrowLeft size={20} />
         </button>
         <div className="flex-1">
-          <h1 className="text-2xl font-bold text-gray-900">{book.cim}</h1>
-          <div className="flex items-center gap-3 text-sm text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-foreground">{book.cim}</h1>
+          <div className="flex items-center gap-3 text-sm text-muted-foreground mt-1">
             <span>{book.szerzo}</span>
             <span>•</span>
             <span className="font-mono">{book.isbn}</span>
@@ -120,7 +120,7 @@ const BookDetails = () => {
         <div className="flex gap-2"></div>
       </div>
 
-      <div className="border-b border-gray-200">
+      <div className="border-b border-border">
         <nav className="flex space-x-8">
           {[
             { id: "details", label: "Alapadatok", icon: BookOpen },
@@ -133,7 +133,7 @@ const BookDetails = () => {
                 "py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2",
                 activeTab === tab.id
                   ? "border-primary text-primary"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
+                  : "border-transparent text-muted-foreground hover:text-foreground hover:border-border",
               )}
             >
               <tab.icon size={16} />
@@ -143,7 +143,7 @@ const BookDetails = () => {
         </nav>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-6">
         {activeTab === "details" && (
           <div key={book.id} className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
@@ -357,44 +357,44 @@ const BookDetails = () => {
             </div>
 
             <div className="overflow-hidden rounded-lg border border-gray-200">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="min-w-full divide-y divide-border">
+                <thead className="bg-muted">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Felhasználó
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Felhasználó típus
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Bérlés kezdete
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Bérlés vége
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Visszahozva
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-card divide-y divide-border">
                   {loans.map((loan) => (
                     <tr key={loan.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">
                         {loan.felhasznalo}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                         {loan.felhasznalo_tipus}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                         {formatDate(loan.berles_kezdete)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                         {formatDate(loan.berles_vege)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                         {!loan.visszahozva ? (
-                          <span className="inline-flex items-center rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
+                          <span className="inline-flex items-center rounded-full bg-red-500/10 px-2 py-1 text-xs font-medium text-red-500 ring-1 ring-inset ring-red-500/20">
                             Kikölcsönözve
                           </span>
                         ) : (

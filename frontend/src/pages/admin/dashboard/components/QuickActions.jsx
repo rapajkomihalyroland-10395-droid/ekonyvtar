@@ -15,8 +15,8 @@ const QuickActions = () => {
     "bg-secondary text-secondary-foreground hover:bg-secondary/80";
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+    <div className="bg-card rounded-xl shadow-sm border border-border p-6">
+      <h3 className="text-lg font-semibold text-foreground mb-4">
         Gyors műveletek
       </h3>
       <div className="flex flex-wrap gap-4">

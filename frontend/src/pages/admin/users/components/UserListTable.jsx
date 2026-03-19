@@ -37,14 +37,14 @@ const UserListTable = ({ users, isLoading }) => {
   };
 
   if (isLoading) {
-    return <div className="p-8 text-center text-gray-500">Betöltés...</div>;
+    return <div className="p-8 text-center text-muted-foreground">Betöltés...</div>;
   }
 
   return (
     <>
-      <div className="flex flex-col md:flex-row gap-4 bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+      <div className="flex flex-col md:flex-row gap-4 bg-card p-4 rounded-lg border border-border shadow-sm">
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <input
             type="text"
             placeholder="Keresés név vagy email alapján..."
@@ -54,9 +54,9 @@ const UserListTable = ({ users, isLoading }) => {
           />
         </div>
       </div>
-      <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm">
+      <div className="overflow-x-auto rounded-lg border border-border bg-card shadow-sm mt-4">
         <table className="w-full text-left text-sm">
-          <thead className="bg-gray-50 text-gray-600 font-medium border-b border-gray-200">
+          <thead className="bg-muted text-muted-foreground font-medium border-b border-border">
             <tr>
               <th className="px-6 py-4">Név / Email</th>
               <th className="px-6 py-4">Szerepkör</th>
@@ -64,13 +64,13 @@ const UserListTable = ({ users, isLoading }) => {
               <th className="px-6 py-4 text-right">Műveletek</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-border">
             {currentUserPage.map((user) => (
-              <tr key={user.id} className="hover:bg-gray-50 transition-colors">
+              <tr key={user.id} className="hover:bg-muted/50 transition-colors">
                 <td className="px-6 py-4">
                   <div>
-                    <div className="font-medium text-gray-900">{user.nev}</div>
-                    <div className="text-xs text-gray-500 mt-0.5">
+                    <div className="font-medium text-foreground">{user.nev}</div>
+                    <div className="text-xs text-muted-foreground mt-0.5">
                       {user.email}
                     </div>
                   </div>
@@ -82,8 +82,8 @@ const UserListTable = ({ users, isLoading }) => {
                   <span
                     className={
                       user.aktiv_kolcsonzes
-                        ? "font-medium text-gray-900"
-                        : "text-gray-400"
+                        ? "font-medium text-foreground"
+                        : "text-muted-foreground"
                     }
                   >
                     {user.aktiv_kolcsonzes
@@ -95,7 +95,7 @@ const UserListTable = ({ users, isLoading }) => {
                   <div className="flex items-center justify-end gap-2">
                     <button
                       onClick={() => navigate(`/admin/users/${user.id}`)}
-                      className="p-1.5 text-gray-500 hover:text-primary hover:bg-primary/10 rounded transition-colors"
+                      className="p-1.5 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded transition-colors"
                       title="Megtekintés"
                     >
                       <Eye size={18} />
@@ -108,11 +108,11 @@ const UserListTable = ({ users, isLoading }) => {
         </table>
         {users.length === 0 && (
           <div className="p-12 text-center">
-            <p className="text-gray-500">Nincs megjeleníthető felhasználó.</p>
+            <p className="text-muted-foreground">Nincs megjeleníthető felhasználó.</p>
           </div>
         )}
       </div>
-      <div className="flex items-center justify-between gap-3 p-4 border-t border-gray-200">
+      <div className="flex items-center justify-between gap-3 p-4 border-t border-border bg-card rounded-b-lg">
         <button
           type="button"
           onClick={previousPage}

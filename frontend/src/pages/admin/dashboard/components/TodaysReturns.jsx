@@ -28,7 +28,7 @@ const TodaysReturns = () => {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 h-full flex items-center justify-center">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-6 h-full flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
@@ -36,7 +36,7 @@ const TodaysReturns = () => {
 
   if (error) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 h-full flex flex-col items-center justify-center text-red-500">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-6 h-full flex flex-col items-center justify-center text-red-500">
         <AlertCircle className="h-8 w-8 mb-2" />
         <p>{error}</p>
       </div>
@@ -44,14 +44,14 @@ const TodaysReturns = () => {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+    <div className="bg-card rounded-xl shadow-sm border border-border p-6">
+      <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
         <Clock className="mr-2 h-5 w-5 text-primary" />
         Mai visszahozások
       </h3>
 
       {returns.length === 0 ? (
-        <div className="text-center text-gray-500 py-4">
+        <div className="text-center text-muted-foreground py-4">
           <CheckCircle className="h-8 w-8 mx-auto mb-2 opacity-20 text-green-500" />
           <p>Nincs mára várható visszahozás.</p>
         </div>
@@ -60,13 +60,16 @@ const TodaysReturns = () => {
           {returns.map((item) => (
             <div
               key={item.id}
-              className="flex items-start gap-3 p-2 border-b border-gray-50 last:border-0 hover:bg-gray-50 rounded-lg transition-colors"
+              className="flex items-start gap-3 p-2 border-b border-border last:border-0 hover:bg-muted rounded-lg transition-colors"
             >
               <div className="w-2 h-2 mt-2 rounded-full bg-yellow-400 flex-shrink-0" />
               <div>
-                <p className="text-sm font-medium text-gray-900">{item.user}</p>
-                <p className="text-xs text-gray-500">
-                  {item.book} - {new Date(item.deadline).toLocaleDateString("hu-HU")}
+                <p className="text-sm font-medium text-foreground">
+                  {item.user}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {item.book} -{" "}
+                  {new Date(item.deadline).toLocaleDateString("hu-HU")}
                 </p>
               </div>
             </div>

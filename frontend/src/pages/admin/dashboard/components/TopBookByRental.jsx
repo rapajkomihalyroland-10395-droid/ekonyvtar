@@ -28,7 +28,7 @@ const TopBookByRental = () => {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 h-full flex items-center justify-center">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-6 h-full flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
@@ -36,7 +36,7 @@ const TopBookByRental = () => {
 
   if (error) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 h-full flex flex-col items-center justify-center text-red-500">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-6 h-full flex flex-col items-center justify-center text-red-500">
         <AlertCircle className="h-8 w-8 mb-2" />
         <p>{error}</p>
       </div>
@@ -44,14 +44,14 @@ const TopBookByRental = () => {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 h-full">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+    <div className="bg-card rounded-xl shadow-sm border border-border p-6 h-full">
+      <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
         <TrendingUp className="mr-2 h-5 w-5 text-primary" />
         Legnépszerűbb könyvek
       </h3>
 
       {topBooks.length === 0 ? (
-        <div className="text-center text-gray-500 py-8">
+        <div className="text-center text-muted-foreground py-8">
           <BookOpen className="h-10 w-10 mx-auto mb-2 opacity-20" />
           <p>Még nincs kölcsönzési adat.</p>
         </div>
@@ -60,7 +60,7 @@ const TopBookByRental = () => {
           {topBooks.map((book, index) => (
             <div
               key={book.id || index}
-              className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors group"
+              className="flex items-center justify-between p-3 hover:bg-muted rounded-lg transition-colors group"
             >
               <div className="flex items-center gap-4">
                 {book.kep ? (
@@ -74,24 +74,24 @@ const TopBookByRental = () => {
                     }}
                   />
                 ) : (
-                  <div className="w-10 h-14 bg-gray-200 rounded shadow-sm flex-shrink-0 flex items-center justify-center">
-                    <BookOpen className="h-5 w-5 text-gray-400" />
+                  <div className="w-10 h-14 bg-muted rounded shadow-sm flex-shrink-0 flex items-center justify-center">
+                    <BookOpen className="h-5 w-5 text-muted-foreground" />
                   </div>
                 )}
                 <div>
-                  <p className="font-medium text-gray-900 group-hover:text-primary transition-colors line-clamp-1">
+                  <p className="font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
                     {book.cim}
                   </p>
-                  <p className="text-sm text-gray-500 line-clamp-1">
+                  <p className="text-sm text-muted-foreground line-clamp-1">
                     {book.szerzo}
                   </p>
                 </div>
               </div>
               <div className="text-right flex-shrink-0 pl-2">
-                <span className="block font-bold text-gray-900">
+                <span className="block font-bold text-foreground">
                   {book.elofordulas}
                 </span>
-                <span className="text-xs text-gray-500">kölcsönzés</span>
+                <span className="text-xs text-muted-foreground">kölcsönzés</span>
               </div>
             </div>
           ))}

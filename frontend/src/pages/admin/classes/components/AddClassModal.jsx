@@ -64,22 +64,22 @@ const AddClassModal = ({ isOpen, onClose, initialData = null }) => {
       console.error("Hiba a mentés során:", error);
       alert(
         "Hiba történt a mentés során: " +
-        (error.response?.data?.message || error.message),
+          (error.response?.data?.message || error.message),
       );
     }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
-        <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between z-10">
-          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+      <div className="bg-card rounded-xl shadow-xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
+        <div className="sticky top-0 bg-card border-b border-border px-6 py-4 flex items-center justify-between z-10">
+          <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
             <GraduationCap className="h-5 w-5 text-primary" />
             {initialData ? "Osztály Módosítása" : "Új Osztály"}
           </h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500 hover:text-gray-900"
+            className="p-2 hover:bg-muted rounded-full transition-colors text-muted-foreground hover:text-foreground"
           >
             <X size={20} />
           </button>
@@ -87,7 +87,7 @@ const AddClassModal = ({ isOpen, onClose, initialData = null }) => {
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">
+            <label className="text-sm font-medium text-foreground">
               Osztály neve
             </label>
             <input
@@ -96,13 +96,13 @@ const AddClassModal = ({ isOpen, onClose, initialData = null }) => {
               value={formData.nev}
               onChange={handleChange}
               required
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-full rounded-md border border-border bg-background text-foreground px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary placeholder:text-muted-foreground"
               placeholder="pl. 12.A"
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">
+            <label className="text-sm font-medium text-foreground">
               Évfolyam
             </label>
             <input
@@ -110,30 +110,34 @@ const AddClassModal = ({ isOpen, onClose, initialData = null }) => {
               name="evfolyam"
               value={formData.evfolyam}
               onChange={handleChange}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-full rounded-md border border-border bg-background text-foreground px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary placeholder:text-muted-foreground"
               placeholder="pl. 12"
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Tagozat</label>
+            <label className="text-sm font-medium text-foreground">
+              Tagozat
+            </label>
             <input
               type="text"
               name="tagozat"
               value={formData.tagozat}
               onChange={handleChange}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-full rounded-md border border-border bg-background text-foreground px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary placeholder:text-muted-foreground"
               placeholder="pl. Matematika"
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Iskola</label>
+            <label className="text-sm font-medium text-foreground">
+              Iskola
+            </label>
             <select
               name="iskola_id"
               value={formData.iskola_id}
               onChange={handleChange}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary bg-white"
+              className="w-full rounded-md border border-border bg-background text-foreground px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
             >
               <option value="">Válassz iskolát...</option>
               {schools.map((school) => (

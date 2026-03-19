@@ -61,13 +61,13 @@ const UserDetails = () => {
         <div className="flex items-center gap-4">
           <button
             onClick={() => navigate("/admin/users")}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            className="p-2 hover:bg-muted rounded-full transition-colors text-muted-foreground"
           >
             <ArrowLeft size={20} />
           </button>
           <div className="flex-1">
-            <h1 className="text-2xl font-bold text-gray-900">{user.nev}</h1>
-            <div className="flex items-center gap-3 text-sm text-gray-500 mt-1">
+            <h1 className="text-2xl font-bold text-foreground">{user.nev}</h1>
+            <div className="flex items-center gap-3 text-sm text-muted-foreground mt-1">
               <span className="font-mono">{user.email}</span>
               <span>•</span>
               <StatusBadge status={user.role} />
@@ -76,7 +76,7 @@ const UserDetails = () => {
         </div>
 
         {}
-        <div className="border-b border-gray-200">
+        <div className="border-b border-border">
           <nav className="flex space-x-8">
             <button
               onClick={() => setActiveTab("details")}
@@ -84,7 +84,7 @@ const UserDetails = () => {
                 "py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2",
                 activeTab === "details"
                   ? "border-primary text-primary"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
+                  : "border-transparent text-muted-foreground hover:text-foreground hover:border-border",
               )}
             >
               <User size={16} />
@@ -96,7 +96,7 @@ const UserDetails = () => {
                 "py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2",
                 activeTab === "loans"
                   ? "border-primary text-primary"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
+                  : "border-transparent text-muted-foreground hover:text-foreground hover:border-border",
               )}
             >
               <History size={16} />
@@ -108,7 +108,7 @@ const UserDetails = () => {
                 "py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2",
                 activeTab === "messages"
                   ? "border-primary text-primary"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
+                  : "border-transparent text-muted-foreground hover:text-foreground hover:border-border",
               )}
             >
               <Mail size={16} />
@@ -118,7 +118,7 @@ const UserDetails = () => {
         </div>
 
         {}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div className="bg-card rounded-xl shadow-sm border border-border p-6">
           {activeTab === "details" && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">

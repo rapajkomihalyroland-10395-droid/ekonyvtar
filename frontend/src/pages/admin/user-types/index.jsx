@@ -57,10 +57,10 @@ const AdminUserTypes = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-foreground">
             Felhasználó Típusok kezelése
           </h1>
-          <p className="text-gray-500">
+          <p className="text-muted-foreground">
             Felhasználó típusok listázása és kezelése
           </p>
         </div>
@@ -73,11 +73,11 @@ const AdminUserTypes = () => {
         </button>
       </div>
 
-      <div className="rounded-md border bg-card text-card-foreground shadow-sm bg-white">
+      <div className="rounded-md border border-border bg-card text-card-foreground shadow-sm">
         <div className="p-0">
           <table className="w-full caption-bottom text-sm text-left">
-            <thead className="[&_tr]:border-b">
-              <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+            <thead className="[&_tr]:border-b border-border">
+              <tr className="border-b border-border transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                 <th className="h-12 px-4 align-middle font-medium text-muted-foreground">
                   ID
                 </th>
@@ -92,29 +92,29 @@ const AdminUserTypes = () => {
                 </th>
               </tr>
             </thead>
-            <tbody className="[&_tr:last-child]:border-0">
+            <tbody className="[&_tr:last-child]:border-0 divide-y divide-border">
               {userTypes.map((item) => (
                 <tr
                   key={item.id}
-                  className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                  className="transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
                 >
-                  <td className="p-4 align-middle">{item.id}</td>
-                  <td className="p-4 align-middle font-medium">
+                  <td className="p-4 align-middle text-foreground">{item.id}</td>
+                  <td className="p-4 align-middle font-medium text-foreground">
                     {item.megnevezes}
                   </td>
-                  <td className="p-4 align-middle">{item.leiras}</td>
+                  <td className="p-4 align-middle text-muted-foreground">{item.leiras}</td>
                   <td className="p-4 align-middle text-right">
                     <div className="flex justify-end gap-2">
                       <button
                         onClick={() => handleEdit(item)}
-                        className="p-2 hover:bg-gray-100 rounded-full text-gray-500 hover:text-primary transition-colors"
+                        className="p-2 hover:bg-muted rounded-full text-muted-foreground hover:text-primary transition-colors"
                         title="Módosítás"
                       >
                         <Eye size={18} />
                       </button>
                       <button
                         onClick={() => handleDelete(item.id)}
-                        className="p-2 hover:bg-gray-100 rounded-full text-gray-500 hover:text-red-600 transition-colors"
+                        className="p-2 hover:bg-muted rounded-full text-muted-foreground hover:text-red-600 transition-colors"
                         title="Archiválás/Törlés"
                       >
                         <Trash2 size={18} />

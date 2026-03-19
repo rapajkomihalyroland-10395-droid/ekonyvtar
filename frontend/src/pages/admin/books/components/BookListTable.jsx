@@ -35,14 +35,16 @@ const BookListTable = ({ books, isLoading }) => {
     setCurrentIndex((prev) => Math.max(prev - page_size, 0));
   };
   if (isLoading) {
-    return <div className="p-8 text-center text-gray-500">Betöltés...</div>;
+    return (
+      <div className="p-8 text-center text-muted-foreground">Betöltés...</div>
+    );
   }
 
   return (
     <>
-      <div className="flex flex-col md:flex-row gap-4 bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+      <div className="flex flex-col md:flex-row gap-4 bg-card p-4 rounded-lg border border-border shadow-sm">
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <input
             type="text"
             placeholder="Keresés cím, szerző vagy ISBN alapján..."
@@ -52,9 +54,9 @@ const BookListTable = ({ books, isLoading }) => {
           />
         </div>
       </div>
-      <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm">
+      <div className="overflow-x-auto rounded-lg border border-border bg-card shadow-sm mt-4">
         <table className="w-full text-left text-sm">
-          <thead className="bg-gray-50 text-gray-600 font-medium border-b border-gray-200">
+          <thead className="bg-muted text-muted-foreground font-medium border-b border-border">
             <tr>
               <th className="px-6 py-4">Cím / ISBN</th>
               <th className="px-6 py-4">Szerző</th>
@@ -64,36 +66,41 @@ const BookListTable = ({ books, isLoading }) => {
               <th className="px-6 py-4 text-right">Műveletek</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-border">
             {currentPageBooks.map((book) => (
-              <tr key={book.id} className="hover:bg-gray-50 transition-colors">
+              <tr key={book.id} className="hover:bg-muted/50 transition-colors">
                 <td className="px-6 py-4">
                   <div>
-                    <div className="font-medium text-gray-900">{book.cim}</div>
-                    <div className="text-xs text-gray-500 font-mono mt-0.5">
+                    <div className="font-medium text-foreground">
+                      {book.cim}
+                    </div>
+                    <div className="text-xs text-muted-foreground font-mono mt-0.5">
                       {book.ISBN}
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-4 text-gray-600">{book.author}</td>
+                <td className="px-6 py-4 text-muted-foreground">
+                  {book.author}
+                </td>
                 <td className="px-6 py-4">
-                  <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700">
+                  <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-muted text-foreground">
                     {book.category}
                   </span>
                 </td>
 
                 <td className="px-6 py-4 text-center">
-                  {Number(book.keszlet ?? 0) === 0 ?
-                    <span className="inline-flex items-center rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
+                  {Number(book.keszlet ?? 0) === 0 ? (
+                    <span className="inline-flex items-center rounded-full bg-red-500/10 px-2 py-1 text-xs font-medium text-red-500 ring-1 ring-inset ring-red-500/20">
                       Nincs készleten
                     </span>
-                  : <span className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                  ) : (
+                    <span className="inline-flex items-center rounded-full bg-green-500/10 px-2 py-1 text-xs font-medium text-green-500 ring-1 ring-inset ring-green-500/20">
                       Készleten
                     </span>
-                  }
+                  )}
                 </td>
                 <td className="px-6 py-4 text-center">
-                  <span className="font-medium text-gray-900">
+                  <span className="font-medium text-foreground">
                     {book.keszlet}
                   </span>
                 </td>
@@ -101,7 +108,7 @@ const BookListTable = ({ books, isLoading }) => {
                   <div className="flex items-center justify-end gap-2">
                     <button
                       onClick={() => navigate(`/admin/books/${book.id}`)}
-                      className="p-1.5 text-gray-500 hover:text-primary hover:bg-primary/10 rounded transition-colors"
+                      className="p-1.5 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded transition-colors"
                       title="Megtekintés"
                     >
                       <Eye size={20} />
@@ -114,10 +121,10 @@ const BookListTable = ({ books, isLoading }) => {
         </table>
         {books.length === 0 && (
           <div className="p-12 text-center">
-            <p className="text-gray-500">Nincs megjeleníthető könyv.</p>
+            <p className="text-muted-foreground">Nincs megjeleníthető könyv.</p>
           </div>
         )}
-        <div className="flex items-center justify-between gap-3 p-4 border-t border-gray-200">
+        <div className="flex items-center justify-between gap-3 p-4 border-t border-border">
           <button
             type="button"
             onClick={previousPage}

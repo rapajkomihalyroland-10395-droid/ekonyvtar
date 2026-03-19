@@ -9,12 +9,12 @@ const AdminDashboard = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Vezérlőpult</h1>
-          <p className="text-gray-500">
+          <h1 className="text-2xl font-bold text-foreground">Vezérlőpult</h1>
+          <p className="text-muted-foreground">
             Áttekintés a könyvtár jelenlegi állapotáról
           </p>
         </div>
-        <div className="text-sm text-gray-500 bg-white px-3 py-1 rounded-full border shadow-sm">
+        <div className="text-sm text-muted-foreground bg-card px-3 py-1 rounded-full border border-border shadow-sm">
           Mai dátum: {new Date().toLocaleDateString("hu-HU")}
         </div>
       </div>
