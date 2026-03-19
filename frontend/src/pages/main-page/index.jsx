@@ -40,13 +40,12 @@ const MainPage = () => {
 
     GetData();
   }, []);
-  console.log(topByCategory);
 
   return (
     <div className="min-h-screen bg-background pb-12">
       <Header />
 
-      {}
+      { }
       <div className="bg-primary/5 pt-24 pb-12 px-4 border-b border-border">
         <div className="max-w-7xl mx-auto">
           <div className="max-w-2xl">
@@ -70,7 +69,7 @@ const MainPage = () => {
       </div>
 
       <main className="max-w-7xl mx-auto px-4 py-12 space-y-16">
-        {}
+        { }
         <section>
           <SectionHeader title="Legtöbbet kölcsönzött könyvek" icon="Star" />
           <Carousel>
@@ -82,7 +81,7 @@ const MainPage = () => {
           </Carousel>
         </section>
 
-        {}
+        { }
         <section>
           <SectionHeader title="Legolvasottabb kategóriák" icon="LayoutGrid" />
           <Carousel>
@@ -94,7 +93,7 @@ const MainPage = () => {
           </Carousel>
         </section>
 
-        {}
+        { }
         <section>
           <SectionHeader title="Legolvasottabb szerzők" icon="Users" />
           <Carousel>
@@ -106,7 +105,7 @@ const MainPage = () => {
           </Carousel>
         </section>
 
-        {}
+        { }
         <section>
           <SectionHeader title="Legmagasabb értékelések" icon="Trophy" />
           <Carousel>

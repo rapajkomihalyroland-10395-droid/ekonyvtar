@@ -1,8 +1,8 @@
-import React from "react";
+import { useState } from "react";
 import { Star } from "lucide-react";
 
 const BookCard = ({ cim, kep, kategoria, csillagok, szerzo }) => {
-  const [imageLoaded, setImageLoaded] = React.useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
     <div className="bg-card border border-border rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 group">
@@ -10,9 +10,8 @@ const BookCard = ({ cim, kep, kategoria, csillagok, szerzo }) => {
         <img
           src={kep}
           alt={cim}
-          className={`w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 ${
-            imageLoaded ? "opacity-100" : "opacity-0"
-          }`}
+          className={`w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 ${imageLoaded ? "opacity-100" : "opacity-0"
+            }`}
           onLoad={() => setImageLoaded(true)}
           onError={(e) => {
             e.target.src = "/assets/images/no_image.png";

@@ -8,6 +8,8 @@ const RentalHistoryItem = ({ rental, onRate }) => {
   const [selectedRating, setSelectedRating] = useState(rental?.userRating || 0);
   const [hoverRating, setHoverRating] = useState(0);
 
+  const stars = [1, 2, 3, 4, 5];
+
   const formatDate = (date) => {
     return new Date(date)?.toLocaleDateString("hu-HU", {
       month: "short",
@@ -68,15 +70,14 @@ const RentalHistoryItem = ({ rental, onRate }) => {
             {rental?.userRating ? (
               <div className="flex items-center gap-1">
                 <div className="flex">
-                  {[1, 2, 3, 4, 5]?.map((star) => (
+                  {stars.map((star) => (
                     <Star
                       key={star}
                       size={16}
-                      className={`${
-                        star <= rental?.userRating
-                          ? "text-warning fill-current"
-                          : "text-muted-foreground/30"
-                      }`}
+                      className={`${star <= rental?.userRating
+                        ? "text-warning fill-current"
+                        : "text-muted-foreground/30"
+                        }`}
                     />
                   ))}
                 </div>
@@ -97,7 +98,7 @@ const RentalHistoryItem = ({ rental, onRate }) => {
                 ) : (
                   <div className="flex items-center gap-2">
                     <div className="flex">
-                      {[1, 2, 3, 4, 5]?.map((star) => (
+                      {stars.map((star) => (
                         <button
                           key={star}
                           onClick={() => setSelectedRating(star)}
@@ -108,11 +109,10 @@ const RentalHistoryItem = ({ rental, onRate }) => {
                         >
                           <Star
                             size={18}
-                            className={`${
-                              star <= (hoverRating || selectedRating)
-                                ? "text-warning fill-current"
-                                : "text-muted-foreground"
-                            }`}
+                            className={`${star <= (hoverRating || selectedRating)
+                              ? "text-warning fill-current"
+                              : "text-muted-foreground"
+                              }`}
                           />
                         </button>
                       ))}

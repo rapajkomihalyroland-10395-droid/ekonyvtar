@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { AlertCircle, DollarSign, Heart, BookCheck, FileText, Search, User, Settings } from 'lucide-react';
 
 const iconMap = {

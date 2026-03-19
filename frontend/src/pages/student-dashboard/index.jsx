@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, BookOpen, Bell, ArrowRight } from "lucide-react";
+import { Search, BookOpen, } from "lucide-react";
 import Header from "../../components/ui/Header";
 import CurrentRentalCard from "./components/CurrentRentalCard";
 import RentalHistoryItem from "./components/RentalHistoryItem";
 import QuickAccessWidget from "./components/QuickAccessWidget";
 import { GetUser, getAuthHeader } from "store/authStore";
 import api from "../../axios_url/baseURL.js";
-import RentalTermsPanel from "pages/rental-checkout/components/RentalTermsPanel";
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
@@ -208,7 +207,7 @@ const StudentDashboard = () => {
                       icon="AlertCircle"
                       iconColor="bg-error/10"
                       badge="Teendő"
-                      onClick={() => {}}
+                      onClick={() => { }}
                     />
                     <QuickAccessWidget
                       title="Elolvasott Könyvek"
@@ -217,7 +216,7 @@ const StudentDashboard = () => {
                       icon="BookCheck"
                       iconColor="bg-primary/10"
                       badge=""
-                      onClick={() => {}}
+                      onClick={() => { }}
                     />
                   </div>
                 </section>

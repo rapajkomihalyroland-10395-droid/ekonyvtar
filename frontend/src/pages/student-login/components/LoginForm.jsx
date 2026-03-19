@@ -25,20 +25,26 @@ const LoginForm = () => {
   const validateForm = () => {
     const errors = {};
 
+    let isValid = true;
+
     if (!formData.email.trim()) {
       errors.email = "Email address is required";
+      isValid = false;
     } else if (!emailRegex.test(formData.email)) {
       errors.email = "Please enter a valid email address";
+      isValid = false;
     }
 
     if (!formData.password) {
       errors.password = "Password is required";
+      isValid = false;
     } else if (formData.password.length < 6) {
       errors.password = "Password must be at least 6 characters";
+      isValid = false;
     }
 
     setFormErrors(errors);
-    return Object.keys(errors).length === 0;
+    return isValid;
   };
 
   const handleInputChange = (e) => {

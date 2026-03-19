@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Calendar, CalendarClock, AlertCircle, Clock, RefreshCw, BookOpen } from "lucide-react";
-import RentalTermsPanel from "pages/rental-checkout/components/RentalTermsPanel";
 
 const CurrentRentalCard = ({ rental, onRenew }) => {
   const navigate = useNavigate();
