@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
 import Icon from "../AppIcon";
-import Button from "./Button";
 
 const Carousel = ({ children, className = "" }) => {
   const scrollContainerRef = useRef(null);
@@ -39,15 +38,13 @@ const Carousel = ({ children, className = "" }) => {
       {}
       {showLeftArrow && (
         <div className="absolute left-0 top-1/2 -translate-y-1/2 z-10 -ml-4">
-          <Button
-            variant="default"
-            size="icon"
-            className="rounded-full shadow-lg bg-background border border-border text-foreground hover:bg-muted"
+          <button
+            className="inline-flex items-center justify-center h-10 w-10 rounded-full shadow-lg bg-background border border-border text-foreground hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             onClick={() => scroll("left")}
             aria-label="Scroll left"
           >
             <Icon name="ChevronLeft" size={24} />
-          </Button>
+          </button>
         </div>
       )}
 
@@ -74,15 +71,13 @@ const Carousel = ({ children, className = "" }) => {
       {}
       {showRightArrow && (
         <div className="absolute right-0 top-1/2 -translate-y-1/2 z-10 -mr-4">
-          <Button
-            variant="default"
-            size="icon"
-            className="rounded-full shadow-lg bg-background border border-border text-foreground hover:bg-muted"
+          <button
+            className="inline-flex items-center justify-center h-10 w-10 rounded-full shadow-lg bg-background border border-border text-foreground hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             onClick={() => scroll("right")}
             aria-label="Scroll right"
           >
             <Icon name="ChevronRight" size={24} />
-          </Button>
+          </button>
         </div>
       )}
     </div>

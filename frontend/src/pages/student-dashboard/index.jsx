@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet";
 import { Search, BookOpen, Bell, ArrowRight } from "lucide-react";
 import Header from "../../components/ui/Header";
 import CurrentRentalCard from "./components/CurrentRentalCard";
@@ -57,7 +56,10 @@ const StudentDashboard = () => {
     setNotifications(notifications?.filter((n) => n?.id !== notificationId));
   };*/
 
-  const expired_books_count = rentals.filter((x) => new Date(x.berles_vege).getTime() < Date.now() && x.visszahozva == false).length;
+  const expired_books_count = rentals.filter(
+    (x) =>
+      new Date(x.berles_vege).getTime() < Date.now() && x.visszahozva == false,
+  ).length;
 
   const handleSearch = (e) => {
     e?.preventDefault();
@@ -78,13 +80,6 @@ const StudentDashboard = () => {
 
   return (
     <>
-      <Helmet>
-        <title>A saját irányítópultom - eKönyvtár</title>
-        <meta
-          name="description"
-          content="Manage your library rentals, view reading history, and discover new books on your student dashboard"
-        />
-      </Helmet>
       <div className="min-h-screen bg-background">
         <Header />
 
@@ -98,8 +93,6 @@ const StudentDashboard = () => {
                 Itt található a kölcsönzési aktivitásod és volt bérléseid.
               </p>
             </div>
-
-
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
               <div className="lg:col-span-2 space-y-6">
@@ -215,7 +208,7 @@ const StudentDashboard = () => {
                       icon="AlertCircle"
                       iconColor="bg-error/10"
                       badge="Teendő"
-                      onClick={() => { }}
+                      onClick={() => {}}
                     />
                     <QuickAccessWidget
                       title="Elolvasott Könyvek"
@@ -224,7 +217,7 @@ const StudentDashboard = () => {
                       icon="BookCheck"
                       iconColor="bg-primary/10"
                       badge=""
-                      onClick={() => { }}
+                      onClick={() => {}}
                     />
                   </div>
                 </section>

@@ -6,13 +6,6 @@ module.exports = {
     './src/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    container: {
-      center: true,
-      padding: '2rem',
-      screens: {
-        '2xl': '1400px',
-      },
-    },
     extend: {
       colors: {
         border: 'var(--color-border)', 
@@ -61,46 +54,7 @@ module.exports = {
           foreground: 'var(--color-error-foreground)', 
         },
       },
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
-      },
-      fontFamily: {
-        sans: ['Source Sans 3', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
-        heading: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
-        mono: ['JetBrains Mono', 'Courier New', 'monospace'],
-      },
-      boxShadow: {
-        'card': '0 1px 3px rgba(0, 0, 0, 0.1)',
-        'card-hover': '0 4px 6px rgba(0, 0, 0, 0.1)',
-        'overlay': '0 10px 25px rgba(0, 0, 0, 0.15)',
-      },
-      transitionDuration: {
-        '200': '200ms',
-        '300': '300ms',
-      },
-      transitionTimingFunction: {
-        'ease-out': 'cubic-bezier(0, 0, 0.2, 1)',
-      },
-      keyframes: {
-        'fade-in': {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
-        'slide-in': {
-          '0%': { transform: 'translateY(-10px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
-      },
-      animation: {
-        'fade-in': 'fade-in 200ms ease-out',
-        'slide-in': 'slide-in 300ms ease-out',
-      },
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
-  ],
+  plugins: [],
 }

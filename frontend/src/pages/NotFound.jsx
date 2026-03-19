@@ -1,12 +1,12 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Home } from 'lucide-react';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft, Home } from "lucide-react";
 
 const NotFound = () => {
   const navigate = useNavigate();
 
   const handleGoHome = () => {
-    navigate('/');
+    navigate("/");
   };
 
   return (
@@ -18,7 +18,9 @@ const NotFound = () => {
           </div>
         </div>
 
-        <h2 className="text-2xl font-medium text-onBackground mb-2">Az oldal nem található</h2>
+        <h2 className="text-2xl font-medium text-onBackground mb-2">
+          Az oldal nem található
+        </h2>
         <p className="text-onBackground/70 mb-8">
           A keresett oldal nem létezik. Segítünk visszatalálni!
         </p>

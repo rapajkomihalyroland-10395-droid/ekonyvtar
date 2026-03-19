@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet";
 import Header from "../../components/ui/Header";
 import {
   ShoppingCart,
@@ -130,13 +129,6 @@ const RentalCheckout = () => {
   if (selectedBooks?.length === 0) {
     return (
       <>
-        <Helmet>
-          <title>Kölcsönzés lezárása - eKönyvtár</title>
-          <meta
-            name="description"
-            content="Complete your book rental checkout process"
-          />
-        </Helmet>
         <Header />
         <div className="min-h-screen bg-background pt-16">
           <div className="max-w-4xl mx-auto px-4 py-12 text-center">
@@ -149,7 +141,8 @@ const RentalCheckout = () => {
                 A kosár üres
               </h1>
               <p className="text-muted-foreground mb-6">
-                Tegyen néhány könyvet a kosárba, hogy folytathassa a fizetési folyamatot
+                Tegyen néhány könyvet a kosárba, hogy folytathassa a fizetési
+                folyamatot
               </p>
               <button
                 onClick={handleContinueShopping}
@@ -166,20 +159,11 @@ const RentalCheckout = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Kölcsönzés lezárása - eKönyvtár</title>
-        <meta
-          name="description"
-          content="Complete your book rental checkout process with clear terms and confirmation"
-        />
-      </Helmet>
       <Header />
       <div className="min-h-screen bg-background pt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="mb-6">
-            <h1 className="text-3xl font-bold text-foreground mb-2">
-              Pénztár
-            </h1>
+            <h1 className="text-3xl font-bold text-foreground mb-2">Pénztár</h1>
             <p className="text-muted-foreground">
               Ellenőrizze a kiválasztott termékeket, és fejezze be a bérlést
             </p>
@@ -316,8 +300,8 @@ const RentalCheckout = () => {
               A bérlés megerősítve!
             </h2>
             <p className="text-muted-foreground mb-4">
-              A könyveit sikeresen kikölcsönözte. Hamarosan
-              megerősítő e-mailt fog kapni.
+              A könyveit sikeresen kikölcsönözte. Hamarosan megerősítő e-mailt
+              fog kapni.
             </p>
             <p className="text-sm text-muted-foreground">
               Átirányítás a vezérlőpultra...
