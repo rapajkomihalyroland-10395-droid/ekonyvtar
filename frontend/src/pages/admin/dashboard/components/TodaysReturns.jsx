@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Clock, AlertCircle, CheckCircle } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Clock, CheckCircle } from "lucide-react";
 import api from "../../../../axios_url/baseURL";
-import { getAuthHeader } from "../../../../store/authStore";
 
 const TodaysReturns = () => {
   const [returns, setReturns] = useState([]);
@@ -9,11 +8,9 @@ const TodaysReturns = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchReturns = async () => {
+    const fetchTodaysReturns = async () => {
       try {
-        const response = await api.get("/todays-returns", {
-          headers: getAuthHeader(),
-        });
+        const response = await api.get("/todays-returns");
         setReturns(response.data);
       } catch (err) {
         console.error("Error fetching returns:", err);
@@ -23,7 +20,7 @@ const TodaysReturns = () => {
       }
     };
 
-    fetchReturns();
+    fetchTodaysReturns();
   }, []);
 
   if (loading) {

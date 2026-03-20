@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { X, Save, Shield } from "lucide-react";
 import api from "../../../../axios_url/baseURL.js";
-import { getAuthHeader } from "store/authStore";
 
 const AddUserTypeModal = ({ isOpen, onClose, initialData = null }) => {
   if (!isOpen) return null;
@@ -36,20 +35,16 @@ const AddUserTypeModal = ({ isOpen, onClose, initialData = null }) => {
     e.preventDefault();
     try {
       if (initialData) {
-        await api.put(`/user-types/${initialData.id}`, formData, {
-          headers: getAuthHeader(),
-        });
+        await api.put(`/user-types/${initialData.id}`, payload);
       } else {
-        await api.post("/user-types", formData, {
-          headers: getAuthHeader(),
-        });
+        await api.post("/user-types", payload);
       }
       onClose();
     } catch (error) {
       console.error("Hiba a mentés során:", error);
       alert(
         "Hiba történt a mentés során: " +
-        (error.response?.data?.message || error.message),
+          (error.response?.data?.message || error.message),
       );
     }
   };
@@ -89,7 +84,9 @@ const AddUserTypeModal = ({ isOpen, onClose, initialData = null }) => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground">Leírás</label>
+            <label className="text-sm font-medium text-foreground">
+              Leírás
+            </label>
             <textarea
               name="leiras"
               value={formData.leiras}

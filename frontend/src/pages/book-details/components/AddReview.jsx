@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import api from "../../../axios_url/baseURL";
-import { getAuthHeader, GetUser } from "../../../store/authStore";
+import { useAuth } from "../../../store/AuthContext";
 
 const AddReview = ({ bookId, onReviewAdded }) => {
   const [rating, setRating] = useState(0);
@@ -9,43 +9,35 @@ const AddReview = ({ bookId, onReviewAdded }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const { user } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
-    setSuccess(false);
 
     if (rating === 0) {
-      setError("Kérlek válassz egy értékelést!");
+      setError("Kérjük, adjon meg értékelést (1-5 csillag).");
       return;
     }
 
     if (!comment.trim()) {
-      setError("Kérlek írj egy rövid véleményt!");
+      setError("Kérjük, írjon szöveges véleményt is.");
       return;
     }
 
-    const user = GetUser();
     if (!user) {
-      setError("A vélemény írásához be kell jelentkezned!");
+      setError("A vélemény írásához be kell jelentkeznie.");
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      const response = await api.post(
-        "/write-opinion",
-        {
-          book_id: bookId,
-          user_id: user.id,
-          stars: rating,
-          opinion: comment,
-        },
-        {
-          headers: getAuthHeader(),
-        }
-      );
+      const response = await api.post("/write-opinion", {
+        book_id: bookId,
+        user_id: user.id,
+        stars: rating,
+        opinion: comment,
+      });
 
       setSuccess(true);
       setComment("");
@@ -57,7 +49,7 @@ const AddReview = ({ bookId, onReviewAdded }) => {
     } catch (err) {
       console.error("Hiba a vélemény küldésekor:", err);
       setError(
-        err.response?.data?.message || "Hiba történt a vélemény küldésekor."
+        err.response?.data?.message || "Hiba történt a vélemény küldésekor.",
       );
     } finally {
       setIsSubmitting(false);
@@ -103,7 +95,9 @@ const AddReview = ({ bookId, onReviewAdded }) => {
                   height="24"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke={star <= (hoverRating || rating) ? "#F59E0B" : "#D1D5DB"}
+                  stroke={
+                    star <= (hoverRating || rating) ? "#F59E0B" : "#D1D5DB"
+                  }
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"

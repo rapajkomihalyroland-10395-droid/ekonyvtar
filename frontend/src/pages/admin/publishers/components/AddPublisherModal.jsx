@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { X, Save, Building2 } from "lucide-react";
 import api from "../../../../axios_url/baseURL.js";
-import { getAuthHeader } from "store/authStore";
 
 const AddPublisherModal = ({ isOpen, onClose, initialData = null }) => {
   if (!isOpen) return null;
@@ -32,20 +31,16 @@ const AddPublisherModal = ({ isOpen, onClose, initialData = null }) => {
     e.preventDefault();
     try {
       if (initialData) {
-        await api.put(`/publishers/${initialData.id}`, formData, {
-          headers: getAuthHeader(),
-        });
+        await api.put(`/publishers/${initialData.id}`, formData);
       } else {
-        await api.post("/publishers", formData, {
-          headers: getAuthHeader(),
-        });
+        await api.post("/publishers", formData);
       }
       onClose();
     } catch (error) {
       console.error("Hiba a mentés során:", error);
       alert(
         "Hiba történt a mentés során: " +
-        (error.response?.data?.message || error.message),
+          (error.response?.data?.message || error.message),
       );
     }
   };

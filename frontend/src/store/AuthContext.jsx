@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import api from "../axios_url/baseURL.js";
+import api, { setAxiosToken } from "../axios_url/baseURL.js";
 
 const Auth = createContext();
 
@@ -11,7 +11,9 @@ const AuthContext = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
 
-  let isCancelled = false;
+  useEffect(() => {
+    setAxiosToken(access_token);
+  }, [access_token]);
 
   const initAuth = async () => {
     setAuthLoading(true);
@@ -23,29 +25,22 @@ const AuthContext = () => {
       const nextAccessToken = response?.data?.accessToken ?? null;
       const nextUser = response?.data?.user ?? null;
 
-      if (isCancelled) return;
-
       setAccessToken(nextAccessToken);
       setUser(nextUser);
       setIsAdmin(Boolean(nextUser?.admin));
       setLogin(Boolean(nextUser));
     } catch (err) {
-      if (isCancelled) return;
       setAccessToken(null);
       setUser(null);
       setIsAdmin(false);
       setLogin(false);
     } finally {
-      if (isCancelled) return;
       setAuthLoading(false);
     }
   };
 
   useEffect(() => {
     initAuth();
-    return () => {
-      isCancelled = true;
-    };
   }, []);
 
   useEffect(() => {

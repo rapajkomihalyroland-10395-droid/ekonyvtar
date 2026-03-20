@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { X, Save, Tags } from "lucide-react";
+import { X, Save, Tag } from "lucide-react";
 import api from "../../../../axios_url/baseURL.js";
-import { getAuthHeader } from "store/authStore";
 
 const AddCategoryModal = ({ isOpen, onClose, initialData = null }) => {
   if (!isOpen) return null;
@@ -30,13 +29,9 @@ const AddCategoryModal = ({ isOpen, onClose, initialData = null }) => {
     e.preventDefault();
     try {
       if (initialData) {
-        await api.put(`/categories/${initialData.id}`, formData, {
-          headers: getAuthHeader(),
-        });
+        await api.put(`/categories/${initialData.id}`, formData);
       } else {
-        await api.post("/categories", formData, {
-          headers: getAuthHeader(),
-        });
+        await api.post("/categories", formData);
       }
       onClose();
     } catch (error) {

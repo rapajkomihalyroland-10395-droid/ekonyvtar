@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Icon from '../AppIcon';
-import { GetIsAdmin } from '../../store/authStore.js';
-
+import { useAuth } from '../../store/AuthContext.jsx';
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const isAdmin = GetIsAdmin();
+  const { isAdmin } = useAuth();
 
   const navigationItems = [
     { label: 'Főoldal', path: '/', icon: 'Home' },

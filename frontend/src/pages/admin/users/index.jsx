@@ -3,7 +3,6 @@ import { UserPlus } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 import UserListTable from "./components/UserListTable";
 import AddUserModal from "./components/AddUserModal";
-import { getAuthHeader } from "store/authStore";
 import api from "../../../axios_url/baseURL.js";
 
 const AdminUsers = () => {
@@ -19,16 +18,16 @@ const AdminUsers = () => {
 
   useEffect(() => {
     const GetUsers = async () => {
-      const response = await api.get("/users", { headers: getAuthHeader() });
+      try {
+        const response = await api.get("/users");
 
-      if (response.data) setUsers(response.data);
+        if (response.data) setUsers(response.data);
+      } catch (error) {
+        console.error("Hiba a felhasználók betöltésekor:", error);
+      }
     };
 
-    try {
-      GetUsers();
-    } catch (error) {
-      console.log(error);
-    }
+    GetUsers();
   }, []);
 
   return (
@@ -50,8 +49,6 @@ const AdminUsers = () => {
           Új felhasználó
         </button>
       </div>
-
-      
 
       <UserListTable users={users} isLoading={false} />
 

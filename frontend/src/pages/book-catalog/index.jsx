@@ -6,7 +6,6 @@ import SearchBar from "./components/SearchBar";
 import BookGrid from "./components/BookGrid";
 import RentalModal from "./components/RentalModal";
 import api from "../../axios_url/baseURL.js";
-import { getAuthHeader } from "../../store/authStore.js";
 
 const BookCatalog = () => {
   const navigate = useNavigate();
@@ -36,9 +35,7 @@ const BookCatalog = () => {
       setLoading(true);
 
       try {
-        const response = await api.get("/user-get-books", {
-          headers: getAuthHeader(),
-        });
+        const response = await api.get("/user-get-books");
 
         const books = (response.data || []).map((b) => {
           const popularity = Number(b.elofordulas ?? 0);

@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Save, BookOpen, History } from "lucide-react";
 import api from "../../../axios_url/baseURL.js";
-import { getAuthHeader } from "store/authStore.js";
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -15,35 +14,25 @@ const BookDetails = () => {
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    const GetBook = async () => {
+    const GetBookAndLoans = async () => {
       try {
-        const response = await api.get(`/get-a-book/${Number(id)}`, {
-          headers: getAuthHeader(),
-        });
+        const [bookRes, loansRes] = await Promise.all([
+          api.get(`/get-a-book/${id}`),
+          api.get(`/get-a-loan/${id}`),
+        ]);
 
-        if (response.data) setBook(response.data);
+        if (bookRes.data) {
+          setBook(bookRes.data);
+          setFormData(bookRes.data);
+        }
+        if (loansRes.data) {
+          setLoans(loansRes.data);
+        }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
-
-    GetBook();
-  }, [id]);
-
-  useEffect(() => {
-    const GetLoans = async () => {
-      try {
-        const response = await api.get(`/get-a-loan/${id}`, {
-          headers: getAuthHeader(),
-        });
-
-        if (response.data) setLoans(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    GetLoans();
+    GetBookAndLoans();
   }, [id]);
 
   const formatDate = (dateString) => {
@@ -79,12 +68,7 @@ const BookDetails = () => {
         formData.append(key, changedInput[key]);
       });
 
-      const result = await api.patch(`/update-a-book/${id}`, formData, {
-        headers: {
-          ...getAuthHeader(),
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const result = await api.patch(`/update-a-book/${id}`, formData);
 
       console.log(result.data.message, result.data.result);
       setBook((prev) => ({ ...prev, ...result.data.result }));

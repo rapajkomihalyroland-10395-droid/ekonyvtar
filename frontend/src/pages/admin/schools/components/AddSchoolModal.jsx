@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { X, Save, School } from "lucide-react";
 import api from "../../../../axios_url/baseURL.js";
-import { getAuthHeader } from "store/authStore";
 
 const AddSchoolModal = ({ isOpen, onClose, initialData = null }) => {
   if (!isOpen) return null;
@@ -30,20 +29,16 @@ const AddSchoolModal = ({ isOpen, onClose, initialData = null }) => {
     e.preventDefault();
     try {
       if (initialData) {
-        await api.put(`/schools/${initialData.id}`, formData, {
-          headers: getAuthHeader(),
-        });
+        await api.put(`/schools/${initialData.id}`, formData);
       } else {
-        await api.post("/schools", formData, {
-          headers: getAuthHeader(),
-        });
+        await api.post("/schools", formData);
       }
       onClose();
     } catch (error) {
       console.error("Hiba a mentés során:", error);
       alert(
         "Hiba történt a mentés során: " +
-        (error.response?.data?.message || error.message),
+          (error.response?.data?.message || error.message),
       );
     }
   };

@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../axios_url/baseURL.js";
-import { getAuthHeader } from "store/authStore";
 
 const CreateLoan = () => {
   const navigate = useNavigate();
@@ -32,15 +31,9 @@ const CreateLoan = () => {
       }
 
       try {
-        const response = await api.post(
-          "/search-name-by-character",
-          {
-            name: searchUser,
-          },
-          {
-            headers: getAuthHeader(),
-          },
-        );
+        const response = await api.post("/search-name-by-character", {
+          name: searchUser,
+        });
 
         setUsers(response.data);
       } catch (error) {
@@ -59,15 +52,9 @@ const CreateLoan = () => {
       }
 
       try {
-        const response = await api.post(
-          "/search-book-by-character",
-          {
-            book: searchBook,
-          },
-          {
-            headers: getAuthHeader(),
-          },
-        );
+        const response = await api.post("/search-book-by-character", {
+          book: searchBook,
+        });
 
         setBooks(response.data);
       } catch (error) {
@@ -82,17 +69,11 @@ const CreateLoan = () => {
 
   const handleCreateLoan = async () => {
     try {
-      await api.post(
-        "/book-loan",
-        {
-          user_id: selectedUser.id,
-          book_id: selectedBook.id,
-          end_loan: dueDate,
-        },
-        {
-          headers: getAuthHeader(),
-        },
-      );
+      await api.post("/book-loan", {
+        user_id: selectedUser.id,
+        book_id: selectedBook.id,
+        end_loan: dueDate,
+      });
       navigate("/admin");
     } catch (error) {
       console.error("Loan creation failed:", error);

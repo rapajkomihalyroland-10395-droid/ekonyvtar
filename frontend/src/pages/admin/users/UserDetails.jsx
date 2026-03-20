@@ -2,7 +2,6 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Save, User, History, Mail, Send } from "lucide-react";
 import StatusBadge from "../components/StatusBadge.jsx";
-import { getAuthHeader } from "store/authStore.js";
 import api from "../../../axios_url/baseURL.js";
 
 const UserDetails = () => {
@@ -18,8 +17,8 @@ const UserDetails = () => {
   useEffect(() => {
     const GetUserAndLoans = async () => {
       const [user, loan] = await Promise.all([
-        api.get(`/users/${id}`, { headers: getAuthHeader() }),
-        api.get(`/get-a-loan/${id}`, { headers: getAuthHeader() }),
+        api.get(`/users/${id}`),
+        api.get(`/get-a-loan/${id}`),
       ]);
 
       if (!user || !loan) console.log("Hiba!");

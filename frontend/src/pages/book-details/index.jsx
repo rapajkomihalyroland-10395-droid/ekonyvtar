@@ -7,7 +7,6 @@ import ActionPanel from "./components/ActionPanel";
 import SynopsisTab from "./components/SynopsisTab";
 import ReviewsTab from "./components/ReviewsTab";
 import api from "../../axios_url/baseURL.js";
-import { getAuthHeader } from "../../store/authStore.js";
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -18,11 +17,9 @@ const BookDetails = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchBookDetails = async () => {
+    const GetBooksAndRelatedDetails = async () => {
       try {
-        const response = await api.get(`/get-book/${id}`, {
-          headers: getAuthHeader(),
-        });
+        const response = await api.get(`/get-book/${id}`);
         const data = response.data;
 
         setBookData(data);

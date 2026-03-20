@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Plus, Eye, Trash2 } from "lucide-react";
 import AddUserTypeModal from "./components/AddUserTypeModal";
 import api from "../../../axios_url/baseURL.js";
-import { getAuthHeader } from "store/authStore";
 
 const AdminUserTypes = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -15,9 +14,7 @@ const AdminUserTypes = () => {
 
   const fetchUserTypes = async () => {
     try {
-      const response = await api.get("/user-types", {
-        headers: getAuthHeader(),
-      });
+      const response = await api.get("/user-types");
       setUserTypes(response.data);
     } catch (error) {
       console.error("Hiba a felhasználó típusok betöltésekor:", error);
@@ -25,11 +22,9 @@ const AdminUserTypes = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Biztosan archiválni/törölni szeretné?")) {
+    if (window.confirm("Biztosan törölni szeretné ezt a felhasználó típust?")) {
       try {
-        await api.delete(`/user-types/${id}`, {
-          headers: getAuthHeader(),
-        });
+        await api.delete(`/user-types/${id}`);
         fetchUserTypes();
       } catch (error) {
         if (error.response && error.response.status === 409) {
@@ -98,11 +93,15 @@ const AdminUserTypes = () => {
                   key={item.id}
                   className="transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
                 >
-                  <td className="p-4 align-middle text-foreground">{item.id}</td>
+                  <td className="p-4 align-middle text-foreground">
+                    {item.id}
+                  </td>
                   <td className="p-4 align-middle font-medium text-foreground">
                     {item.megnevezes}
                   </td>
-                  <td className="p-4 align-middle text-muted-foreground">{item.leiras}</td>
+                  <td className="p-4 align-middle text-muted-foreground">
+                    {item.leiras}
+                  </td>
                   <td className="p-4 align-middle text-right">
                     <div className="flex justify-end gap-2">
                       <button

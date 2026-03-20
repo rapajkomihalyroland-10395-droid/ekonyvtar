@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, BookOpen, } from "lucide-react";
+import { Search, BookOpen } from "lucide-react";
 import Header from "../../components/ui/Header";
 import CurrentRentalCard from "./components/CurrentRentalCard";
 import RentalHistoryItem from "./components/RentalHistoryItem";
 import QuickAccessWidget from "./components/QuickAccessWidget";
-import { GetUser, getAuthHeader } from "store/authStore";
+import { useAuth } from "../../store/AuthContext";
 import api from "../../axios_url/baseURL.js";
 
 const StudentDashboard = () => {
@@ -14,16 +14,14 @@ const StudentDashboard = () => {
   const [showAllActiveHistory, setShowAllActiveHistory] = useState(false);
   /*const [showAllNotifications, setShowAllNotifications] = useState(false);*/
   /*const [notifications, setNotifications] = useState([]);*/
-  const user = GetUser();
+  const { user } = useAuth();
 
   const [rentals, setRentals] = useState([]);
 
   useEffect(() => {
     const GetRentals = async () => {
       try {
-        const response = await api.get(`/get-a-rental/${user.id}`, {
-          headers: getAuthHeader(),
-        });
+        const response = await api.get(`/get-a-rental/${user.id}`);
 
         setRentals(response.data);
       } catch (error) {
@@ -207,7 +205,7 @@ const StudentDashboard = () => {
                       icon="AlertCircle"
                       iconColor="bg-error/10"
                       badge="Teendő"
-                      onClick={() => { }}
+                      onClick={() => {}}
                     />
                     <QuickAccessWidget
                       title="Elolvasott Könyvek"
@@ -216,7 +214,7 @@ const StudentDashboard = () => {
                       icon="BookCheck"
                       iconColor="bg-primary/10"
                       badge=""
-                      onClick={() => { }}
+                      onClick={() => {}}
                     />
                   </div>
                 </section>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { TrendingUp, BookOpen, AlertCircle } from "lucide-react";
 import api from "../../../../axios_url/baseURL";
-import { getAuthHeader } from "../../../../store/authStore";
 
 const TopBookByRental = () => {
   const [topBooks, setTopBooks] = useState([]);
@@ -11,9 +10,7 @@ const TopBookByRental = () => {
   useEffect(() => {
     const fetchTopBooks = async () => {
       try {
-        const response = await api.get("/top-books-by-rental", {
-          headers: getAuthHeader(),
-        });
+        const response = await api.get("/top-books-by-rental");
         setTopBooks(response.data);
       } catch (err) {
         console.error("Error fetching top books:", err);
@@ -91,7 +88,9 @@ const TopBookByRental = () => {
                 <span className="block font-bold text-foreground">
                   {book.elofordulas}
                 </span>
-                <span className="text-xs text-muted-foreground">kölcsönzés</span>
+                <span className="text-xs text-muted-foreground">
+                  kölcsönzés
+                </span>
               </div>
             </div>
           ))}

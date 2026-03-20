@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Plus, Eye, Trash2 } from "lucide-react";
 import AddSchoolModal from "./components/AddSchoolModal";
 import api from "../../../axios_url/baseURL.js";
-import { getAuthHeader } from "store/authStore";
 
 const AdminSchools = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -15,9 +14,7 @@ const AdminSchools = () => {
 
   const fetchSchools = async () => {
     try {
-      const response = await api.get("/schools", {
-        headers: getAuthHeader(),
-      });
+      const response = await api.get("/schools");
       setSchools(response.data);
     } catch (error) {
       console.error("Hiba az iskolák betöltésekor:", error);
@@ -27,9 +24,7 @@ const AdminSchools = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Biztosan archiválni/törölni szeretné?")) {
       try {
-        await api.delete(`/schools/${id}`, {
-          headers: getAuthHeader(),
-        });
+        await api.delete(`/schools/${id}`);
         fetchSchools();
       } catch (error) {
         if (error.response && error.response.status === 409) {
@@ -57,7 +52,9 @@ const AdminSchools = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Iskolák kezelése</h1>
+          <h1 className="text-2xl font-bold text-foreground">
+            Iskolák kezelése
+          </h1>
           <p className="text-muted-foreground">Iskolák listázása és kezelése</p>
         </div>
         <button
@@ -91,8 +88,12 @@ const AdminSchools = () => {
                   key={item.id}
                   className="transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
                 >
-                  <td className="p-4 align-middle text-foreground">{item.id}</td>
-                  <td className="p-4 align-middle font-medium text-foreground">{item.neve}</td>
+                  <td className="p-4 align-middle text-foreground">
+                    {item.id}
+                  </td>
+                  <td className="p-4 align-middle font-medium text-foreground">
+                    {item.neve}
+                  </td>
                   <td className="p-4 align-middle text-right">
                     <div className="flex justify-end gap-2">
                       <button

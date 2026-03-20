@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { X, Save, GraduationCap } from "lucide-react";
+import { X, Save, Users } from "lucide-react";
 import api from "../../../../axios_url/baseURL.js";
-import { getAuthHeader } from "store/authStore";
 
 const AddClassModal = ({ isOpen, onClose, initialData = null }) => {
   if (!isOpen) return null;
@@ -17,9 +16,7 @@ const AddClassModal = ({ isOpen, onClose, initialData = null }) => {
   useEffect(() => {
     const fetchSchools = async () => {
       try {
-        const response = await api.get("/schools", {
-          headers: getAuthHeader(),
-        });
+        const response = await api.get("/schools");
         setSchools(response.data);
       } catch (error) {
         console.error("Hiba az iskolák betöltésekor:", error);
@@ -51,13 +48,9 @@ const AddClassModal = ({ isOpen, onClose, initialData = null }) => {
     e.preventDefault();
     try {
       if (initialData) {
-        await api.put(`/classes/${initialData.id}`, formData, {
-          headers: getAuthHeader(),
-        });
+        await api.put(`/classes/${initialData.id}`, payload);
       } else {
-        await api.post("/classes", formData, {
-          headers: getAuthHeader(),
-        });
+        await api.post("/classes", payload);
       }
       onClose();
     } catch (error) {

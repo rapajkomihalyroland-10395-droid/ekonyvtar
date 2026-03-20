@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 
 import api from "../../../../axios_url/baseURL.js";
-import { getAuthHeader } from "store/authStore";
 
 const AddUserModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
@@ -49,10 +48,10 @@ const AddUserModal = ({ isOpen, onClose }) => {
   useEffect(() => {
     const Get_Class_School_UserTypes = async () => {
       try {
-        const [classes, schools, userTypes] = await Promise.all([
-          api.get("/get-classes", { headers: getAuthHeader() }),
-          api.get("/get-schools", { headers: getAuthHeader() }),
-          api.get("/get-user-types", { headers: getAuthHeader() }),
+        const [classesRes, schoolsRes, typesRes] = await Promise.all([
+          api.get("/get-classes"),
+          api.get("/get-schools"),
+          api.get("/get-user-types"),
         ]);
 
         if (!classes || !schools || !userTypes) console.log("Hiba");
@@ -166,7 +165,9 @@ const AddUserModal = ({ isOpen, onClose }) => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground">Lakcím</label>
+            <label className="text-sm font-medium text-foreground">
+              Lakcím
+            </label>
             <div className="relative">
               <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input

@@ -4,7 +4,6 @@ import { useSearchParams } from "react-router-dom";
 import BookListTable from "./components/BookListTable";
 import AddBookModal from "./components/AddBookModal";
 import api from "../../../axios_url/baseURL.js";
-import { getAuthHeader } from "store/authStore";
 
 const AdminBooks = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,19 +15,20 @@ const AdminBooks = () => {
 
   useEffect(() => {
     const GetBooks = async () => {
-      const response = await api.get("/get-all-books", {
-        headers: getAuthHeader(),
-      });
+      try {
+        const response = await api.get("/get-all-books");
 
-      if (response.data != [] || response.data != null) setBooks(response.data);
+        if (response.data != [] || response.data != null)
+          setBooks(response.data);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
-    try {
+    if (activeTab === "all") {
       GetBooks();
-    } catch (error) {
-      console.log(error);
     }
-  }, []);
+  }, [activeTab]);
 
   return (
     <div className="space-y-6">
@@ -47,8 +47,6 @@ const AdminBooks = () => {
           Új könyv
         </button>
       </div>
-
-      
 
       <BookListTable books={books} isLoading={false} />
 

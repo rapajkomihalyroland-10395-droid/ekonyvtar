@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import api from "../../../axios_url/baseURL.js";
-import { getAuthHeader } from "../../../store/authStore.js";
 
 const FilterPanel = ({
   filters,
@@ -17,9 +16,7 @@ const FilterPanel = ({
 
     const fetchCategories = async () => {
       try {
-        const response = await api.get("/get-all-categories", {
-          headers: getAuthHeader(),
-        });
+        const response = await api.get("/get-all-categories");
 
         if (!active) return;
         setApiCategories(Array.isArray(response.data) ? response.data : []);

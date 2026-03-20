@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../axios_url/baseURL.js";
-import { GetUser, getAuthHeader } from "store/authStore";
+import { useAuth } from "../../../store/AuthContext";
 
 const ActionPanel = ({ book }) => {
   const navigate = useNavigate();
   const [rentalDuration, setRentalDuration] = useState("14");
   const [IsSentTheRequest, setIsSentTheRequest] = useState(false);
   const [isTheRequestinProccess, setisTheRequestinProccess] = useState(false);
-  const user = GetUser();
+  const { user } = useAuth();
 
   const rentalOptions = [
     { value: "7", label: "7 days" },
@@ -35,16 +35,10 @@ const ActionPanel = ({ book }) => {
     setIsSentTheRequest(!IsSentTheRequest);
 
     try {
-      const response = await api.post(
-        "/loan-signal",
-        {
-          book_id: book.id,
-          user_id: user.id,
-        },
-        {
-          headers: getAuthHeader(),
-        }
-      );
+      const response = await api.post("/loan-signal", {
+        book_id: book.id,
+        user_id: user.id,
+      });
     } catch (error) {
       if (error.response && error.response.status === 409) {
         setisTheRequestinProccess(true);
@@ -132,8 +126,8 @@ const ActionPanel = ({ book }) => {
               isTheRequestinProccess
                 ? "bg-muted text-muted-foreground cursor-not-allowed border-border"
                 : IsSentTheRequest
-                ? "bg-background text-primary border-primary hover:bg-accent"
-                : "bg-background text-foreground border-border hover:bg-accent hover:text-accent-foreground"
+                  ? "bg-background text-primary border-primary hover:bg-accent"
+                  : "bg-background text-foreground border-border hover:bg-accent hover:text-accent-foreground"
             }`}
           >
             <svg
@@ -154,8 +148,8 @@ const ActionPanel = ({ book }) => {
             {isTheRequestinProccess
               ? "Ez a könyv már elküldésre került"
               : IsSentTheRequest
-              ? "Kérelem elküldve"
-              : "Könyv kérelem"}
+                ? "Kérelem elküldve"
+                : "Könyv kérelem"}
           </button>
         </div>
       )}
