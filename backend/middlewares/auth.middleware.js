@@ -20,14 +20,14 @@ const verifyAccessToken = async (token) => {
     return jwt.verify(cleanToken, process.env.ACCESS_TOKEN_SECRET);
   } catch (err) {
     console.error("Access token verification error:", err.message);
-    throw err; // Dobd tovább a hibát, hogy a hívó kezelhesse
+    throw err; 
   }
 };
 
 export const getAccessTokenExp = async (accessToken) => {
   try {
     const decoded = await verifyAccessToken(accessToken);
-    return new Date(decoded.exp * 1000); // exp másodpercben van, át kell váltani ms-ra
+    return new Date(decoded.exp * 1000); 
   } catch (error) {
     console.error("getAccessTokenExp error:", error.message);
     throw error;

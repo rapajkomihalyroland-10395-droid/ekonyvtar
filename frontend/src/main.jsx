@@ -26,6 +26,7 @@ import AdminClasses from "./pages/admin/classes/index.jsx";
 import CreateLoan from "./pages/admin/loans/CreateLoan.jsx";
 
 import AuthContext from "store/AuthContext";
+import RouterGuard from "security/RouterGuard";
 
 const RouteErrorElement = () => {
   return <NotFound />;
@@ -36,73 +37,45 @@ const router = createBrowserRouter([
     element: <AuthContext />,
     children: [
       {
-        path: "/",
-        element: <MainPage />,
-        errorElement: <RouteErrorElement />,
-      },
-      {
-        path: "/book-catalog",
-        element: <BookCatalog />,
-      },
-      {
-        path: "/book-details/:id",
-        element: <BookDetails />,
-      },
-      {
-        path: "/rental-checkout",
-        element: <RentalCheckout />,
-      },
-      {
-        path: "/student-dashboard",
-        element: <StudentDashboard />,
-      },
-      {
-        path: "/admin",
-        element: <AdminLayout />,
+        element: <RouterGuard />,
         children: [
           {
-            path: "",
-            element: <AdminDashboard />,
+            path: "/",
+            element: <MainPage />,
+            errorElement: <RouteErrorElement />,
           },
           {
-            path: "books",
-            element: <AdminBooks />,
+            path: "/book-catalog",
+            element: <BookCatalog />,
           },
           {
-            path: "books/:id",
-            element: <AdminBookDetails />,
+            path: "/book-details/:id",
+            element: <BookDetails />,
           },
           {
-            path: "users",
-            element: <AdminUsers />,
+            path: "/rental-checkout",
+            element: <RentalCheckout />,
           },
           {
-            path: "users/:id",
-            element: <AdminUserDetails />,
+            path: "/student-dashboard",
+            element: <StudentDashboard />,
           },
           {
-            path: "loans/new",
-            element: <CreateLoan />,
-          },
-          {
-            path: "user-types",
-            element: <AdminUserTypes />,
-          },
-          {
-            path: "schools",
-            element: <AdminSchools />,
-          },
-          {
-            path: "categories",
-            element: <AdminCategories />,
-          },
-          {
-            path: "publishers",
-            element: <AdminPublishers />,
-          },
-          {
-            path: "classes",
-            element: <AdminClasses />,
+            path: "/admin",
+            element: <AdminLayout />,
+            children: [
+              { index: true, element: <AdminDashboard /> },
+              { path: "books", element: <AdminBooks /> },
+              { path: "books/:id", element: <AdminBookDetails /> },
+              { path: "users", element: <AdminUsers /> },
+              { path: "users/:id", element: <AdminUserDetails /> },
+              { path: "loans/new", element: <CreateLoan /> },
+              { path: "user-types", element: <AdminUserTypes /> },
+              { path: "schools", element: <AdminSchools /> },
+              { path: "categories", element: <AdminCategories /> },
+              { path: "publishers", element: <AdminPublishers /> },
+              { path: "classes", element: <AdminClasses /> },
+            ],
           },
         ],
       },
@@ -117,7 +90,6 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-
 createRoot(document.getElementById("root")).render(
   <RouterProvider router={router} future={{ v7_startTransition: true }} />,
 );

@@ -8,6 +8,8 @@ const RouterGuard = ({ children }) => {
   if (authLoading) return null;
   if (!user) return <Navigate to="/login" replace />;
 
+  console.log(user)
+
   return children;
 };
 

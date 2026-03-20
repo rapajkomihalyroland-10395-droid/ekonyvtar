@@ -11,37 +11,37 @@ const AuthContext = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
 
+  let isCancelled = false;
+
+  const initAuth = async () => {
+    setAuthLoading(true);
+    try {
+      const response = await api.get("/token-details", {
+        withCredentials: true,
+      });
+
+      const nextAccessToken = response?.data?.accessToken ?? null;
+      const nextUser = response?.data?.user ?? null;
+
+      if (isCancelled) return;
+
+      setAccessToken(nextAccessToken);
+      setUser(nextUser);
+      setIsAdmin(Boolean(nextUser?.admin));
+      setLogin(Boolean(nextUser));
+    } catch (err) {
+      if (isCancelled) return;
+      setAccessToken(null);
+      setUser(null);
+      setIsAdmin(false);
+      setLogin(false);
+    } finally {
+      if (isCancelled) return;
+      setAuthLoading(false);
+    }
+  };
+
   useEffect(() => {
-    let isCancelled = false;
-
-    const initAuth = async () => {
-      setAuthLoading(true);
-      try {
-        const response = await api.get("/token-details", {
-          withCredentials: true,
-        });
-
-        const nextAccessToken = response?.data?.accessToken ?? null;
-        const nextUser = response?.data?.user ?? null;
-
-        if (isCancelled) return;
-
-        setAccessToken(nextAccessToken);
-        setUser(nextUser);
-        setIsAdmin(Boolean(nextUser?.admin));
-        setLogin(Boolean(nextUser));
-      } catch (err) {
-        if (isCancelled) return;
-        setAccessToken(null);
-        setUser(null);
-        setIsAdmin(false);
-        setLogin(false);
-      } finally {
-        if (isCancelled) return;
-        setAuthLoading(false);
-      }
-    };
-
     initAuth();
     return () => {
       isCancelled = true;

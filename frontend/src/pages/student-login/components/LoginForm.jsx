@@ -8,13 +8,9 @@ const LoginForm = () => {
   const navigate = useNavigate();
 
   const {setUser,
-        user,
         setAccessToken,
-        access_token,
-        setLogin,
-        login,
         setIsAdmin,
-        isAdmin} = useAuth();
+        } = useAuth();
 
 
   const deviceId = useRef(

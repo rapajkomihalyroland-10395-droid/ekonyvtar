@@ -10,17 +10,28 @@ export const GetAccessToken = async (req, res) => {
     const authHeader = req.headers.authorization; // Bearer token
     const refreshToken = req.cookies.refreshToken; // HttpOnly
 
+    /*
+    Feladat: 
+    1. Vizsgálni a refresh-tokent ez alapján eldönteni a access_token életét
+    2. A user-t visszaadni ami a payload
+     */
+
     let accessToken = null;
     let user;
 
     if (authHeader) {
       const token = authHeader.split(" ")[1];
 
+      console.log(token)
+
       if (token) {
         try {
           jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
           accessToken = token;
-        } catch {}
+          console.log(token)
+        } catch(err) {
+          console.log("routerguard.js\n", err.message)
+        }
       }
     }
 

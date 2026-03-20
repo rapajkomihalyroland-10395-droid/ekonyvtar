@@ -11,8 +11,6 @@ import {
 import {
   createRefreshToken,
   createAccessToken,
-  getAccessTokenExp,
-  isTokenExpired,
 } from "../../middlewares/auth.middleware.js";
 
 const prisma = new PrismaClient();
@@ -53,6 +51,7 @@ export const Login = async (req, res) => {
       const updatedDevice = await UpdateAttempts(device_id);
       if (updatedDevice.attempts_count >= LOGIN_MAX_ATTEMPTS)
         await LockDevice(device_id);
+
       return res.status(401).json({
         message: "Helytelen felhasználónév vagy jelszó",
         attempts: updatedDevice.attempts_count,
@@ -69,6 +68,7 @@ export const Login = async (req, res) => {
       const updatedDevice = await UpdateAttempts(device_id);
       if (updatedDevice.attempts_count >= LOGIN_MAX_ATTEMPTS)
         await LockDevice(device_id);
+
       return res.status(401).json({
         message: "Helytelen felhasználónév vagy jelszó",
         attempts: updatedDevice.attempts_count,
@@ -87,41 +87,31 @@ export const Login = async (req, res) => {
       expires: newRefreshToken.RefreshTokenExpiresAt,
     });
 
-    let AccessToken = req.headers.authorization;
-    let AccessTokenExpiresAt;
+    const newAccessToken = await createAccessToken(user);
 
-    try {
-      if (!AccessToken) {
-        const newAccessToken = await createAccessToken(user);
-        AccessToken = `Bearer ${newAccessToken.AccessToken}`;
-        AccessTokenExpiresAt = newAccessToken.AccessTokenExpiresAt;
-      } else {
-        const isExpired = await isTokenExpired(AccessToken);
-        if (isExpired) {
-          const newAccessToken = await createAccessToken(user);
-          AccessToken = `Bearer ${newAccessToken.AccessToken}`;
-          AccessTokenExpiresAt = newAccessToken.AccessTokenExpiresAt;
-        } else {
-          AccessTokenExpiresAt = await getAccessTokenExp(AccessToken);
-        }
-      }
-    } catch (error) {
-      const newAccessToken = await createAccessToken(user);
-      AccessToken = `Bearer ${newAccessToken.AccessToken}`;
-      AccessTokenExpiresAt = newAccessToken.AccessTokenExpiresAt;
-    }
+    /**
+     * api.get("https://api.example.com/protected", {
+  method: "GET",
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
+     */
+    console.log(newAccessToken)
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Sikeres bejelentkezés",
-      accessToken: AccessToken,
+      accessToken: `Bearer ${newAccessToken.AccessToken}`,
+      //accessTokenExpiresAt: newAccessToken.AccessTokenExpiresAt,
       user: user,
-      isAdmin: user.admin === 1 ? true : false,
+      isAdmin: user.admin === 1,
     });
   } catch (err) {
     console.error("Login error:", err);
     res.status(500).json({
       error: "Belépési hiba",
-      details: process.env.NODE_ENV === "development" ? err.message : undefined,
+      details:
+        process.env.NODE_ENV === "development" ? err.message : undefined,
     });
   }
 };
