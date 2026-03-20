@@ -2,10 +2,20 @@ import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertCircle, Eye, EyeOff, Loader2 } from "lucide-react";
 import api from "../../../axios_url/baseURL.js";
-import { setAccessToken, SetUser } from "../../../store/authStore.js";
+import {useAuth} from "../../../store/AuthContext.jsx"
 
 const LoginForm = () => {
   const navigate = useNavigate();
+
+  const {setUser,
+        user,
+        setAccessToken,
+        access_token,
+        setLogin,
+        login,
+        setIsAdmin,
+        isAdmin} = useAuth();
+
 
   const deviceId = useRef(
     `device_${Math.random().toString(36).substr(2, 9)}_${Date.now()}`
@@ -121,13 +131,11 @@ const LoginForm = () => {
         device_id: deviceId.current,
       });
 
-      const rawToken = (response.data?.accessToken || "")
-        .toString()
-        .replace(/^Bearer\s+/i, "")
-        .trim();
+      const rawToken = (response.data?.accessToken || "").toString().trim();
 
       setAccessToken(rawToken);
-      SetUser(response.data?.user);
+      setUser(response.data?.user);
+      setIsAdmin(response.data?.isAdmin)
       navigate("/");
     } catch (error) {
       console.error("Login error:", error);

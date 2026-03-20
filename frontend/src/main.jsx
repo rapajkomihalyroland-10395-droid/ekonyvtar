@@ -25,7 +25,7 @@ import AdminPublishers from "./pages/admin/publishers/index.jsx";
 import AdminClasses from "./pages/admin/classes/index.jsx";
 import CreateLoan from "./pages/admin/loans/CreateLoan.jsx";
 
-import RouterGuard from "security/RouterGuard";
+import AuthContext from "store/AuthContext";
 
 const RouteErrorElement = () => {
   return <NotFound />;
@@ -33,107 +33,88 @@ const RouteErrorElement = () => {
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: (
-      <RouterGuard>
-        <MainPage />
-      </RouterGuard>
-    ),
-    errorElement: <RouteErrorElement />,
-  },
-  {
-    path: "/book-catalog",
-    element: (
-      <RouterGuard>
-        <BookCatalog />
-      </RouterGuard>
-    ),
-  },
-  {
-    path: "/book-details/:id",
-    element: (
-      <RouterGuard>
-        <BookDetails />
-      </RouterGuard>
-    ),
-  },
-  {
-    path: "/rental-checkout",
-    element: (
-      <RouterGuard>
-        <RentalCheckout />
-      </RouterGuard>
-    ),
-  },
-  {
-    path: "/student-dashboard",
-    element: (
-      <RouterGuard>
-        <StudentDashboard />
-      </RouterGuard>
-    ),
-  },
-  {
-    path: "/admin",
-    element: (
-      <RouterGuard>
-        <AdminLayout />
-      </RouterGuard>
-    ),
+    element: <AuthContext />,
     children: [
       {
-        path: "",
-        element: <AdminDashboard />,
+        path: "/",
+        element: <MainPage />,
+        errorElement: <RouteErrorElement />,
       },
       {
-        path: "books",
-        element: <AdminBooks />,
+        path: "/book-catalog",
+        element: <BookCatalog />,
       },
       {
-        path: "books/:id",
-        element: <AdminBookDetails />,
+        path: "/book-details/:id",
+        element: <BookDetails />,
       },
       {
-        path: "users",
-        element: <AdminUsers />,
+        path: "/rental-checkout",
+        element: <RentalCheckout />,
       },
       {
-        path: "users/:id",
-        element: <AdminUserDetails />,
+        path: "/student-dashboard",
+        element: <StudentDashboard />,
       },
       {
-        path: "loans/new",
-        element: <CreateLoan />,
+        path: "/admin",
+        element: <AdminLayout />,
+        children: [
+          {
+            path: "",
+            element: <AdminDashboard />,
+          },
+          {
+            path: "books",
+            element: <AdminBooks />,
+          },
+          {
+            path: "books/:id",
+            element: <AdminBookDetails />,
+          },
+          {
+            path: "users",
+            element: <AdminUsers />,
+          },
+          {
+            path: "users/:id",
+            element: <AdminUserDetails />,
+          },
+          {
+            path: "loans/new",
+            element: <CreateLoan />,
+          },
+          {
+            path: "user-types",
+            element: <AdminUserTypes />,
+          },
+          {
+            path: "schools",
+            element: <AdminSchools />,
+          },
+          {
+            path: "categories",
+            element: <AdminCategories />,
+          },
+          {
+            path: "publishers",
+            element: <AdminPublishers />,
+          },
+          {
+            path: "classes",
+            element: <AdminClasses />,
+          },
+        ],
       },
       {
-        path: "user-types",
-        element: <AdminUserTypes />,
+        path: "/login",
+        element: <StudentLogin />,
       },
       {
-        path: "schools",
-        element: <AdminSchools />,
-      },
-      {
-        path: "categories",
-        element: <AdminCategories />,
-      },
-      {
-        path: "publishers",
-        element: <AdminPublishers />,
-      },
-      {
-        path: "classes",
-        element: <AdminClasses />,
+        path: "*",
+        element: <NotFound />,
       },
     ],
-  },
-  {
-    path: "/login",
-    element: <StudentLogin />,
-  },
-  {
-    path: "*",
-    element: <NotFound />,
   },
 ]);
 

@@ -1,5 +1,9 @@
 0. login átdolgozása
 
+0.1 regisztrációs rész kidolgozása smtp-vel (ellenőrzö kóddal)
+
+0.2 Admin azonosítása
+
 1. ui mappában az appicon és appimages-t cserélni a logókra
 
 2. a loginnál hogy ha elfejelti valaki a jelszót smtp jelszó visszaállítás

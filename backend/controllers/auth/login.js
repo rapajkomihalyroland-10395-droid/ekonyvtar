@@ -115,6 +115,7 @@ export const Login = async (req, res) => {
       message: "Sikeres bejelentkezés",
       accessToken: AccessToken,
       user: user,
+      isAdmin: user.admin === 1 ? true : false,
     });
   } catch (err) {
     console.error("Login error:", err);
