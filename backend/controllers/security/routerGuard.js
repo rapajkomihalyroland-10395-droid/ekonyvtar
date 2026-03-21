@@ -7,39 +7,16 @@ const prisma = new PrismaClient();
 
 export const GetAccessToken = async (req, res) => {
   try {
-    const authHeader = req.headers.authorization; // Bearer token
-    const refreshToken = req.cookies.refreshToken; // HttpOnly
-
-    /*
-    Feladat: 
-    1. Vizsgálni a refresh-tokent ez alapján eldönteni a access_token életét
-    2. A user-t visszaadni ami a payload
-     */
-
+    const refreshToken = req.cookies.refreshToken; // HttpOnly (refresh)
+    
     let accessToken = null;
-    let user;
+    let user = null;
 
-    if (authHeader) {
-      const token = authHeader.split(" ")[1];
-
-      console.log(token)
-
-      if (token) {
-        try {
-          jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-          accessToken = token;
-          console.log(token)
-        } catch(err) {
-          console.log("routerguard.js\n", err.message)
-        }
-      }
-    }
-
-    if (!accessToken && refreshToken) {
+    if (refreshToken) {
       try {
         const decodedRefresh = jwt.verify(
           refreshToken,
-          process.env.REFRESH_TOKEN_SECRET
+          process.env.REFRESH_TOKEN_SECRET,
         );
 
         user = await prisma.felhasznalo.findUnique({
@@ -49,7 +26,9 @@ export const GetAccessToken = async (req, res) => {
         if (user) {
           accessToken = (await createAccessToken(user)).AccessToken;
         }
-      } catch {}
+      } catch (err) {
+        console.error("Refresh token validation failed:", err.message);
+      }
     }
 
     return res.json({ accessToken: accessToken || null, user: user || null });

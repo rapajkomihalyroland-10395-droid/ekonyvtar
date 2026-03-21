@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 const REFRESH_TOKEN_LIFETIME_MS = 7 * 24 * 60 * 60 * 1000; // 7 nap
-const ACCESS_TOKEN_LIFETIME_MS = 15 * 60 * 1000; // 15 perc (ajánlott)
+//const ACCESS_TOKEN_LIFETIME_MS = 15 * 60 * 1000; // 15 perc (ajánlott)
 
 const verifyRefreshToken = async (token) => {
   try {
@@ -19,88 +19,30 @@ const verifyAccessToken = async (token) => {
     const cleanToken = token.replace("Bearer ", "");
     return jwt.verify(cleanToken, process.env.ACCESS_TOKEN_SECRET);
   } catch (err) {
-    console.error("Access token verification error:", err.message);
-    throw err; 
+    console.error("Access Token ellenőrzése sikertelen", err.message);
+    throw err;
   }
-};
-
-export const getAccessTokenExp = async (accessToken) => {
-  try {
-    const decoded = await verifyAccessToken(accessToken);
-    return new Date(decoded.exp * 1000); 
-  } catch (error) {
-    console.error("getAccessTokenExp error:", error.message);
-    throw error;
-  }
-};
-
-export const isTokenExpired = async (token) => {
-  try {
-    const expiresAt = await getAccessTokenExp(token);
-    const now = new Date();
-
-    // Ha expiresAt < now, akkor lejárt
-    return expiresAt < now;
-  } catch (error) {
-    // Ha bármilyen validációs hiba van (pl. invalid signature),
-    // tekintsük lejártnak, hogy új tokent generáljunk
-    console.log("Token validation failed, treating as expired:", error.message);
-    return true;
-  }
-};
-
-export const getRefreshTokenDetail = async (user) => {
-  const result = await prisma.felhasznalo.findUnique({
-    where: { id: user.id },
-    select: {
-      jwt_refresh_token: true,
-      jwt_token_expires_at: true,
-    },
-  });
-
-  // Ellenőrizzük, hogy van-e érvényes refresh token
-  if (result.jwt_refresh_token && result.jwt_token_expires_at) {
-    const expiresAt = new Date(result.jwt_token_expires_at);
-
-    // Ha még érvényes a refresh token
-    if (expiresAt > new Date()) {
-      return {
-        refresh_token: result.jwt_refresh_token,
-        exp: expiresAt,
-      };
-    }
-  }
-
-  // Ha nincs vagy lejárt, új refresh tokent generálunk
-  const newRefreshToken = await createRefreshToken(user);
-
-  return {
-    refresh_token: newRefreshToken.RefreshToken,
-    exp: newRefreshToken.RefreshTokenExpiresAt,
-  };
 };
 
 export const createAccessToken = async (user) => {
   const AccessToken = jwt.sign(
     { id: user.id },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "15m" }
+    { expiresIn: "15m" },
   );
 
-  const AccessTokenExpiresAt = new Date(Date.now() + ACCESS_TOKEN_LIFETIME_MS);
-
-  return { AccessToken, AccessTokenExpiresAt };
+  return { AccessToken };
 };
 
 export const createRefreshToken = async (user) => {
   const RefreshToken = jwt.sign(
     { id: user.id },
     process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: "7d" }
+    { expiresIn: "7d" },
   );
 
   const RefreshTokenExpiresAt = new Date(
-    Date.now() + REFRESH_TOKEN_LIFETIME_MS
+    Date.now() + REFRESH_TOKEN_LIFETIME_MS,
   );
 
   return { RefreshToken, RefreshTokenExpiresAt };

@@ -1,4 +1,4 @@
-0. login átdolgozása
+0. login átdolgozása✅
 
 0.1 regisztrációs rész kidolgozása smtp-vel (ellenőrzö kóddal)
 

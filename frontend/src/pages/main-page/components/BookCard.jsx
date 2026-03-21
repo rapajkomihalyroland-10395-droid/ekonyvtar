@@ -8,15 +8,12 @@ const BookCard = ({ cim, kep, kategoria, csillagok, szerzo }) => {
     <div className="bg-card border border-border rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 group">
       <div className="aspect-[2/3] relative overflow-hidden bg-muted">
         <img
-          src={kep}
+          src={kep || "/assets/images/no_image.png"}
           alt={cim}
-          className={`w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 ${imageLoaded ? "opacity-100" : "opacity-0"
-            }`}
+          className={`w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 ${
+            imageLoaded ? "opacity-100" : "opacity-0"
+          }`}
           onLoad={() => setImageLoaded(true)}
-          onError={(e) => {
-            e.target.src = "/assets/images/no_image.png";
-            setImageLoaded(true);
-          }}
         />
         <div className="absolute top-2 right-2 bg-background/90 backdrop-blur-sm px-2 py-1 rounded-md shadow-sm flex items-center gap-1">
           <Star size={14} className="text-warning fill-warning" />

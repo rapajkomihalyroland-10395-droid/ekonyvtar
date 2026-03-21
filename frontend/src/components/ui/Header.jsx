@@ -7,7 +7,8 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { isAdmin } = useAuth();
+  const { user } = useAuth();
+  const isAdmin = Boolean(user?.admin);
 
   const navigationItems = [
     { label: 'Főoldal', path: '/', icon: 'Home' },

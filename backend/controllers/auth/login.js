@@ -15,9 +15,8 @@ import {
 
 const prisma = new PrismaClient();
 
-const LOGIN_MAX_ATTEMPTS = process.env.LOGIN_MAX_ATTEMPTS
-  ? parseInt(process.env.LOGIN_MAX_ATTEMPTS)
-  : 5;
+const LOGIN_MAX_ATTEMPTS =
+  process.env.LOGIN_MAX_ATTEMPTS ? parseInt(process.env.LOGIN_MAX_ATTEMPTS) : 5;
 
 export const Login = async (req, res) => {
   try {
@@ -61,7 +60,7 @@ export const Login = async (req, res) => {
 
     const passwordMatch = await bcrypt.compare(
       password,
-      user.belepesi_azonosito_hash
+      user.belepesi_azonosito_hash,
     );
 
     if (!passwordMatch) {
@@ -97,21 +96,18 @@ export const Login = async (req, res) => {
   },
 });
      */
-    console.log(newAccessToken)
+    //console.log(newAccessToken);
 
     return res.status(200).json({
       message: "Sikeres bejelentkezés",
-      accessToken: `Bearer ${newAccessToken.AccessToken}`,
-      //accessTokenExpiresAt: newAccessToken.AccessTokenExpiresAt,
+      accessToken: newAccessToken.AccessToken,
       user: user,
-      isAdmin: user.admin === 1,
     });
   } catch (err) {
     console.error("Login error:", err);
     res.status(500).json({
       error: "Belépési hiba",
-      details:
-        process.env.NODE_ENV === "development" ? err.message : undefined,
+      details: process.env.NODE_ENV === "development" ? err.message : undefined,
     });
   }
 };

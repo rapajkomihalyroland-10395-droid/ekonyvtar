@@ -2,19 +2,12 @@ import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertCircle, Eye, EyeOff, Loader2 } from "lucide-react";
 import api from "../../../axios_url/baseURL.js";
-import {useAuth} from "../../../store/AuthContext.jsx"
 
 const LoginForm = () => {
   const navigate = useNavigate();
 
-  const {setUser,
-        setAccessToken,
-        setIsAdmin,
-        } = useAuth();
-
-
   const deviceId = useRef(
-    `device_${Math.random().toString(36).substr(2, 9)}_${Date.now()}`
+    `device_${Math.random().toString(36).substr(2, 9)}_${Date.now()}`,
   );
 
   const [formData, setFormData] = useState({
@@ -71,7 +64,7 @@ const LoginForm = () => {
 
   const handleForgotPassword = () => {
     alert(
-      "A jelszó-visszaállítási funkció hamarosan elérhető lesz. Kérjük, forduljon az iskola könyvtárosához segítségért."
+      "A jelszó-visszaállítási funkció hamarosan elérhető lesz. Kérjük, forduljon az iskola könyvtárosához segítségért.",
     );
   };
 
@@ -81,12 +74,15 @@ const LoginForm = () => {
 
       if (status === 429) {
         return (
-          data?.message || "Túl sok sikertelen kísérlet történt. Kérjük, próbálja meg később újra."
+          data?.message ||
+          "Túl sok sikertelen kísérlet történt. Kérjük, próbálja meg később újra."
         );
       }
 
       if (status === 401) {
-        return data?.message || "A megadott e-mail-cím vagy jelszó érvénytelen.";
+        return (
+          data?.message || "A megadott e-mail-cím vagy jelszó érvénytelen."
+        );
       }
 
       return data?.message || "Hiba történt. Kérjük, próbálja meg újra!";
@@ -121,17 +117,12 @@ const LoginForm = () => {
     setFormErrors({});
 
     try {
-      const response = await api.post("/login", {
+      await api.post("/login", {
         email: formData.email,
         password: formData.password,
         device_id: deviceId.current,
       });
 
-      const rawToken = (response.data?.accessToken || "").toString().trim();
-
-      setAccessToken(rawToken);
-      setUser(response.data?.user);
-      setIsAdmin(response.data?.isAdmin)
       navigate("/");
     } catch (error) {
       console.error("Login error:", error);
@@ -151,10 +142,7 @@ const LoginForm = () => {
     <form onSubmit={handleSubmit} className="space-y-6" noValidate>
       {formErrors.submit && (
         <div className="p-4 bg-error/10 border border-error/20 rounded-lg flex items-start gap-3">
-          <AlertCircle
-            size={20}
-            className="text-error flex-shrink-0 mt-0.5"
-          />
+          <AlertCircle size={20} className="text-error flex-shrink-0 mt-0.5" />
           <p className="text-sm font-medium text-error flex-1">
             {formErrors.submit}
           </p>
@@ -185,7 +173,7 @@ const LoginForm = () => {
 
       <div className="space-y-2 relative">
         <label className="text-sm font-medium text-foreground">
-        Jelszó <span className="text-error">*</span>
+          Jelszó <span className="text-error">*</span>
         </label>
         <div className="relative">
           <input
