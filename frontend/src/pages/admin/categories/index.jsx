@@ -17,7 +17,6 @@ const AdminCategories = () => {
       const response = await api.get("/categories");
       setCategories(response.data);
     } catch (error) {
-      console.error("Hiba a kategóriák betöltésekor:", error);
     }
   };
 
@@ -30,7 +29,6 @@ const AdminCategories = () => {
         if (error.response && error.response.status === 409) {
           alert("Nem törölhető, mert használatban van.");
         } else {
-          console.error("Hiba a törlés során:", error);
           alert("Hiba történt a törlés során.");
         }
       }

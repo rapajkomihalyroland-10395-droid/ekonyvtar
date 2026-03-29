@@ -21,14 +21,13 @@ const AdminBooks = () => {
         if (response.data != [] || response.data != null)
           setBooks(response.data);
       } catch (error) {
-        console.error(error);
       }
     };
 
-    if (activeTab === "all") {
+    if (filterStatus === "all") {
       GetBooks();
     }
-  }, [activeTab]);
+  }, [filterStatus]);
 
   return (
     <div className="space-y-6">

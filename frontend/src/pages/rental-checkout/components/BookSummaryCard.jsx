@@ -7,7 +7,7 @@ const BookSummaryCard = ({ book, onRemove }) => {
   const calculateDueDate = (rentalDays) => {
     const dueDate = new Date();
     dueDate?.setDate(dueDate?.getDate() + rentalDays);
-    return dueDate?.toLocaleDateString('en-US', { 
+    return dueDate?.toLocaleDateString('hu-HU', { 
       month: 'short', 
       day: 'numeric', 
       year: 'numeric' 

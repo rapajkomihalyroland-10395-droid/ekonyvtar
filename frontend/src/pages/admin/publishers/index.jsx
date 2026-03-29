@@ -17,7 +17,6 @@ const AdminPublishers = () => {
       const response = await api.get("/publishers");
       setPublishers(response.data);
     } catch (error) {
-      console.error("Hiba a kiadók betöltésekor:", error);
     }
   };
 
@@ -30,7 +29,6 @@ const AdminPublishers = () => {
         if (error.response && error.response.status === 409) {
           alert("Nem törölhető, mert használatban van.");
         } else {
-          console.error("Hiba a törlés során:", error);
           alert("Hiba történt a törlés során.");
         }
       }

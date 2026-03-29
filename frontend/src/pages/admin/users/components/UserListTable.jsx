@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Eye, Search } from "lucide-react";
+import { Eye, Search, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import StatusBadge from "../../components/StatusBadge.jsx";
 
@@ -37,7 +37,9 @@ const UserListTable = ({ users, isLoading }) => {
   };
 
   if (isLoading) {
-    return <div className="p-8 text-center text-muted-foreground">Betöltés...</div>;
+    return (
+      <div className="p-8 text-center text-muted-foreground">Betöltés...</div>
+    );
   }
 
   return (
@@ -69,7 +71,9 @@ const UserListTable = ({ users, isLoading }) => {
               <tr key={user.id} className="hover:bg-muted/50 transition-colors">
                 <td className="px-6 py-4">
                   <div>
-                    <div className="font-medium text-foreground">{user.nev}</div>
+                    <div className="font-medium text-foreground">
+                      {user.nev}
+                    </div>
                     <div className="text-xs text-muted-foreground mt-0.5">
                       {user.email}
                     </div>
@@ -100,6 +104,33 @@ const UserListTable = ({ users, isLoading }) => {
                     >
                       <Eye size={18} />
                     </button>
+                    <button
+                      onClick={async () => {
+                        if (
+                          window.confirm(
+                            "Biztosan törölni szeretnéd ezt a felhasználót?",
+                          )
+                        ) {
+                          try {
+                            const { default: api } =
+                              await import("../../../../axios_url/baseURL.js");
+                            await api.delete(`/users/${user.id}`);
+                            alert("Sikeres törlés!");
+                            window.location.reload();
+                          } catch (error) {
+                            alert(
+                              "Hiba: " +
+                                (error.response?.data?.message ||
+                                  error.message),
+                            );
+                          }
+                        }
+                      }}
+                      className="p-1.5 text-muted-foreground hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                      title="Törlés"
+                    >
+                      <Trash2 size={18} />
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -108,7 +139,9 @@ const UserListTable = ({ users, isLoading }) => {
         </table>
         {users.length === 0 && (
           <div className="p-12 text-center">
-            <p className="text-muted-foreground">Nincs megjeleníthető felhasználó.</p>
+            <p className="text-muted-foreground">
+              Nincs megjeleníthető felhasználó.
+            </p>
           </div>
         )}
       </div>

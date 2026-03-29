@@ -37,7 +37,6 @@ const CreateLoan = () => {
 
         setUsers(response.data);
       } catch (error) {
-        console.error("Failed to fetch users:", error);
       }
     };
 
@@ -58,7 +57,6 @@ const CreateLoan = () => {
 
         setBooks(response.data);
       } catch (error) {
-        console.error("Failed to fetch books:", error);
       }
     };
 
@@ -76,7 +74,6 @@ const CreateLoan = () => {
       });
       navigate("/admin");
     } catch (error) {
-      console.error("Loan creation failed:", error);
       alert(error.response?.data?.message || "Hiba történt a kölcsönzés során");
     }
   };

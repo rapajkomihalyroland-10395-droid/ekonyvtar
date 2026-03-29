@@ -23,14 +23,11 @@ const BookDetails = () => {
 
         if (bookRes.data) {
           setBook(bookRes.data);
-          setFormData(bookRes.data);
         }
         if (loansRes.data) {
           setLoans(loansRes.data);
         }
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
     GetBookAndLoans();
   }, [id]);
@@ -48,8 +45,6 @@ const BookDetails = () => {
     const { name, value } = e.target;
 
     setChangedInput((prev) => ({ ...prev, [name]: value }));
-
-    console.log(changedInput);
   };
 
   const handleImageChange = (e) => {
@@ -70,11 +65,8 @@ const BookDetails = () => {
 
       const result = await api.patch(`/update-a-book/${id}`, formData);
 
-      console.log(result.data.message, result.data.result);
       setBook((prev) => ({ ...prev, ...result.data.result }));
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleSubmit = (e) => {

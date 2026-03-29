@@ -17,7 +17,6 @@ const AdminSchools = () => {
       const response = await api.get("/schools");
       setSchools(response.data);
     } catch (error) {
-      console.error("Hiba az iskolák betöltésekor:", error);
     }
   };
 
@@ -30,7 +29,6 @@ const AdminSchools = () => {
         if (error.response && error.response.status === 409) {
           alert("Nem törölhető, mert használatban van.");
         } else {
-          console.error("Hiba a törlés során:", error);
           alert("Hiba történt a törlés során.");
         }
       }

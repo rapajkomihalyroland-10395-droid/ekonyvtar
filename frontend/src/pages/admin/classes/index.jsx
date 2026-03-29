@@ -17,7 +17,6 @@ const AdminClasses = () => {
       const response = await api.get("/classes");
       setClasses(response.data);
     } catch (error) {
-      console.error("Hiba az osztályok betöltésekor:", error);
     }
   };
 
@@ -30,7 +29,6 @@ const AdminClasses = () => {
         if (error.response && error.response.status === 409) {
           alert("Nem törölhető, mert használatban van.");
         } else {
-          console.error("Hiba a törlés során:", error);
           alert("Hiba történt a törlés során.");
         }
       }

@@ -54,13 +54,9 @@ const AddUserModal = ({ isOpen, onClose }) => {
           api.get("/get-user-types"),
         ]);
 
-        if (!classes || !schools || !userTypes) console.log("Hiba");
-
         setOsztaly(classes.data);
         setIskola(schools.data);
         setFelhasznaloTipus(userTypes.data);
-
-        console.log(classes, schools, userTypes);
       } catch (error) {
         return error;
       }
@@ -69,10 +65,28 @@ const AddUserModal = ({ isOpen, onClose }) => {
     Get_Class_School_UserTypes();
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    onClose();
+    try {
+      const data = {
+        nev: formData.name,
+        email: formData.email,
+        nyers_jelszo: formData.password,
+        telefonszam: formData.phone,
+        szuletesi_datum: formData.birthDate ? new Date(formData.birthDate).toISOString() : new Date().toISOString(),
+        lakcim: formData.address,
+        admin: formData.isAdmin,
+        iskola_id: Number(formData.school),
+        osztaly_id: Number(formData.classId) || null,
+        felhasznalo_tipus_id: Number(formData.userType),
+      };
+
+      await api.post("/users", data);
+      alert("Sikeres felhasználó felvétel!");
+      onClose();
+    } catch (error) {
+      alert("Hiba: " + (error.response?.data?.message || error.message));
+    }
   };
 
   return (

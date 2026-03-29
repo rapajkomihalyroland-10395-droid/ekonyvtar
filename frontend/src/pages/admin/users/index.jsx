@@ -23,7 +23,6 @@ const AdminUsers = () => {
 
         if (response.data) setUsers(response.data);
       } catch (error) {
-        console.error("Hiba a felhasználók betöltésekor:", error);
       }
     };
 

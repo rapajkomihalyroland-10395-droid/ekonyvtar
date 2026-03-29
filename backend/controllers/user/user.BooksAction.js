@@ -181,7 +181,6 @@ export const GetBooksForBookCatalog = async (req, res) => {
 
     return res.status(200).json(formattedBooks);
   } catch (error) {
-    console.error("Error fetching books:", error);
     return res.status(500).json({ error: error.message });
   }
 };

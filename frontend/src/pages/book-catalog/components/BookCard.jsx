@@ -82,6 +82,8 @@ const BookCard = ({ book, onRentNow }) => {
     navigate(`/book-details/${book.id}`, { state: { bookId: book.id } });
   };
 
+  const stars = [0, 1, 2, 3, 4];
+
   return (
     <article className="bg-card border border-border rounded-lg overflow-hidden hover:shadow-card transition-all duration-300 group">
       <div
@@ -136,7 +138,7 @@ const BookCard = ({ book, onRentNow }) => {
         </div>
 
         <div className="flex items-center gap-1">
-          {[...Array(5)]?.map((_, index) => (
+          {stars.map((index) => (
             <svg
               key={index}
               xmlns="http://www.w3.org/2000/svg"

@@ -11,6 +11,8 @@ const AddReview = ({ bookId, onReviewAdded }) => {
   const [success, setSuccess] = useState(false);
   const { user } = useAuth();
 
+  const stars = [1, 2, 3, 4, 5];
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -47,7 +49,6 @@ const AddReview = ({ bookId, onReviewAdded }) => {
       }
       setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
-      console.error("Hiba a vélemény küldésekor:", err);
       setError(
         err.response?.data?.message || "Hiba történt a vélemény küldésekor.",
       );
@@ -80,7 +81,7 @@ const AddReview = ({ bookId, onReviewAdded }) => {
             Értékelés
           </label>
           <div className="flex items-center gap-1">
-            {[1, 2, 3, 4, 5].map((star) => (
+            {stars.map((star) => (
               <button
                 key={star}
                 type="button"

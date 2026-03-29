@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../../../../axios_url/baseURL.js";
 import {
   X,
   Upload,
@@ -66,15 +66,13 @@ const AddBookModal = ({ isOpen, onClose }) => {
         data.append("coverImage", formData.coverImage);
       }
 
-      await axios.post("http://localhost:3000/api/new-book", data, {
-        withCredentials: true,
+      await api.post("/new-book", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
       onClose();
       alert("Sikeres könyvfelvétel!");
     } catch (error) {
-      console.error("Hiba a könyv feltöltésekor:", error);
       alert(
         "Hiba történt a mentés során: " +
           (error.response?.data?.message || error.message),

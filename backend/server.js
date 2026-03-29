@@ -29,5 +29,5 @@ app.use(
 app.use("/api", router);
 
 app.listen(port, () => {
-  console.log(`The backend is listening on ${port}`);
+  console.log(`The server is listenin on ${port}`)
 });

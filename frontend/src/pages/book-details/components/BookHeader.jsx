@@ -1,6 +1,8 @@
 import React from "react";
 
 const BookHeader = ({ book }) => {
+  const stars = [0, 1, 2, 3, 4];
+
   return (
     <div className="mb-6">
       <div className="flex items-start justify-between gap-4 mb-4">
@@ -13,7 +15,7 @@ const BookHeader = ({ book }) => {
           </p>
           <div className="flex items-center gap-2 mb-4">
             <div className="flex items-center gap-1">
-              {[...Array(5)]?.map((_, index) => (
+              {stars.map((index) => (
                 <svg
                   key={index}
                   xmlns="http://www.w3.org/2000/svg"

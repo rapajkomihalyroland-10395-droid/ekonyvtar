@@ -13,6 +13,7 @@ export const GetAllUsers = async (req, res) => {
     const user = result.map((u) => ({
       id: u.id,
       nev: u.nev,
+      email: u.email,
       szerepkor: u.felhasznalotipus.megnevezes,
       aktiv_kolcsonzes: u.berles.some(
         (b) =>
@@ -183,17 +184,14 @@ export const DeleteUser = async (req, res) => {
       });
     }
 
-    /*
     await prisma.felhasznalo.delete({
       where: { id },
     });
-    */
 
     return res.status(200).json({
       message: `Sikeresen töröltük a ${Username.nev} nevű felhasználót.`,
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({
       message: "Szerveroldali hiba történt.",
       error: error.message,

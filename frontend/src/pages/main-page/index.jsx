@@ -2,7 +2,7 @@ import { React, useState, useEffect, use } from "react";
 import api from "../../axios_url/baseURL.js";
 import Header from "../../components/ui/Header";
 import Carousel from "../../components/ui/Carousel";
-import { Search, BookOpen } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import SectionHeader from "./components/SectionHeader";
@@ -30,9 +30,7 @@ const MainPage = () => {
         setTopAuthors(authorRes.data);
         setTopCategory(categoryRes.data);
         setTopStars(starsRes.data);
-      } catch (error) {
-        console.log(error.message);
-      }
+      } catch (error) {}
     };
 
     GetData();

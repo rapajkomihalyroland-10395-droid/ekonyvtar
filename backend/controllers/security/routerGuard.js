@@ -27,13 +27,11 @@ export const GetAccessToken = async (req, res) => {
           accessToken = (await createAccessToken(user)).AccessToken;
         }
       } catch (err) {
-        console.error("Refresh token validation failed:", err.message);
       }
     }
 
     return res.json({ accessToken: accessToken || null, user: user || null });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({ error: error.message });
   }
 };

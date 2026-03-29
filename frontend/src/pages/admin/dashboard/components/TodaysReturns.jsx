@@ -13,7 +13,6 @@ const TodaysReturns = () => {
         const response = await api.get("/todays-returns");
         setReturns(response.data);
       } catch (err) {
-        console.error("Error fetching returns:", err);
         setError("Nem sikerült betölteni a visszahozásokat.");
       } finally {
         setLoading(false);

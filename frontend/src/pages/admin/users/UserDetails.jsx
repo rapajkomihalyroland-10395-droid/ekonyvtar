@@ -21,8 +21,6 @@ const UserDetails = () => {
         api.get(`/get-a-loan/${id}`),
       ]);
 
-      if (!user || !loan) console.log("Hiba!");
-
       setUser(user.data);
       setLoan(loan.data);
     };
@@ -30,7 +28,6 @@ const UserDetails = () => {
     try {
       GetUserAndLoans();
     } catch (error) {
-      console.log(error);
     }
   }, [id]);
 

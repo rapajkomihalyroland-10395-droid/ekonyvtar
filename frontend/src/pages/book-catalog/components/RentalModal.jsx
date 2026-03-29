@@ -7,6 +7,8 @@ const RentalModal = ({ book, onClose, onConfirm }) => {
   const dueDate = new Date();
   dueDate?.setDate(dueDate?.getDate() + rentalDuration);
 
+  const stars = [0, 1, 2, 3, 4];
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div
@@ -59,7 +61,7 @@ const RentalModal = ({ book, onClose, onConfirm }) => {
               </h3>
               <p className="text-sm text-muted-foreground">{book?.author}</p>
               <div className="flex items-center gap-1 pt-1">
-                {[...Array(5)]?.map((_, index) => (
+                {stars.map((index) => (
                   <svg
                     key={index}
                     xmlns="http://www.w3.org/2000/svg"

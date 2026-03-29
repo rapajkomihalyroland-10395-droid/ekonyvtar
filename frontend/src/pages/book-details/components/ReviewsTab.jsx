@@ -20,12 +20,14 @@ const ReviewsTab = ({
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date?.toLocaleDateString("en-US", {
+    return date?.toLocaleDateString("hu-HU", {
       month: "short",
       day: "numeric",
       year: "numeric",
     });
   };
+
+  const stars = [0, 1, 2, 3, 4];
 
   return (
     <div>
@@ -35,7 +37,7 @@ const ReviewsTab = ({
             {overallRating?.toFixed(1)}
           </div>
           <div className="flex items-center justify-center md:justify-start gap-1 mb-2">
-            {[...Array(5)]?.map((_, index) => (
+            {stars.map((index) => (
               <svg
                 key={index}
                 xmlns="http://www.w3.org/2000/svg"
@@ -138,7 +140,7 @@ const ReviewsTab = ({
                     </p>
                   </div>
                   <div className="flex items-center gap-1">
-                    {[...Array(5)]?.map((_, index) => (
+                    {stars.map((index) => (
                       <svg
                         key={index}
                         xmlns="http://www.w3.org/2000/svg"

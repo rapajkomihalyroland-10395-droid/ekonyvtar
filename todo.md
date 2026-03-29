@@ -1,8 +1,4 @@
-0. login átdolgozása✅
-
 0.1 regisztrációs rész kidolgozása smtp-vel (ellenőrzö kóddal)
-
-0.2 Admin azonosítása
 
 1. ui mappában az appicon és appimages-t cserélni a logókra
 
@@ -16,26 +12,16 @@
 
 6. a valtozo neveket egysegesiteni, hol magyar hol angol
 
-6.1 a error kiírásokat is egységesíteni magyarra a konzol logokat pedig kivenni product-ra
+7. book-catalog BookCard.jsx az egész -> Meg kell írni a rentals részt.
 
-7. main-page SectionHeader 12
+8. -- || -- BookGrid.jsx egész
 
-8. book-details AddReview.jsx 56.-dik sor
+9. -- || -- FilterPanel.jsx egész
 
-9. -- || -- BookHeader.jsx 43.-dik sor
+10. -- || -- RentalModal.jsx egész
 
-10. -- || -- ReviewsTab.jsx az egész
+11. -- || -- SearchBar.jsx egész
 
-11. book-catalog BookCard.jsx az egész
+12. Admin Panel a többiek végeztél átnézni.
 
-12. -- || -- BookGrid.jsx egész
-
-13. -- || -- FilterPanel.jsx egész
-
-14. -- || -- RentalModal.jsx egész
-
-15. -- || -- SearchBar.jsx egész
-
-16. Admin Panel a többiek végeztél átnézni.
-
-17. Fiók rész eltávolítása vagy kidolgozása
+13. Fiók rész eltávolítása vagy kidolgozása

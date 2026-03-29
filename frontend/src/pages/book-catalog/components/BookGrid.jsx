@@ -1,12 +1,17 @@
-import React from 'react';
-import BookCard from './BookCard';
+import React from "react";
+import BookCard from "./BookCard";
 
 const BookGrid = ({ books, loading, onAddToCart, onRentNow }) => {
+  const loadingCards = [0, 1, 2, 3, 4, 5, 6, 7];
+
   if (loading) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {[...Array(8)]?.map((_, index) => (
-          <div key={index} className="bg-card border border-border rounded-lg overflow-hidden animate-pulse">
+        {loadingCards.map((index) => (
+          <div
+            key={index}
+            className="bg-card border border-border rounded-lg overflow-hidden animate-pulse"
+          >
             <div className="aspect-[3/4] bg-muted" />
             <div className="p-4 space-y-3">
               <div className="h-4 bg-muted rounded w-3/4" />
@@ -48,7 +53,9 @@ const BookGrid = ({ books, loading, onAddToCart, onRentNow }) => {
           Nem találtam könyveket
         </h3>
         <p className="text-muted-foreground text-center max-w-md">
-          Nem találtunk olyan könyvet, amely megfelelne a keresési feltételeinek. Próbálja meg módosítani a szűrőket vagy a keresési kifejezéseket.
+          Nem találtunk olyan könyvet, amely megfelelne a keresési
+          feltételeinek. Próbálja meg módosítani a szűrőket vagy a keresési
+          kifejezéseket.
         </p>
       </div>
     );

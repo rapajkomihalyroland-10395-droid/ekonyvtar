@@ -24,9 +24,7 @@ const StudentDashboard = () => {
         const response = await api.get(`/get-a-rental/${user.id}`);
 
         setRentals(response.data);
-      } catch (error) {
-        console.log(error.message);
-      }
+      } catch (error) {}
     };
 
     GetRentals();
@@ -42,11 +40,11 @@ const StudentDashboard = () => {
   );
 
   const handleRenew = (rentalId) => {
-    alert(`Renewal request submitted for rental ID: ${rentalId}`);
+    alert(`Hosszabbítási kérelem elküldve a kölcsönzéshez (ID: ${rentalId})`);
   };
 
   const handleRate = (rentalId, rating) => {
-    alert(`Book rated ${rating} stars for rental ID: ${rentalId}`);
+    alert(`A könyv ${rating} csillagos értékelést kapott (ID: ${rentalId})`);
   };
 
   /*const handleDismissNotification = (notificationId) => {

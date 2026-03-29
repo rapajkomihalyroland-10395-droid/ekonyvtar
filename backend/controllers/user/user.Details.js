@@ -32,6 +32,6 @@ export const GetARentalByID = async (req, res) => {
 
     return res.json(normalized);
   } catch (error) {
-    return res.status(200).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };

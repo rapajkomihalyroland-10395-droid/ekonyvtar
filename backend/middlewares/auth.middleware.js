@@ -9,7 +9,6 @@ const verifyRefreshToken = async (token) => {
   try {
     return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
   } catch (err) {
-    console.error("Refresh token verification error:", err.message);
     throw new Error("Érvénytelen vagy lejárt refresh token");
   }
 };
@@ -19,7 +18,6 @@ const verifyAccessToken = async (token) => {
     const cleanToken = token.replace("Bearer ", "");
     return jwt.verify(cleanToken, process.env.ACCESS_TOKEN_SECRET);
   } catch (err) {
-    console.error("Access Token ellenőrzése sikertelen", err.message);
     throw err;
   }
 };
@@ -69,6 +67,7 @@ export const AuthMiddleware = async (req, res, next) => {
         return res.status(401).json({ message: "Felhasználó nem található" });
       }
 
+      req.user = user;
       req.headers.authorization = `Bearer ${accessToken}`;
       return next();
     } catch (accessTokenError) {
@@ -104,15 +103,22 @@ export const AuthMiddleware = async (req, res, next) => {
 
       const { AccessToken } = await createAccessToken(user);
       req.headers.authorization = `Bearer ${AccessToken}`;
+      req.user = user;
 
       return next();
     }
   } catch (err) {
-    console.error("AuthMiddleware error:", err);
 
     return res.status(500).json({
       error: "Hitelesítési hiba",
       details: process.env.NODE_ENV === "development" ? err.message : undefined,
     });
   }
+};
+
+export const AdminMiddleware = async (req, res, next) => {
+  if (!req.user || !req.user.admin) {
+    return res.status(403).json({ message: "Nincs admin jogosultságod." });
+  }
+  return next();
 };

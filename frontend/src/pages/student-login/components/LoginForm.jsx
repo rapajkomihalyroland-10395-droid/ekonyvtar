@@ -27,18 +27,18 @@ const LoginForm = () => {
     let isValid = true;
 
     if (!formData.email.trim()) {
-      errors.email = "Email address is required";
+      errors.email = "Az e-mail cím megadása kötelező";
       isValid = false;
     } else if (!emailRegex.test(formData.email)) {
-      errors.email = "Please enter a valid email address";
+      errors.email = "Kérjük, adjon meg egy érvényes e-mail címet";
       isValid = false;
     }
 
     if (!formData.password) {
-      errors.password = "Password is required";
+      errors.password = "A jelszó megadása kötelező";
       isValid = false;
     } else if (formData.password.length < 6) {
-      errors.password = "Password must be at least 6 characters";
+      errors.password = "A jelszónak legalább 6 karakter hosszúnak kell lennie";
       isValid = false;
     }
 
@@ -100,7 +100,7 @@ const LoginForm = () => {
 
     const { attempts, maxAttempts } = error.response.data;
     if (attempts && maxAttempts) {
-      return ` (${attempts}/${maxAttempts} attempts)`;
+      return ` (${attempts}/${maxAttempts} kísérlet)`;
     }
 
     return "";
@@ -125,8 +125,6 @@ const LoginForm = () => {
 
       navigate("/");
     } catch (error) {
-      console.error("Login error:", error);
-
       const errorMessage = getErrorMessage(error);
       const attemptsInfo = getAttemptsInfo(error);
 
@@ -179,7 +177,7 @@ const LoginForm = () => {
           <input
             type={showPassword ? "text" : "password"}
             name="password"
-            placeholder="Enter your password"
+            placeholder="Adja meg a jelszavát"
             value={formData.password}
             onChange={handleInputChange}
             className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pr-10 ${

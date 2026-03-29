@@ -12,7 +12,7 @@ const RentalSummary = ({ books }) => {
     const minDays = Math.min(...books?.map(book => book?.rentalDays));
     const dueDate = new Date();
     dueDate?.setDate(dueDate?.getDate() + minDays);
-    return dueDate?.toLocaleDateString('en-US', { 
+    return dueDate?.toLocaleDateString('hu-HU', { 
       weekday: 'long',
       month: 'long', 
       day: 'numeric', 

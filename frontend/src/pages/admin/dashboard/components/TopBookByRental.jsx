@@ -13,7 +13,6 @@ const TopBookByRental = () => {
         const response = await api.get("/top-books-by-rental");
         setTopBooks(response.data);
       } catch (err) {
-        console.error("Error fetching top books:", err);
         setError("Nem sikerült betölteni a népszerű könyveket.");
       } finally {
         setLoading(false);

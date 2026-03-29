@@ -26,14 +26,13 @@ const BookDetails = () => {
 
         setReviewsData(data.velemeny || []);
       } catch (error) {
-        console.error("Error fetching book details:", error);
       } finally {
         setLoading(false);
       }
     };
 
     if (id) {
-      fetchBookDetails();
+      GetBooksAndRelatedDetails();
     }
   }, [id]);
 

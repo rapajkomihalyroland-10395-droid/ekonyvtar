@@ -20,7 +20,7 @@ const ActionPanel = ({ book }) => {
   const calculateDueDate = (days) => {
     const date = new Date();
     date?.setDate(date?.getDate() + parseInt(days));
-    return date?.toLocaleDateString("en-US", {
+    return date?.toLocaleDateString("hu-HU", {
       month: "long",
       day: "numeric",
       year: "numeric",

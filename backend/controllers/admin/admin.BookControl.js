@@ -310,7 +310,6 @@ export const UpdateBookDetail = async (req, res) => {
       .status(200)
       .json({ message: "Sikeres frissítés", result: result });
   } catch (error) {
-    console.error("Update error:", error);
     return res.status(500).json({ message: error.message });
   }
 };
@@ -339,6 +338,33 @@ export const GetAllBook = async (req, res) => {
       return res.status(404).json({ message: "Nincs könyv" });
     }
     return res.status(200).json(books);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const DeleteBook = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const book = await prisma.konyv.findUnique({
+      where: { id: Number(id) },
+      include: { berles: true }
+    });
+
+    if (!book) {
+      return res.status(404).json({ message: "A könyv nem található." });
+    }
+
+    if (book.berles.some(b => !b.visszahozva)) {
+      return res.status(409).json({ message: "A könyv jelenleg ki van kölcsönözve, így nem törölhető." });
+    }
+
+    await prisma.konyv.delete({
+      where: { id: Number(id) }
+    });
+
+    return res.status(200).json({ message: "Sikeresen töröltük a könyvet." });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

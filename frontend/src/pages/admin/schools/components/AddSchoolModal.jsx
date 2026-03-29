@@ -35,7 +35,6 @@ const AddSchoolModal = ({ isOpen, onClose, initialData = null }) => {
       }
       onClose();
     } catch (error) {
-      console.error("Hiba a mentés során:", error);
       alert(
         "Hiba történt a mentés során: " +
           (error.response?.data?.message || error.message),

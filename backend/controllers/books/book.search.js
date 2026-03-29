@@ -7,7 +7,7 @@ export const SearchBookByCharacters = async (req, res) => {
     const { book } = req.body;
     const host = req.protocol + "://" + req.get("host");
 
-    if (!book || book.trim() === "") return [];
+    if (!book || book.trim() === "") return res.json([]);
 
     const result = await prisma.konyv.findMany({
       where: {

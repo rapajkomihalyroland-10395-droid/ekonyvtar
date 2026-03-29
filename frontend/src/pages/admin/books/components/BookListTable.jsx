@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { Eye, Search } from "lucide-react";
+import { Eye, Search, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const BookListTable = ({ books, isLoading }) => {
@@ -112,6 +112,33 @@ const BookListTable = ({ books, isLoading }) => {
                       title="Megtekintés"
                     >
                       <Eye size={20} />
+                    </button>
+                    <button
+                      onClick={async () => {
+                        if (
+                          window.confirm(
+                            "Biztosan törölni szeretnéd ezt a könyvet?",
+                          )
+                        ) {
+                          try {
+                            const { default: api } =
+                              await import("../../../../axios_url/baseURL.js");
+                            await api.delete(`/delete-a-book/${book.id}`);
+                            alert("Sikeres törlés!");
+                            window.location.reload();
+                          } catch (error) {
+                            alert(
+                              "Hiba: " +
+                                (error.response?.data?.message ||
+                                  error.message),
+                            );
+                          }
+                        }
+                      }}
+                      className="p-1.5 text-muted-foreground hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                      title="Törlés"
+                    >
+                      <Trash2 size={20} />
                     </button>
                   </div>
                 </td>

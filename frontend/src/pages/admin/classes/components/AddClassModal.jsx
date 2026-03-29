@@ -19,7 +19,6 @@ const AddClassModal = ({ isOpen, onClose, initialData = null }) => {
         const response = await api.get("/schools");
         setSchools(response.data);
       } catch (error) {
-        console.error("Hiba az iskolák betöltésekor:", error);
       }
     };
     fetchSchools();
@@ -54,7 +53,6 @@ const AddClassModal = ({ isOpen, onClose, initialData = null }) => {
       }
       onClose();
     } catch (error) {
-      console.error("Hiba a mentés során:", error);
       alert(
         "Hiba történt a mentés során: " +
           (error.response?.data?.message || error.message),
