@@ -72,7 +72,7 @@ const CreateLoan = () => {
         book_id: selectedBook.id,
         end_loan: dueDate,
       });
-      navigate("/admin");
+      navigate("/admin/loans");
     } catch (error) {
       alert(error.response?.data?.message || "Hiba történt a kölcsönzés során");
     }
@@ -98,25 +98,23 @@ const CreateLoan = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {}
+        { }
         <div className="lg:col-span-2 space-y-6">
-          {}
+          { }
           <div
-            className={`bg-card rounded-xl shadow-sm border transition-all duration-200 ${
-              selectedUser
+            className={`bg-card rounded-xl shadow-sm border transition-all duration-200 ${selectedUser
                 ? "border-primary/50 ring-1 ring-primary/20"
                 : "border-border"
-            }`}
+              }`}
           >
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                      selectedUser
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${selectedUser
                         ? "bg-primary text-primary-foreground"
                         : "bg-muted text-muted-foreground"
-                    }`}
+                      }`}
                   >
                     1
                   </div>
@@ -188,23 +186,21 @@ const CreateLoan = () => {
             </div>
           </div>
 
-          {}
+          { }
           <div
-            className={`bg-card rounded-xl shadow-sm border transition-all duration-200 ${
-              selectedBook
+            className={`bg-card rounded-xl shadow-sm border transition-all duration-200 ${selectedBook
                 ? "border-primary/50 ring-1 ring-primary/20"
                 : "border-border"
-            } ${!selectedUser ? "opacity-50 pointer-events-none" : ""}`}
+              } ${!selectedUser ? "opacity-50 pointer-events-none" : ""}`}
           >
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                      selectedBook
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${selectedBook
                         ? "bg-primary text-primary-foreground"
                         : "bg-muted text-muted-foreground"
-                    }`}
+                      }`}
                   >
                     2
                   </div>
@@ -238,11 +234,10 @@ const CreateLoan = () => {
                         key={book.id}
                         disabled={book.keszlet === 0}
                         onClick={() => setSelectedBook(book)}
-                        className={`w-full flex items-center gap-3 p-3 transition-colors text-left ${
-                          book.keszlet === 0
+                        className={`w-full flex items-center gap-3 p-3 transition-colors text-left ${book.keszlet === 0
                             ? "opacity-50 cursor-not-allowed bg-muted/50"
                             : "hover:bg-muted/50"
-                        }`}
+                          }`}
                       >
                         <div className="w-10 h-14 bg-muted rounded shadow-sm flex-shrink-0">
                           {book.kep ? (
@@ -263,11 +258,10 @@ const CreateLoan = () => {
                         </div>
                         <div className="text-right">
                           <span
-                            className={`text-xs font-medium px-2 py-1 rounded ${
-                              book.keszlet > 0
+                            className={`text-xs font-medium px-2 py-1 rounded ${book.keszlet > 0
                                 ? "bg-green-500/10 text-green-500"
                                 : "bg-red-500/10 text-red-500"
-                            }`}
+                              }`}
                           >
                             {book.keszlet > 0
                               ? `${book.keszlet} elérhető`
@@ -307,7 +301,7 @@ const CreateLoan = () => {
           </div>
         </div>
 
-        {}
+        { }
         <div className="lg:col-span-1">
           <div className="bg-card rounded-xl shadow-sm border border-border p-6 sticky top-6">
             <h3 className="text-lg font-semibold text-foreground mb-4">

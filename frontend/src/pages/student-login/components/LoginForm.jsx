@@ -1,10 +1,12 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertCircle, Eye, EyeOff, Loader2 } from "lucide-react";
-import api from "../../../axios_url/baseURL.js";
+import api, { setAxiosToken } from "../../../axios_url/baseURL.js";
+import { useAuth } from "../../../store/AuthContext.jsx";
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const { setUser, setAccessToken, setLogin } = useAuth();
 
   const deviceId = useRef(
     `device_${Math.random().toString(36).substr(2, 9)}_${Date.now()}`,
@@ -117,11 +119,17 @@ const LoginForm = () => {
     setFormErrors({});
 
     try {
-      await api.post("/login", {
+      const response = await api.post("/login", {
         email: formData.email,
         password: formData.password,
         device_id: deviceId.current,
       });
+
+      const { accessToken, user } = response.data;
+      setAxiosToken(accessToken);
+      setAccessToken(accessToken);
+      setUser(user);
+      setLogin(true);
 
       navigate("/");
     } catch (error) {

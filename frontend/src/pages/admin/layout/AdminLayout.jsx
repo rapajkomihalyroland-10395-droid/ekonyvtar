@@ -13,6 +13,8 @@ import {
   Tags,
   Building2,
   GraduationCap,
+  PenTool,
+  Clock,
 } from "lucide-react";
 
 const AdminLayout = () => {
@@ -22,22 +24,24 @@ const AdminLayout = () => {
   const navItems = [
     { label: "Vezérlőpult", path: "/admin", icon: LayoutDashboard },
     { label: "Könyvek", path: "/admin/books", icon: BookOpen },
+    { label: "Kölcsönzések", path: "/admin/loans", icon: Clock },
     { label: "Felhasználók", path: "/admin/users", icon: Users },
     { label: "Felhasználó Típusok", path: "/admin/user-types", icon: Shield },
     { label: "Iskolák", path: "/admin/schools", icon: School },
     { label: "Kategóriák", path: "/admin/categories", icon: Tags },
     { label: "Kiadók", path: "/admin/publishers", icon: Building2 },
+    { label: "Szerzők", path: "/admin/authors", icon: PenTool },
     { label: "Osztályok", path: "/admin/classes", icon: GraduationCap },
   ];
 
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="h-screen bg-background flex overflow-hidden">
       {}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border shadow-sm transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
-          !isSidebarOpen ? "-translate-x-full lg:w-20" : ""
+        className={`fixed inset-y-0 left-0 z-50 h-screen flex flex-col bg-card border-r border-border shadow-sm transition-all duration-300 ease-in-out lg:static lg:translate-x-0 ${
+          !isSidebarOpen ? "-translate-x-full lg:w-20 w-64" : "w-64"
         }`}
       >
         <div className="h-16 flex items-center justify-between px-4 border-b border-border">
@@ -63,7 +67,7 @@ const AdminLayout = () => {
           </button>
         </div>
 
-        <nav className="p-4 space-y-1">
+        <nav className="p-4 space-y-1 flex-1 overflow-y-auto overflow-x-hidden">
           {navItems.map((item) => (
             <NavLink
               key={item.path}
@@ -86,7 +90,7 @@ const AdminLayout = () => {
           ))}
         </nav>
 
-        <div className="absolute bottom-4 left-0 right-0 px-4">
+        <div className="p-4 border-t border-border shrink-0">
           <button
             onClick={() => navigate("/")}
             className={`flex items-center gap-3 w-full px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors ${

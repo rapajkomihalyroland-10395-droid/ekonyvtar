@@ -36,7 +36,7 @@ export const ReaderOpinion = async (req, res) => {
 
     const result = await prisma.$transaction(async (tx) => {
       const book = await tx.konyv.findFirst({
-        where: { id: book_id },
+        where: { id: Number(book_id) },
       });
 
       if (!book) throw new Error("Ez a könyv nem létezik");
@@ -45,7 +45,7 @@ export const ReaderOpinion = async (req, res) => {
         data: {
           velemeny_erteke: Number(stars),
           velemeny_szovege: opinion,
-          felhasznalo_id: user_id,
+          felhasznalo_id: Number(user_id),
           konyv_id: book.id,
         },
       });

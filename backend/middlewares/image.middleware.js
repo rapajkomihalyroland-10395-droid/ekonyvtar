@@ -12,12 +12,13 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
 
     const safeName = req.body.cim
       ? req.body.cim.replace(/[^a-z0-9]/gi, "_").toLowerCase()
       : "book";
 
-    cb(null, `${safeName}-${ext}`);
+    cb(null, `${safeName}-${uniqueSuffix}${ext}`);
   },
 });
 

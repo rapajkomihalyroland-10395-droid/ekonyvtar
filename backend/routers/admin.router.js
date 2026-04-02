@@ -1,7 +1,5 @@
 import { Router } from "express";
-import {
-  TopBooks,
-} from "../controllers/user/user.TopBooks.js";
+import { TopBooks } from "../controllers/user/user.TopBooks.js";
 
 import {
   GetAllUsers,
@@ -24,6 +22,7 @@ import {
   BookLoan,
   GetLoanById,
   GetTodaysReturns,
+  ReturnLoan,
 } from "../controllers/admin/admin.RentalControl.js";
 
 import {
@@ -47,11 +46,18 @@ import {
   CreateClass,
   UpdateClass,
   DeleteClass,
+  GetAllAuthors,
+  CreateAuthor,
+  UpdateAuthor,
+  DeleteAuthor,
 } from "../controllers/admin/admin.ReferenceControl.js";
 
 import { upload } from "../middlewares/image.middleware.js";
 
-import { AuthMiddleware, AdminMiddleware } from "../middlewares/auth.middleware.js";
+import {
+  AuthMiddleware,
+  AdminMiddleware,
+} from "../middlewares/auth.middleware.js";
 
 const adminRouter = Router();
 
@@ -93,10 +99,14 @@ adminRouter.route("/classes").post(CreateClass);
 adminRouter.route("/classes/:id").put(UpdateClass);
 adminRouter.route("/classes/:id").delete(DeleteClass);
 
+// 6. Szerzők
+adminRouter.route("/authors").get(GetAllAuthors);
+adminRouter.route("/authors").post(CreateAuthor);
+adminRouter.route("/authors/:id").patch(UpdateAuthor);
+adminRouter.route("/authors/:id").delete(DeleteAuthor);
+
 //KÖNYVEK
-adminRouter
-  .route("/new-book")
-  .post(upload.single("coverImage"), CreateNewBook);
+adminRouter.route("/new-book").post(upload.single("coverImage"), CreateNewBook);
 adminRouter.route("/increase-stock").post(IncreaseStock);
 adminRouter.route("/get-a-book/:id").get(GetBookByID);
 adminRouter.route("/get-all-books").get(GetAllBook);
@@ -110,8 +120,9 @@ adminRouter.route("/get-all-rentals").get(GetAllRentals);
 adminRouter.route("/book-loan").post(BookLoan);
 adminRouter.route("/get-a-loan/:id").get(GetLoanById);
 adminRouter.route("/todays-returns").get(GetTodaysReturns);
+adminRouter.route("/return-loan/:id").put(ReturnLoan);
 
-//TOPLISTÁK
+//TOPLISTA BÉRLÉS SZERINT
 adminRouter.route("/top-books-by-rental").get(TopBooks);
 
 export default adminRouter;

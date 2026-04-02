@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import api from "../../../axios_url/baseURL";
 import { useAuth } from "../../../store/AuthContext";
 
-const AddReview = ({ bookId, onReviewAdded }) => {
+const AddReview = ({ bookId, onReviewAdded, reviews }) => {
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -12,6 +12,24 @@ const AddReview = ({ bookId, onReviewAdded }) => {
   const { user } = useAuth();
 
   const stars = [1, 2, 3, 4, 5];
+
+  const hasAlreadyReviewed = reviews?.some(
+    (review) => review?.felhasznalo_id === user?.id,
+  );
+
+  if (hasAlreadyReviewed) {
+    return (
+      <div className="bg-card rounded-lg shadow-sm border border-border p-6 mb-8 text-center">
+        <h3 className="text-lg font-semibold text-foreground mb-2">
+          Köszönjük az értékelést!
+        </h3>
+        <p className="text-sm text-muted-foreground">
+          Ehhez a könyvhöz már írtál véleményt, amit a lenti listában meg is
+          tekinthetsz.
+        </p>
+      </div>
+    );
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();

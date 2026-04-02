@@ -163,3 +163,39 @@ export const GetTodaysReturns = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const ReturnLoan = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await prisma.$transaction(async (tx) => {
+      const loan = await tx.berles.findUnique({
+        where: { id: Number(id) },
+      });
+
+      if (!loan) {
+        throw new Error("A kölcsönzés nem található!");
+      }
+
+      if (loan.visszahozva) {
+        throw new Error("A könyv már vissza lett hozva!");
+      }
+
+      const updatedLoan = await tx.berles.update({
+        where: { id: Number(id) },
+        data: { visszahozva: true },
+      });
+
+      await tx.konyv.update({
+        where: { id: loan.konyv_id },
+        data: { keszlet: { increment: 1 } },
+      });
+
+      return updatedLoan;
+    });
+
+    return res.status(200).json({ message: "Sikeres visszavétel!", result });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};

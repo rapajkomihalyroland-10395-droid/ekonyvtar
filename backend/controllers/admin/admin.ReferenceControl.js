@@ -38,7 +38,8 @@ export const UpdateUserType = async (req, res) => {
         megnevezes,
         leiras,
         max_kolcsonzes: max_kolcsonzes ? parseInt(max_kolcsonzes) : undefined,
-        max_idotartam_nap: max_idotartam_nap ? parseInt(max_idotartam_nap) : undefined,
+        max_idotartam_nap:
+          max_idotartam_nap ? parseInt(max_idotartam_nap) : undefined,
       },
     });
     return res.status(200).json(result);
@@ -56,7 +57,9 @@ export const DeleteUserType = async (req, res) => {
     return res.status(200).json({ message: "Sikeres törlés" });
   } catch (error) {
     if (error.code === "P2003") {
-      return res.status(409).json({ message: "Nem törölhető, mert használatban van." });
+      return res
+        .status(409)
+        .json({ message: "Nem törölhető, mert használatban van." });
     }
     return res.status(500).json({ message: error.message });
   }
@@ -106,7 +109,9 @@ export const DeleteSchool = async (req, res) => {
     return res.status(200).json({ message: "Sikeres törlés" });
   } catch (error) {
     if (error.code === "P2003") {
-      return res.status(409).json({ message: "Nem törölhető, mert használatban van." });
+      return res
+        .status(409)
+        .json({ message: "Nem törölhető, mert használatban van." });
     }
     return res.status(500).json({ message: error.message });
   }
@@ -156,7 +161,9 @@ export const DeleteCategory = async (req, res) => {
     return res.status(200).json({ message: "Sikeres törlés" });
   } catch (error) {
     if (error.code === "P2003") {
-      return res.status(409).json({ message: "Nem törölhető, mert használatban van." });
+      return res
+        .status(409)
+        .json({ message: "Nem törölhető, mert használatban van." });
     }
     return res.status(500).json({ message: error.message });
   }
@@ -206,7 +213,9 @@ export const DeletePublisher = async (req, res) => {
     return res.status(200).json({ message: "Sikeres törlés" });
   } catch (error) {
     if (error.code === "P2003") {
-      return res.status(409).json({ message: "Nem törölhető, mert használatban van." });
+      return res
+        .status(409)
+        .json({ message: "Nem törölhető, mert használatban van." });
     }
     return res.status(500).json({ message: error.message });
   }
@@ -266,7 +275,63 @@ export const DeleteClass = async (req, res) => {
     return res.status(200).json({ message: "Sikeres törlés" });
   } catch (error) {
     if (error.code === "P2003") {
-      return res.status(409).json({ message: "Nem törölhető, mert használatban van." });
+      return res
+        .status(409)
+        .json({ message: "Nem törölhető, mert használatban van." });
+    }
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const GetAllAuthors = async (req, res) => {
+  try {
+    const result = await prisma.szerzo.findMany();
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const CreateAuthor = async (req, res) => {
+  try {
+    const { nev } = req.body;
+    const result = await prisma.szerzo.create({
+      data: { nev },
+    });
+    return res.status(201).json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const UpdateAuthor = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nev } = req.body;
+    const result = await prisma.szerzo.update({
+      where: { id: Number(id) },
+      data: { nev },
+    });
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const DeleteAuthor = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await prisma.szerzo.delete({
+      where: { id: Number(id) },
+    });
+    console.log("Sikeres szerző törlés!");
+
+    return res.status(200);
+  } catch (error) {
+    if (error.code === "P2003") {
+      return res
+        .status(409)
+        .json({ message: "Nem törölhető, mert használatban van." });
     }
     return res.status(500).json({ message: error.message });
   }

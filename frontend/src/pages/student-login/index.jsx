@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../../components/ui/Header";
 import LoginForm from "./components/LoginForm";
 import TrustSignals from "./components/TrustSignals";
 import WelcomeSection from "./components/WelcomeSection";
 import { BookMarked } from "lucide-react";
+import { useAuth } from "../../store/AuthContext";
 
 const StudentLogin = () => {
+  const { user, authLoading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      navigate("/");
+    }
+  }, [user, authLoading, navigate]);
+
   return (
     <div className="min-h-screen bg-background">
       <Header />

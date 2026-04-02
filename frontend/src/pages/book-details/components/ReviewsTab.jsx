@@ -8,15 +8,6 @@ const ReviewsTab = ({
   totalReviews,
   onReviewAdded,
 }) => {
-  const [sortBy, setSortBy] = useState("recent");
-
-  const ratingDistribution = [
-    { stars: 5, count: 145, percentage: 72 },
-    { stars: 4, count: 38, percentage: 19 },
-    { stars: 3, count: 12, percentage: 6 },
-    { stars: 2, count: 4, percentage: 2 },
-    { stars: 1, count: 2, percentage: 1 },
-  ];
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -31,77 +22,48 @@ const ReviewsTab = ({
 
   return (
     <div>
-      <div className="grid md:grid-cols-3 gap-6 mb-8 pb-8 border-b border-border">
-        <div className="md:col-span-1 text-center md:text-left">
-          <div className="text-5xl font-bold text-foreground mb-2">
-            {overallRating?.toFixed(1)}
-          </div>
-          <div className="flex items-center justify-center md:justify-start gap-1 mb-2">
-            {stars.map((index) => (
-              <svg
-                key={index}
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke={
-                  index < Math.floor(overallRating) ? "#F59E0B" : "#E5E7EB"
-                }
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className={
-                  index < Math.floor(overallRating)
-                    ? "fill-current text-[#F59E0B]"
-                    : "text-[#E5E7EB]"
-                }
-              >
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-              </svg>
-            ))}
-          </div>
-          <p className="text-sm text-muted-foreground">
-            {totalReviews} összes értékelés
-          </p>
+      <div className="flex flex-col items-center justify-center mb-8 pb-8 border-b border-border">
+        <div className="text-5xl font-bold text-foreground mb-2">
+          {overallRating > 0 ? overallRating?.toFixed(1) : "0.0"}
         </div>
-
-        <div className="md:col-span-2">
-          {ratingDistribution?.map((item) => (
-            <div key={item?.stars} className="flex items-center gap-3 mb-2">
-              <span className="text-sm font-medium text-foreground w-12">
-                {item?.stars} csillag
-              </span>
-              <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-warning transition-all duration-300"
-                  style={{ width: `${item?.percentage}%` }}
-                />
-              </div>
-              <span className="text-sm text-muted-foreground w-12 text-right">
-                {item?.count}
-              </span>
-            </div>
+        <div className="flex items-center justify-center gap-1 mb-2">
+          {stars.map((index) => (
+            <svg
+              key={index}
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={index < Math.floor(overallRating) ? "#F59E0B" : "#E5E7EB"}
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className={
+                index < Math.floor(overallRating)
+                  ? "fill-current text-[#F59E0B]"
+                  : "text-[#E5E7EB]"
+              }
+            >
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
           ))}
         </div>
+        <p className="text-sm text-muted-foreground font-medium mt-1">
+          {totalReviews} összes értékelés
+        </p>
       </div>
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-heading font-semibold text-foreground">
           Diákok véleménye
         </h3>
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e?.target?.value)}
-          className="px-3 py-2 text-sm border border-border rounded-md bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-        >
-          <option value="recent">Legfrissebb</option>
-          <option value="helpful">Leghasznosabb</option>
-          <option value="highest">Legmagasabb értékelés</option>
-          <option value="lowest">Legalacsonyabb értékelés</option>
-        </select>
       </div>
 
-      <AddReview bookId={bookId} onReviewAdded={onReviewAdded} />
+      <AddReview
+        bookId={bookId}
+        onReviewAdded={onReviewAdded}
+        reviews={reviews}
+      />
 
       <div className="space-y-6">
         {reviews?.map((review) => (

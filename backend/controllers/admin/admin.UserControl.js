@@ -84,9 +84,8 @@ export const CreateUser = async (req, res) => {
       !telefonszam ||
       !szuletesi_datum ||
       !lakcim ||
-      !admin ||
+      admin === undefined ||
       !iskola_id || //-> azonosítani
-      !osztaly_id || //-> azonosítani
       !felhasznalo_tipus_id ||
       !email // csekkolni
     ) {
@@ -103,18 +102,18 @@ export const CreateUser = async (req, res) => {
           "Ilyen email cím már hozzá van rendelve egy felhasználóhoz",
         );
 
-      const HashJelszo = bcrypt.hash(nyers_jelszo, process.env.SALT);
+      const HashJelszo = await bcrypt.hash(nyers_jelszo, Number(process.env.SALT) || 10);
 
-      const NewUser = await tx.create({
+      const NewUser = await tx.felhasznalo.create({
         data: {
           nev: nev,
           belepesi_azonosito_hash: HashJelszo,
           telefonszam: telefonszam,
-          szuletesi_datum: szuletesi_datum,
+          szuletesi_datum: new Date(szuletesi_datum),
           lakcim: lakcim,
           admin: Boolean(admin),
           iskola_id: Number(iskola_id),
-          osztaly_id: Number(osztaly_id),
+          osztaly_id: osztaly_id ? Number(osztaly_id) : null,
           felhasznalo_tipus_id: Number(felhasznalo_tipus_id),
           email: email,
         },

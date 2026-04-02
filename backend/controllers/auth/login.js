@@ -82,7 +82,7 @@ export const Login = async (req, res) => {
     res.cookie("refreshToken", newRefreshToken.RefreshToken, {
       httpOnly: true,
       secure: false,
-      sameSite: "strict",
+      sameSite: "lax",
       expires: newRefreshToken.RefreshTokenExpiresAt,
     });
 

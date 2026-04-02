@@ -11,7 +11,7 @@ const BookHeader = ({ book }) => {
             {book?.cim}
           </h1>
           <p className="text-lg text-muted-foreground mb-3">
-            Szerző {book?.szerzo?.nev}
+            Szerző: {book?.szerzo?.nev}
           </p>
           <div className="flex items-center gap-2 mb-4">
             <div className="flex items-center gap-1">
@@ -45,33 +45,46 @@ const BookHeader = ({ book }) => {
               {Number(book?.csillag_ertekeles || 0).toFixed(1)}
             </span>
             <span className="text-sm text-muted-foreground">
-              ({book?.velemeny?.length || 0} reviews)
+              ({book?.velemeny?.length || 0} vélemény)
             </span>
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 bg-muted/30 rounded-lg border border-border">
-        <div>
-          <p className="text-xs text-muted-foreground mb-1">ISBN</p>
-          <p className="text-sm font-medium text-foreground">{book?.ISBN}</p>
+
+      {/* Adatok szekció - Javított elrendezés */}
+      <div className="grid grid-cols-2 lg:flex lg:flex-wrap lg:gap-x-12 gap-y-4 p-5 bg-muted/30 rounded-lg border border-border">
+        <div className="min-w-fit">
+          <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1">
+            ISBN
+          </p>
+          <p className="text-sm md:text-base font-semibold text-foreground whitespace-nowrap">
+            {book?.ISBN}
+          </p>
         </div>
-        <div>
-          <p className="text-xs text-muted-foreground mb-1">Publisher</p>
-          <p className="text-sm font-medium text-foreground">
+        <div className="min-w-fit">
+          <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1">
+            Kiadó
+          </p>
+          <p className="text-sm md:text-base font-semibold text-foreground">
             {book?.kiado?.nev}
           </p>
         </div>
-        <div>
-          <p className="text-xs text-muted-foreground mb-1">Published</p>
-          <p className="text-sm font-medium text-foreground">
+        <div className="min-w-fit">
+          <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1">
+            Kiadás éve
+          </p>
+          <p className="text-sm md:text-base font-semibold text-foreground">
             {book?.kiadas_ev}
           </p>
         </div>
-      </div>
-      <div className="flex flex-wrap gap-2 mt-4">
-        <span className="px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full">
-          {book?.kategoria?.nev}
-        </span>
+        <div className="min-w-fit">
+          <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1">
+            Kategória
+          </p>
+          <span className="inline-block px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary rounded">
+            {book?.kategoria?.nev}
+          </span>
+        </div>
       </div>
     </div>
   );

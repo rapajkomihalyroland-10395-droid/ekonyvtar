@@ -23,6 +23,8 @@ import AdminSchools from "./pages/admin/schools/index.jsx";
 import AdminCategories from "./pages/admin/categories/index.jsx";
 import AdminPublishers from "./pages/admin/publishers/index.jsx";
 import AdminClasses from "./pages/admin/classes/index.jsx";
+import AdminAuthors from "./pages/admin/authors/index.jsx";
+import AdminLoans from "./pages/admin/loans/index.jsx";
 import CreateLoan from "./pages/admin/loans/CreateLoan.jsx";
 
 import AuthContext from "store/AuthContext";
@@ -69,11 +71,13 @@ const router = createBrowserRouter([
               { path: "books/:id", element: <AdminBookDetails /> },
               { path: "users", element: <AdminUsers /> },
               { path: "users/:id", element: <AdminUserDetails /> },
+              { path: "loans", element: <AdminLoans /> },
               { path: "loans/new", element: <CreateLoan /> },
               { path: "user-types", element: <AdminUserTypes /> },
               { path: "schools", element: <AdminSchools /> },
               { path: "categories", element: <AdminCategories /> },
               { path: "publishers", element: <AdminPublishers /> },
+              { path: "authors", element: <AdminAuthors /> },
               { path: "classes", element: <AdminClasses /> },
             ],
           },
