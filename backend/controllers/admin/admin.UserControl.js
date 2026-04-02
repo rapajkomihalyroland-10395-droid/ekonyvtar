@@ -51,9 +51,12 @@ export const GetUserByID = async (req, res) => {
       szuletesi_datum: result.szuletesi_datum,
       lakcim: result.lakcim,
       admin: result.admin,
-      iskola: result.iskola.neve ,
-      osztaly: result.osztaly.nev,
-      felhasznalo_tipus: result.felhasznalotipus.megnevezes,
+      iskola_id: result.iskola_id,
+      iskola: result.iskola?.neve || "",
+      osztaly_id: result.osztaly_id,
+      osztaly: result.osztaly?.nev || "",
+      felhasznalo_tipus_id: result.felhasznalo_tipus_id,
+      felhasznalo_tipus: result.felhasznalotipus?.megnevezes || "",
       email: result.email,
     };
 
@@ -102,7 +105,10 @@ export const CreateUser = async (req, res) => {
           "Ilyen email cím már hozzá van rendelve egy felhasználóhoz",
         );
 
-      const HashJelszo = await bcrypt.hash(nyers_jelszo, Number(process.env.SALT) || 10);
+      const HashJelszo = await bcrypt.hash(
+        nyers_jelszo,
+        Number(process.env.SALT) || 10,
+      );
 
       const NewUser = await tx.felhasznalo.create({
         data: {
@@ -133,7 +139,68 @@ export const CreateUser = async (req, res) => {
 
 export const ModifyUser = async (req, res) => {
   try {
+    const { id } = req.params;
+    const {
+      nev,
+      telefonszam,
+      szuletesi_datum,
+      lakcim,
+      admin,
+      iskola_id,
+      osztaly_id,
+      felhasznalo_tipus_id,
+      email,
+    } = req.body;
+
+    const result = await prisma.$transaction(async (tx) => {
+      const user = await tx.felhasznalo.findUnique({
+        where: { id: Number(id) },
+      });
+
+      if (!user) {
+        throw new Error("USER_NOT_FOUND");
+      }
+
+      if (email && email !== user.email) {
+        const emailExists = await tx.felhasznalo.findUnique({
+          where: { email },
+        });
+
+        if (emailExists) {
+          throw new Error("EMAIL_EXISTS");
+        }
+      }
+
+      const updateData = {};
+
+      if (nev) updateData.nev = nev;
+      if (telefonszam) updateData.telefonszam = telefonszam;
+      if (szuletesi_datum)
+        updateData.szuletesi_datum = new Date(szuletesi_datum);
+      if (lakcim) updateData.lakcim = lakcim;
+      if (admin !== undefined) updateData.admin = Boolean(admin);
+      if (iskola_id !== undefined) updateData.iskola_id = iskola_id;
+      if (osztaly_id !== undefined) updateData.osztaly_id = osztaly_id;
+      if (felhasznalo_tipus_id !== undefined)
+        updateData.felhasznalo_tipus_id = felhasznalo_tipus_id;
+      if (email) updateData.email = email;
+
+      return await tx.felhasznalo.update({
+        where: { id: Number(id) },
+        data: updateData,
+      });
+    });
+
+    return res.status(200).json(result);
   } catch (error) {
+    if (error.message === "USER_NOT_FOUND") {
+      return res.status(404);
+    }
+
+    if (error.message === "EMAIL_EXISTS") {
+      return res.status(409);
+    }
+
     return res.status(500).json({ message: error.message });
   }
 };

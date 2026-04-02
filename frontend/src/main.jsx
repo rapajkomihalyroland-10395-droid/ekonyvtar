@@ -17,7 +17,7 @@ import AdminDashboard from "./pages/admin/dashboard/index.jsx";
 import AdminBooks from "./pages/admin/books/index.jsx";
 import AdminBookDetails from "./pages/admin/books/BookDetails.jsx";
 import AdminUsers from "./pages/admin/users/index.jsx";
-import AdminUserDetails from "./pages/admin/users/UserDetails.jsx";
+import AdminUserDetails from "./pages/admin/users/tabs/UserDetails.jsx";
 import AdminUserTypes from "./pages/admin/user-types/index.jsx";
 import AdminSchools from "./pages/admin/schools/index.jsx";
 import AdminCategories from "./pages/admin/categories/index.jsx";

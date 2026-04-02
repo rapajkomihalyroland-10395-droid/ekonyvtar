@@ -10,17 +10,16 @@ const UserListTable = ({ users, isLoading }) => {
   const [search, setSearch] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const filteredUsers = useMemo(() => {
-    if (!search.trim()) return users;
+  const filteredUsers = !search.trim()
+    ? users
+    : users.filter((user) =>
+        user.nev.toLowerCase().includes(search.toLowerCase()),
+      );
 
-    return users.filter((user) =>
-      user.nev.toLowerCase().includes(search.toLowerCase()),
-    );
-  }, [users, search]);
-
-  const currentUserPage = useMemo(() => {
-    return filteredUsers.slice(currentIndex, currentIndex + page_size);
-  }, [filteredUsers, currentIndex]);
+  const currentUserPage = filteredUsers.slice(
+    currentIndex,
+    currentIndex + page_size,
+  );
 
   useEffect(() => {
     setCurrentIndex(0);
@@ -34,6 +33,21 @@ const UserListTable = ({ users, isLoading }) => {
 
   const previousPage = () => {
     setCurrentIndex((prev) => Math.max(prev - page_size, 0));
+  };
+
+  const handleDelete = async (userId) => {
+    if (!window.confirm("Biztosan törölni szeretnéd ezt a felhasználót?")) {
+      return;
+    }
+
+    try {
+      const { default: api } = await import("../../../../axios_url/baseURL.js");
+      await api.delete(`/users/${userId}`);
+      alert("Sikeres törlés!");
+
+    } catch (error) {
+      alert("Hiba: " + (error.response?.data?.message || error.message));
+    }
   };
 
   if (isLoading) {
@@ -105,27 +119,7 @@ const UserListTable = ({ users, isLoading }) => {
                       <Eye size={18} />
                     </button>
                     <button
-                      onClick={async () => {
-                        if (
-                          window.confirm(
-                            "Biztosan törölni szeretnéd ezt a felhasználót?",
-                          )
-                        ) {
-                          try {
-                            const { default: api } =
-                              await import("../../../../axios_url/baseURL.js");
-                            await api.delete(`/users/${user.id}`);
-                            alert("Sikeres törlés!");
-                            window.location.reload();
-                          } catch (error) {
-                            alert(
-                              "Hiba: " +
-                                (error.response?.data?.message ||
-                                  error.message),
-                            );
-                          }
-                        }
-                      }}
+                      onClick={() => handleDelete(user.id)}
                       className="p-1.5 text-muted-foreground hover:text-red-600 hover:bg-red-50 rounded transition-colors"
                       title="Törlés"
                     >

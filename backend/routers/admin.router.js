@@ -5,6 +5,7 @@ import {
   GetAllUsers,
   GetUserByID,
   CreateUser,
+  ModifyUser,
   DeleteUser,
 } from "../controllers/admin/admin.UserControl.js";
 
@@ -65,7 +66,7 @@ adminRouter.use(AuthMiddleware, AdminMiddleware);
 
 //FELHASZNÁLOK
 adminRouter.route("/users").get(GetAllUsers).post(CreateUser);
-adminRouter.route("/users/:id").get(GetUserByID).delete(DeleteUser);
+adminRouter.route("/users/:id").get(GetUserByID).delete(DeleteUser).patch(ModifyUser);
 
 // Referencia táblák kezelése
 
