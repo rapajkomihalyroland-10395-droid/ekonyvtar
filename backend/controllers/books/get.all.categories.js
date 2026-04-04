@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 export const GetAllCategories = async (req, res) => {
   try {
-    const result = await prisma.kategoria.findMany();
+    const result = await prisma.kategoriak.findMany();
 
     if (!result) return res.status(500).json({ message: "Sikertelen query" });
 

@@ -9,7 +9,7 @@ export const SearchBookByCharacters = async (req, res) => {
 
     if (!book || book.trim() === "") return res.json([]);
 
-    const result = await prisma.konyv.findMany({
+    const result = await prisma.konyvek.findMany({
       where: {
         cim: {
           contains: book,

@@ -7,12 +7,12 @@ export const GetARentalByID = async (req, res) => {
     const { felhasznalo_id } = req.params;
     const host = req.protocol + "://" + req.get("host");
 
-    const IsUserHaveRental = await prisma.berles.findMany({
+    const IsUserHaveRental = await prisma.berlesek.findMany({
       where: { felhasznalo_id: Number(felhasznalo_id) },
       include: {
-        konyv: {
+        konyvek: {
           include: {
-            szerzo: true,
+            szerzok: true,
           },
         },
       },
@@ -21,13 +21,13 @@ export const GetARentalByID = async (req, res) => {
     const normalized = IsUserHaveRental.map((book) => ({
       felhasznalo_id: felhasznalo_id,
       id: book.id,
-      konyv_id: book.konyv.id,
-      cim: book.konyv.cim,
-      szerzo: book.konyv.szerzo.nev,
+      konyv_id: book.konyvek.id,
+      cim: book.konyvek.cim,
+      szerzo: book.konyvek.szerzok.nev,
       berles_kezdete: book.berles_kezdete,
       berles_vege: book.berles_vege,
       visszahozva: book.visszahozva,
-      kep: book.konyv.kep ? `${host}/uploads/${book.konyv.kep}` : null,
+      kep: book.konyvek.kep ? `${host}/uploads/${book.konyvek.kep}` : null,
     }));
 
     return res.json(normalized);

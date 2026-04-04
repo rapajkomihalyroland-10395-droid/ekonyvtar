@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 export const GetAllUserTypes = async (req, res) => {
   try {
-    const result = await prisma.felhasznalotipus.findMany();
+    const result = await prisma.felhasznalotipusok.findMany();
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -13,13 +13,10 @@ export const GetAllUserTypes = async (req, res) => {
 
 export const CreateUserType = async (req, res) => {
   try {
-    const { megnevezes, leiras, max_kolcsonzes, max_idotartam_nap } = req.body;
-    const result = await prisma.felhasznalotipus.create({
+    const { nev } = req.body;
+    const result = await prisma.felhasznalotipusok.create({
       data: {
-        megnevezes,
-        leiras,
-        max_kolcsonzes: max_kolcsonzes ? parseInt(max_kolcsonzes) : 5,
-        max_idotartam_nap: max_idotartam_nap ? parseInt(max_idotartam_nap) : 30,
+        nev,
       },
     });
     return res.status(201).json(result);
@@ -31,15 +28,11 @@ export const CreateUserType = async (req, res) => {
 export const UpdateUserType = async (req, res) => {
   try {
     const { id } = req.params;
-    const { megnevezes, leiras, max_kolcsonzes, max_idotartam_nap } = req.body;
-    const result = await prisma.felhasznalotipus.update({
+    const { nev } = req.body;
+    const result = await prisma.felhasznalotipusok.update({
       where: { id: parseInt(id) },
       data: {
-        megnevezes,
-        leiras,
-        max_kolcsonzes: max_kolcsonzes ? parseInt(max_kolcsonzes) : undefined,
-        max_idotartam_nap:
-          max_idotartam_nap ? parseInt(max_idotartam_nap) : undefined,
+        nev,
       },
     });
     return res.status(200).json(result);
@@ -51,7 +44,7 @@ export const UpdateUserType = async (req, res) => {
 export const DeleteUserType = async (req, res) => {
   try {
     const { id } = req.params;
-    await prisma.felhasznalotipus.delete({
+    await prisma.felhasznalotipusok.delete({
       where: { id: parseInt(id) },
     });
     return res.status(200).json({ message: "Sikeres törlés" });
@@ -67,7 +60,7 @@ export const DeleteUserType = async (req, res) => {
 
 export const GetAllSchools = async (req, res) => {
   try {
-    const result = await prisma.iskola.findMany();
+    const result = await prisma.iskolak.findMany();
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -76,9 +69,9 @@ export const GetAllSchools = async (req, res) => {
 
 export const CreateSchool = async (req, res) => {
   try {
-    const { neve } = req.body;
-    const result = await prisma.iskola.create({
-      data: { neve },
+    const { nev } = req.body;
+    const result = await prisma.iskolak.create({
+      data: { nev },
     });
     return res.status(201).json(result);
   } catch (error) {
@@ -89,10 +82,10 @@ export const CreateSchool = async (req, res) => {
 export const UpdateSchool = async (req, res) => {
   try {
     const { id } = req.params;
-    const { neve } = req.body;
-    const result = await prisma.iskola.update({
+    const { nev } = req.body;
+    const result = await prisma.iskolak.update({
       where: { id: parseInt(id) },
-      data: { neve },
+      data: { nev },
     });
     return res.status(200).json(result);
   } catch (error) {
@@ -103,7 +96,7 @@ export const UpdateSchool = async (req, res) => {
 export const DeleteSchool = async (req, res) => {
   try {
     const { id } = req.params;
-    await prisma.iskola.delete({
+    await prisma.iskolak.delete({
       where: { id: parseInt(id) },
     });
     return res.status(200).json({ message: "Sikeres törlés" });
@@ -119,7 +112,7 @@ export const DeleteSchool = async (req, res) => {
 
 export const GetAllCategories = async (req, res) => {
   try {
-    const result = await prisma.kategoria.findMany();
+    const result = await prisma.kategoriak.findMany();
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -129,7 +122,7 @@ export const GetAllCategories = async (req, res) => {
 export const CreateCategory = async (req, res) => {
   try {
     const { nev } = req.body;
-    const result = await prisma.kategoria.create({
+    const result = await prisma.kategoriak.create({
       data: { nev },
     });
     return res.status(201).json(result);
@@ -142,7 +135,7 @@ export const UpdateCategory = async (req, res) => {
   try {
     const { id } = req.params;
     const { nev } = req.body;
-    const result = await prisma.kategoria.update({
+    const result = await prisma.kategoriak.update({
       where: { id: parseInt(id) },
       data: { nev },
     });
@@ -155,7 +148,7 @@ export const UpdateCategory = async (req, res) => {
 export const DeleteCategory = async (req, res) => {
   try {
     const { id } = req.params;
-    await prisma.kategoria.delete({
+    await prisma.kategoriak.delete({
       where: { id: parseInt(id) },
     });
     return res.status(200).json({ message: "Sikeres törlés" });
@@ -171,7 +164,7 @@ export const DeleteCategory = async (req, res) => {
 
 export const GetAllPublishers = async (req, res) => {
   try {
-    const result = await prisma.kiado.findMany();
+    const result = await prisma.kiadok.findMany();
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -181,7 +174,7 @@ export const GetAllPublishers = async (req, res) => {
 export const CreatePublisher = async (req, res) => {
   try {
     const { nev, szekhely } = req.body;
-    const result = await prisma.kiado.create({
+    const result = await prisma.kiadok.create({
       data: { nev, szekhely },
     });
     return res.status(201).json(result);
@@ -194,7 +187,7 @@ export const UpdatePublisher = async (req, res) => {
   try {
     const { id } = req.params;
     const { nev, szekhely } = req.body;
-    const result = await prisma.kiado.update({
+    const result = await prisma.kiadok.update({
       where: { id: parseInt(id) },
       data: { nev, szekhely },
     });
@@ -207,7 +200,7 @@ export const UpdatePublisher = async (req, res) => {
 export const DeletePublisher = async (req, res) => {
   try {
     const { id } = req.params;
-    await prisma.kiado.delete({
+    await prisma.kiadok.delete({
       where: { id: parseInt(id) },
     });
     return res.status(200).json({ message: "Sikeres törlés" });
@@ -223,7 +216,7 @@ export const DeletePublisher = async (req, res) => {
 
 export const GetAllClasses = async (req, res) => {
   try {
-    const result = await prisma.osztaly.findMany();
+    const result = await prisma.osztalyok.findMany();
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -232,10 +225,10 @@ export const GetAllClasses = async (req, res) => {
 
 export const CreateClass = async (req, res) => {
   try {
-    const { nev, evfolyam, tagozat, iskola_id } = req.body;
-    const result = await prisma.osztaly.create({
+    const { osztaly_jeloles, evfolyam, tagozat, iskola_id } = req.body;
+    const result = await prisma.osztalyok.create({
       data: {
-        nev,
+        osztaly_jeloles,
         evfolyam: evfolyam ? parseInt(evfolyam) : null,
         tagozat,
         iskola_id: iskola_id ? parseInt(iskola_id) : null,
@@ -250,11 +243,11 @@ export const CreateClass = async (req, res) => {
 export const UpdateClass = async (req, res) => {
   try {
     const { id } = req.params;
-    const { nev, evfolyam, tagozat, iskola_id } = req.body;
-    const result = await prisma.osztaly.update({
+    const { osztaly_jeloles, evfolyam, tagozat, iskola_id } = req.body;
+    const result = await prisma.osztalyok.update({
       where: { id: parseInt(id) },
       data: {
-        nev,
+        osztaly_jeloles,
         evfolyam: evfolyam ? parseInt(evfolyam) : undefined,
         tagozat,
         iskola_id: iskola_id ? parseInt(iskola_id) : undefined,
@@ -269,7 +262,7 @@ export const UpdateClass = async (req, res) => {
 export const DeleteClass = async (req, res) => {
   try {
     const { id } = req.params;
-    await prisma.osztaly.delete({
+    await prisma.osztalyok.delete({
       where: { id: parseInt(id) },
     });
     return res.status(200).json({ message: "Sikeres törlés" });
@@ -285,7 +278,7 @@ export const DeleteClass = async (req, res) => {
 
 export const GetAllAuthors = async (req, res) => {
   try {
-    const result = await prisma.szerzo.findMany();
+    const result = await prisma.szerzok.findMany();
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -295,7 +288,7 @@ export const GetAllAuthors = async (req, res) => {
 export const CreateAuthor = async (req, res) => {
   try {
     const { nev } = req.body;
-    const result = await prisma.szerzo.create({
+    const result = await prisma.szerzok.create({
       data: { nev },
     });
     return res.status(201).json(result);
@@ -308,7 +301,7 @@ export const UpdateAuthor = async (req, res) => {
   try {
     const { id } = req.params;
     const { nev } = req.body;
-    const result = await prisma.szerzo.update({
+    const result = await prisma.szerzok.update({
       where: { id: Number(id) },
       data: { nev },
     });
@@ -321,7 +314,7 @@ export const UpdateAuthor = async (req, res) => {
 export const DeleteAuthor = async (req, res) => {
   try {
     const { id } = req.params;
-    await prisma.szerzo.delete({
+    await prisma.szerzok.delete({
       where: { id: Number(id) },
     });
     console.log("Sikeres szerző törlés!");

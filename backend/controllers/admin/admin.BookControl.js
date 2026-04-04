@@ -28,65 +28,65 @@ export const CreateNewBook = async (req, res) => {
     let error;
 
     const result = await prisma.$transaction(async (tx) => {
-      const image_url = await tx.konyv.findFirst({
+      const image_url = await tx.konyvek.findFirst({
         where: { kep: kep },
       });
       if (image_url) throw new Error("Ez a fájl már foglalt");
 
-      const existingISBN = await tx.konyv.findUnique({
+      const existingISBN = await tx.konyvek.findUnique({
         where: { ISBN: ISBN },
       });
       if (existingISBN) throw new Error("Ez a ISBN szám már foglalt!");
 
-      const existingKnyNySzam = await tx.konyv.findUnique({
+      const existingKnyNySzam = await tx.konyvek.findFirst({
         where: { konyvtar_nyilvantartasi_szam: konyvtar_nyilvantartasi_szam },
       });
       if (existingKnyNySzam)
         throw new Error("Ez a könyvtári szám már foglalt!");
 
       let szerzoID;
-      const existingSzerzo = await tx.szerzo.findFirst({
+      const existingSzerzo = await tx.szerzok.findFirst({
         where: { nev: szerzo },
       });
 
       if (existingSzerzo) {
         szerzoID = existingSzerzo.id;
       } else {
-        const newSzerzo = await tx.szerzo.create({
+        const newSzerzo = await tx.szerzok.create({
           data: { nev: szerzo },
         });
         szerzoID = newSzerzo.id;
       }
 
       let kiadoID;
-      const existingKiado = await tx.kiado.findFirst({
+      const existingKiado = await tx.kiadok.findFirst({
         where: { nev: kiado },
       });
 
       if (existingKiado) {
         kiadoID = existingKiado.id;
       } else {
-        const newKiado = await tx.kiado.create({
+        const newKiado = await tx.kiadok.create({
           data: { nev: kiado },
         });
         kiadoID = newKiado.id;
       }
 
       let kategoriaID;
-      const existingKategoria = await tx.kategoria.findFirst({
+      const existingKategoria = await tx.kategoriak.findFirst({
         where: { nev: kategoria },
       });
 
       if (existingKategoria) {
         kategoriaID = existingKategoria.id;
       } else {
-        const newKategoria = await tx.kategoria.create({
+        const newKategoria = await tx.kategoriak.create({
           data: { nev: kategoria },
         });
         kategoriaID = newKategoria.id;
       }
 
-      const newBook = await tx.konyv.create({
+      const newBook = await tx.konyvek.create({
         data: {
           cim: cim,
           kep: kep,
@@ -140,7 +140,7 @@ export const IncreaseStock = async (req, res) => {
 
     let result;
 
-    const findBook = await prisma.konyv.findUnique({
+    const findBook = await prisma.konyvek.findUnique({
       where: { ISBN: ISBN },
     });
 
@@ -148,7 +148,7 @@ export const IncreaseStock = async (req, res) => {
       return res.status(409).json({ message: "Nincs ilyen ISBN számú könyv" });
 
     if (!ertek == 0) {
-      result = await prisma.konyv.update({
+      result = await prisma.konyvek.update({
         where: { ISBN: ISBN },
         data: { keszlet: { increment: ertek } },
       });
@@ -169,36 +169,36 @@ export const GetBookByID = async (req, res) => {
 
     let book;
 
-    const result = await prisma.konyv.findUnique({
+    const result = await prisma.konyvek.findUnique({
       where: { id: Number(id) },
       include: {
-        berles: {
+        berlesek: {
           include: {
-            felhasznalo: {
-              include: { osztaly: true },
+            felhasznalok: {
+              include: { osztalyok: true },
             },
           },
         },
-        szerzo: true,
-        kiado: true,
-        kategoria: true,
+        szerzok: true,
+        kiadok: true,
+        kategoriak: true,
       },
     });
-    /*berles: result.berles.map((x) => ({
-        nev: x.felhasznalo.nev,
-        lakcim: x.felhasznalo.lakcim,
-        osztaly: x.felhasznalo.osztaly.nev,
+    /*berles: result.berlesek.map((x) => ({
+        nev: x.felhasznalok.nev,
+        lakcim: x.felhasznalok.lakcim,
+        osztaly: x.felhasznalok.osztalyok.nev,
         kikolcsozes_stat:
           x.visszahozva != false ? x.berles_kezdete : "Visszahozott",
       })), */
     book = {
       cim: result.cim,
-      szerzo: result.szerzo.nev,
+      szerzo: result.szerzok.nev,
       isbn: result.ISBN,
-      kiado: result.kiado.nev,
+      kiado: result.kiadok.nev,
       kiadas_ev: result.kiadas_ev,
       leiras: result.leiras,
-      kategoria: result.kategoria.nev,
+      kategoria: result.kategoriak.nev,
       keszlet: result.keszlet,
       konyvtar_nyilvantartasi_szam: result.konyvtar_nyilvantartasi_szam,
       kolcsonozheto: result.kolcsonozheto,
@@ -237,13 +237,13 @@ export const UpdateBookDetail = async (req, res) => {
     const result = await prisma.$transaction(async (tx) => {
       let szerzoID;
       if (szerzo) {
-        const existingSzerzo = await tx.szerzo.findFirst({
+        const existingSzerzo = await tx.szerzok.findFirst({
           where: { nev: szerzo },
         });
         if (existingSzerzo) {
           szerzoID = existingSzerzo.id;
         } else {
-          const newSzerzo = await tx.szerzo.create({
+          const newSzerzo = await tx.szerzok.create({
             data: { nev: szerzo },
           });
           szerzoID = newSzerzo.id;
@@ -252,13 +252,13 @@ export const UpdateBookDetail = async (req, res) => {
 
       let kiadoID;
       if (kiado) {
-        const existingKiado = await tx.kiado.findFirst({
+        const existingKiado = await tx.kiadok.findFirst({
           where: { nev: kiado },
         });
         if (existingKiado) {
           kiadoID = existingKiado.id;
         } else {
-          const newKiado = await tx.kiado.create({
+          const newKiado = await tx.kiadok.create({
             data: { nev: kiado },
           });
           kiadoID = newKiado.id;
@@ -267,13 +267,13 @@ export const UpdateBookDetail = async (req, res) => {
 
       let kategoriaID;
       if (kategoria) {
-        const existingKategoria = await tx.kategoria.findFirst({
+        const existingKategoria = await tx.kategoriak.findFirst({
           where: { nev: kategoria },
         });
         if (existingKategoria) {
           kategoriaID = existingKategoria.id;
         } else {
-          const newKategoria = await tx.kategoria.create({
+          const newKategoria = await tx.kategoriak.create({
             data: { nev: kategoria },
           });
           kategoriaID = newKategoria.id;
@@ -298,7 +298,7 @@ export const UpdateBookDetail = async (req, res) => {
       if (kiadas_ev) updateData.kiadas_ev = Number(kiadas_ev);
       if (magassag_cm) updateData.magassag_cm = Number(magassag_cm);
 
-      const updatedBook = await tx.konyv.update({
+      const updatedBook = await tx.konyvek.update({
         where: { id: Number(id) },
         data: updateData,
       });
@@ -317,10 +317,10 @@ export const UpdateBookDetail = async (req, res) => {
 export const GetAllBook = async (req, res) => {
   try {
     let books = {};
-    const result = await prisma.konyv.findMany({
+    const result = await prisma.konyvek.findMany({
       include: {
-        szerzo: true,
-        kategoria: true,
+        szerzok: true,
+        kategoriak: true,
       },
     });
     if (result) {
@@ -328,8 +328,8 @@ export const GetAllBook = async (req, res) => {
         id: r.id,
         cim: r.cim,
         ISBN: r.ISBN,
-        author: r.szerzo.nev,
-        category: r.kategoria.nev,
+        author: r.szerzok.nev,
+        category: r.kategoriak.nev,
         keszlet: r.keszlet,
       }));
     }
@@ -347,20 +347,20 @@ export const DeleteBook = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const book = await prisma.konyv.findUnique({
+    const book = await prisma.konyvek.findUnique({
       where: { id: Number(id) },
-      include: { berles: true }
+      include: { berlesek: true }
     });
 
     if (!book) {
       return res.status(404).json({ message: "A könyv nem található." });
     }
 
-    if (book.berles.some(b => !b.visszahozva)) {
+    if (book.berlesek.some(b => !b.visszahozva)) {
       return res.status(409).json({ message: "A könyv jelenleg ki van kölcsönözve, így nem törölhető." });
     }
 
-    await prisma.konyv.delete({
+    await prisma.konyvek.delete({
       where: { id: Number(id) }
     });
 

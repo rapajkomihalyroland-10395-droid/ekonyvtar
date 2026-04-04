@@ -90,7 +90,7 @@ const AdminSchools = () => {
                     {item.id}
                   </td>
                   <td className="p-4 align-middle font-medium text-foreground">
-                    {item.neve}
+                    {item.nev}
                   </td>
                   <td className="p-4 align-middle text-right">
                     <div className="flex justify-end gap-2">

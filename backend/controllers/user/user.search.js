@@ -8,7 +8,7 @@ export const SearchUserNameByCharacters = async (req, res) => {
 
     if (!name || name.trim() === "") return res.json([]);
 
-    const user = await prisma.felhasznalo.findMany({
+    const user = await prisma.felhasznalok.findMany({
       where: { nev: { contains: name } },
     });
 

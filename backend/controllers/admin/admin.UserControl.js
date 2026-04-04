@@ -9,16 +9,16 @@ const prisma = new PrismaClient();
 
 export const GetAllUsers = async (req, res) => {
   try {
-    const result = await prisma.felhasznalo.findMany({
-      include: { felhasznalotipus: true, berles: true },
+    const result = await prisma.felhasznalok.findMany({
+      include: { felhasznalotipusok: true, berlesek: true },
     });
 
     const user = result.map((u) => ({
       id: u.id,
       nev: u.nev,
       email: u.email,
-      szerepkor: u.felhasznalotipus.megnevezes,
-      aktiv_kolcsonzes: u.berles.some(
+      szerepkor: u.felhasznalotipusok.nev,
+      aktiv_kolcsonzes: u.berlesek.some(
         (b) =>
           b.visszahozva === false &&
           new Date(b.berles_vege).getTime() > Date.now(),
@@ -35,12 +35,12 @@ export const GetUserByID = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const result = await prisma.felhasznalo.findFirst({
+    const result = await prisma.felhasznalok.findFirst({
       where: { id: Number(id) },
       include: {
-        felhasznalotipus: true,
-        osztaly: true,
-        iskola: true,
+        felhasznalotipusok: true,
+        osztalyok: true,
+        iskolak: true,
       },
     });
 
@@ -55,11 +55,11 @@ export const GetUserByID = async (req, res) => {
       lakcim: result.lakcim,
       admin: result.admin,
       iskola_id: result.iskola_id,
-      iskola: result.iskola?.neve || "",
+      iskola: result.iskolak?.nev || "",
       osztaly_id: result.osztaly_id,
-      osztaly: result.osztaly?.nev || "",
+      osztaly: result.osztalyok?.osztaly_jeloles || "",
       felhasznalo_tipus_id: result.felhasznalo_tipus_id,
-      felhasznalo_tipus: result.felhasznalotipus?.megnevezes || "",
+      felhasznalo_tipus: result.felhasznalotipusok?.nev || "",
       email: result.email,
     };
 
@@ -99,7 +99,7 @@ export const CreateUser = async (req, res) => {
     }
 
     const result = await prisma.$transaction(async (tx) => {
-      const IsEmailExist = await tx.felhasznalo.findFirst({
+      const IsEmailExist = await tx.felhasznalok.findFirst({
         where: { email: email },
       });
 
@@ -113,7 +113,7 @@ export const CreateUser = async (req, res) => {
         Number(process.env.SALT) || 10,
       );
 
-      const NewUser = await tx.felhasznalo.create({
+      const NewUser = await tx.felhasznalok.create({
         data: {
           nev: nev,
           belepesi_azonosito_hash: HashJelszo,
@@ -156,7 +156,7 @@ export const ModifyUser = async (req, res) => {
     } = req.body;
 
     const result = await prisma.$transaction(async (tx) => {
-      const user = await tx.felhasznalo.findUnique({
+      const user = await tx.felhasznalok.findUnique({
         where: { id: Number(id) },
       });
 
@@ -165,7 +165,7 @@ export const ModifyUser = async (req, res) => {
       }
 
       if (email && email !== user.email) {
-        const emailExists = await tx.felhasznalo.findUnique({
+        const emailExists = await tx.felhasznalok.findUnique({
           where: { email },
         });
 
@@ -188,7 +188,7 @@ export const ModifyUser = async (req, res) => {
         updateData.felhasznalo_tipus_id = felhasznalo_tipus_id;
       if (email) updateData.email = email;
 
-      return await tx.felhasznalo.update({
+      return await tx.felhasznalok.update({
         where: { id: Number(id) },
         data: updateData,
       });
@@ -212,7 +212,7 @@ export const DeleteUser = async (req, res) => {
   try {
     const id = Number(req.params.id);
 
-    const Username = await prisma.felhasznalo.findFirst({
+    const Username = await prisma.felhasznalok.findFirst({
       where: { id: id },
       select: { nev: true },
     });
@@ -223,12 +223,12 @@ export const DeleteUser = async (req, res) => {
       });
     }
 
-    const UserBorrowStatus = await prisma.berles.findMany({
+    const UserBorrowStatus = await prisma.berlesek.findMany({
       where: { felhasznalo_id: id },
       include: {
-        konyv: {
+        konyvek: {
           include: {
-            szerzo: true,
+            szerzok: true,
           },
         },
       },
@@ -237,7 +237,7 @@ export const DeleteUser = async (req, res) => {
     const ActiveBorrowBooks = {
       felhasznalo: Username,
       konyvek: UserBorrowStatus.filter((x) => x.visszahozva === false).map(
-        (x) => x.konyv,
+        (x) => x.konyvek,
       ),
     };
 
@@ -246,14 +246,14 @@ export const DeleteUser = async (req, res) => {
         message: `A ${
           Username.nev
         } felhasználót nem lehet törölni, mert a/az ${ActiveBorrowBooks.konyvek
-          .map((x) => `"${x.szerzo.nev} : ${x.cim}"`)
+          .map((x) => `"${x.szerzok.nev} : ${x.cim}"`)
           .join(", ")} című ${
           ActiveBorrowBooks.konyvek.length <= 1 ? "könyvet" : "könyveket"
         } nem hozta vissza.`,
       });
     }
 
-    await prisma.felhasznalo.delete({
+    await prisma.felhasznalok.delete({
       where: { id },
     });
 

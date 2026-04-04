@@ -5,78 +5,6 @@ const BookCard = ({ book, onRentNow }) => {
   const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  const getStatusConfig = (status) => {
-    const configs = {
-      available: {
-        label: "Available",
-        bgColor: "bg-success/10",
-        textColor: "text-success",
-        icon: (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-            <polyline points="22 4 12 14.01 9 11.01" />
-          </svg>
-        ),
-      },
-      "checked-out": {
-        label: "Checked Out",
-        bgColor: "bg-error/10",
-        textColor: "text-error",
-        icon: (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <line x1="15" y1="9" x2="9" y2="15" />
-            <line x1="9" y1="9" x2="15" y2="15" />
-          </svg>
-        ),
-      },
-      reserved: {
-        label: "Reserved",
-        bgColor: "bg-warning/10",
-        textColor: "text-warning",
-        icon: (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <polyline points="12 6 12 12 16 14" />
-          </svg>
-        ),
-      },
-    };
-    return configs?.[status] || configs?.available;
-  };
-
-  const statusConfig = getStatusConfig(book?.status);
-
   const handleCardClick = () => {
     if (!book?.id && book?.id !== 0) return;
     navigate(`/book-details/${book.id}`, { state: { bookId: book.id } });
@@ -118,15 +46,6 @@ const BookCard = ({ book, onRentNow }) => {
           }`}
           onLoad={() => setImageLoaded(true)}
         />
-
-        <div className="absolute top-2 right-2">
-          <span
-            className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium ${statusConfig?.bgColor} ${statusConfig?.textColor}`}
-          >
-            {statusConfig?.icon}
-            {statusConfig?.label}
-          </span>
-        </div>
       </div>
 
       <div className="p-4 space-y-3">
@@ -225,7 +144,7 @@ const BookCard = ({ book, onRentNow }) => {
               disabled
               className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3"
             >
-              Kérelem benyújtása
+              Nincs elérhető példány a készletben
             </button>
           )}
         </div>

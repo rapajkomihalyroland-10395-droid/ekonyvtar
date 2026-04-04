@@ -5,9 +5,9 @@ const prisma = new PrismaClient();
 export const TopBooks = async (req, res) => {
   try {
     const host = req.protocol + "://" + req.get("host");
-    const books = await prisma.berles.findMany({
+    const books = await prisma.berlesek.findMany({
       select: {
-        konyv: {
+        konyvek: {
           select: {
             id: true,
             cim: true,
@@ -16,32 +16,32 @@ export const TopBooks = async (req, res) => {
             keszlet: true,
             kolcsonozheto: true,
             csillag_ertekeles: true,
-            szerzo: { select: { nev: true } },
-            kiado: { select: { nev: true } },
-            kategoria: { select: { nev: true } },
+            szerzok: { select: { nev: true } },
+            kiadok: { select: { nev: true } },
+            kategoriak: { select: { nev: true, id: true } },
           },
         },
       },
     });
 
     const collect_books = books.reduce((acc, book) => {
-      const key = book.konyv.id;
+      const key = book.konyvek.id;
 
       if (acc[key]) {
         acc[key].elofordulas++;
       } else {
         acc[key] = {
           id: key,
-          cim: book.konyv.cim,
-          kep: book.konyv.kep ? `${host}/uploads/${book.konyv.kep}` : null,
-          leiras: book.konyv.leiras,
-          keszlet: book.konyv.keszlet,
-          kolcsonozheto: book.konyv.kolcsonozheto,
-          szerzo: book.konyv.szerzo.nev,
-          kiado: book.konyv.kiado.nev,
-          kategoria: book.konyv.kategoria.nev,
-          kategoria_id: book.konyv.kategoria.id,
-          csillagok: book.konyv.csillag_ertekeles,
+          cim: book.konyvek.cim,
+          kep: book.konyvek.kep ? `${host}/uploads/${book.konyvek.kep}` : null,
+          leiras: book.konyvek.leiras,
+          keszlet: book.konyvek.keszlet,
+          kolcsonozheto: book.konyvek.kolcsonozheto,
+          szerzo: book.konyvek.szerzok.nev,
+          kiado: book.konyvek.kiadok.nev,
+          kategoria: book.konyvek.kategoriak.nev,
+          kategoria_id: book.konyvek.kategoriak.id,
+          csillagok: book.konyvek.csillag_ertekeles,
           elofordulas: 1,
         };
       }
@@ -61,32 +61,32 @@ export const TopBooks = async (req, res) => {
 
 export const TopAuthor = async (req, res) => {
   try {
-    const books = await prisma.berles.findMany({
+    const books = await prisma.berlesek.findMany({
       select: {
         id: true,
-        konyv: {
+        konyvek: {
           select: {
             cim: true,
             kep: true,
             leiras: true,
-            szerzo: { select: { nev: true, id: true } },
-            kiado: { select: { nev: true } },
-            kategoria: { select: { nev: true } },
+            szerzok: { select: { nev: true, id: true } },
+            kiadok: { select: { nev: true } },
+            kategoriak: { select: { nev: true } },
           },
         },
       },
     });
 
     const collect_books = books.reduce((acc, book) => {
-      const key = book.konyv.szerzo.id;
+      const key = book.konyvek.szerzok.id;
 
       if (acc[key]) {
         acc[key].elofordulas++;
       } else {
         acc[key] = {
           id: key,
-          szerzo: book.konyv.szerzo.nev,
-          konyv: book.konyv.cim,
+          szerzo: book.konyvek.szerzok.nev,
+          konyv: book.konyvek.cim,
           elofordulas: 1,
         };
       }
@@ -107,7 +107,7 @@ export const TopAuthor = async (req, res) => {
 export const TopByStars = async (req, res) => {
   try {
     const host = req.protocol + "://" + req.get("host");
-    const books = await prisma.konyv.findMany({
+    const books = await prisma.konyvek.findMany({
       where: {
         csillag_ertekeles: { gte: 4.8 },
       },
@@ -117,23 +117,23 @@ export const TopByStars = async (req, res) => {
         kep: true,
         leiras: true,
         csillag_ertekeles: true,
-        szerzo: { select: { nev: true } },
-        kiado: { select: { nev: true } },
-        kategoria: { select: { nev: true } },
+        szerzok: { select: { nev: true } },
+        kiadok: { select: { nev: true } },
+        kategoriak: { select: { nev: true } },
       },
       take: 25,
     });
 
-    /*kep: book.konyv.kep ? `${host}/uploads/${book.konyv.kep}` : null, */
+    /*kep: book.konyvek.kep ? `${host}/uploads/${book.konyvek.kep}` : null, */
     const formattedBooks = books.map((book) => ({
       id: book.id,
       cim: book.cim,
       kep: book.kep ? `${host}/uploads/${book.kep}` : null,
       leiras: book.leiras,
       csillag_ertekeles: book.csillag_ertekeles,
-      szerzo: book.szerzo.nev,
-      kiado: book.kiado.nev,
-      kategoria: book.kategoria.nev,
+      szerzo: book.szerzok.nev,
+      kiado: book.kiadok.nev,
+      kategoria: book.kategoriak.nev,
     }));
 
     return res.status(200).json(formattedBooks);
@@ -145,17 +145,17 @@ export const TopByStars = async (req, res) => {
 export const TopByCategory = async (req, res) => {
   try {
     const host = req.protocol + "://" + req.get("host");
-    const books = await prisma.berles.findMany({
+    const books = await prisma.berlesek.findMany({
       select: {
         id: true,
-        konyv: {
+        konyvek: {
           select: {
             cim: true,
             kep: true,
             leiras: true,
-            szerzo: { select: { nev: true } },
-            kiado: { select: { nev: true } },
-            kategoria: { select: { nev: true, id: true } },
+            szerzok: { select: { nev: true } },
+            kiadok: { select: { nev: true } },
+            kategoriak: { select: { nev: true, id: true } },
           },
         },
       },
@@ -163,18 +163,18 @@ export const TopByCategory = async (req, res) => {
     });
 
     const collect_books = books.reduce((acc, book) => {
-      const key = book.konyv.kategoria.id;
+      const key = book.konyvek.kategoriak.id;
 
       if (acc[key]) acc[key].elofordulas++;
       else {
         acc[key] = {
           id: key,
-          kategoria: book.konyv.kategoria.nev,
-          cim: book.konyv.cim,
-          kep: book.konyv.kep ? `${host}/uploads/${book.konyv.kep}` : null,
-          leiras: book.konyv.leiras,
-          szerzo: book.konyv.szerzo.nev,
-          kiado: book.konyv.kiado.nev,
+          kategoria: book.konyvek.kategoriak.nev,
+          cim: book.konyvek.cim,
+          kep: book.konyvek.kep ? `${host}/uploads/${book.konyvek.kep}` : null,
+          leiras: book.konyvek.leiras,
+          szerzo: book.konyvek.szerzok.nev,
+          kiado: book.konyvek.kiadok.nev,
           elofordulas: 1,
         };
       }

@@ -11,7 +11,7 @@ const BookHeader = ({ book }) => {
             {book?.cim}
           </h1>
           <p className="text-lg text-muted-foreground mb-3">
-            Szerző: {book?.szerzo?.nev}
+            Szerző: {book?.szerzok?.nev}
           </p>
           <div className="flex items-center gap-2 mb-4">
             <div className="flex items-center gap-1">
@@ -45,7 +45,7 @@ const BookHeader = ({ book }) => {
               {Number(book?.csillag_ertekeles || 0).toFixed(1)}
             </span>
             <span className="text-sm text-muted-foreground">
-              ({book?.velemeny?.length || 0} vélemény)
+              ({book?.velemenyek?.length || 0} vélemény)
             </span>
           </div>
         </div>
@@ -66,7 +66,7 @@ const BookHeader = ({ book }) => {
             Kiadó
           </p>
           <p className="text-sm md:text-base font-semibold text-foreground">
-            {book?.kiado?.nev}
+            {book?.kiadok?.nev}
           </p>
         </div>
         <div className="min-w-fit">
@@ -82,7 +82,7 @@ const BookHeader = ({ book }) => {
             Kategória
           </p>
           <span className="inline-block px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary rounded">
-            {book?.kategoria?.nev}
+            {book?.kategoriak?.nev}
           </span>
         </div>
       </div>

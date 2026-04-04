@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Plus, Eye, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2 } from "lucide-react";
 import AddClassModal from "./components/AddClassModal";
 import api from "../../../axios_url/baseURL.js";
 
@@ -17,11 +17,12 @@ const AdminClasses = () => {
       const response = await api.get("/classes");
       setClasses(response.data);
     } catch (error) {
+      console.error("Hiba az osztályok lekérésekor:", error);
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Biztosan archiválni/törölni szeretné?")) {
+    if (window.confirm("Biztosan törölni szeretné ezt az osztályt?")) {
       try {
         await api.delete(`/classes/${id}`);
         fetchClasses();
@@ -54,59 +55,73 @@ const AdminClasses = () => {
             Osztályok kezelése
           </h1>
           <p className="text-muted-foreground">
-            Osztályok listázása és kezelése
+            Rendszerben lévő osztályok áttekintése és szerkesztése
           </p>
         </div>
         <button
           onClick={() => setIsAddModalOpen(true)}
-          className="inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90"
+          className="inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm"
         >
           <Plus className="mr-2 h-4 w-4" />
           Új Osztály
         </button>
       </div>
 
-      <div className="rounded-md border border-border bg-card text-card-foreground shadow-sm">
-        <div className="p-0">
-          <table className="w-full caption-bottom text-sm text-left">
-            <thead className="[&_tr]:border-b border-border">
-              <tr className="border-b border-border transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                <th className="h-12 px-4 align-middle font-medium text-muted-foreground">
+      <div className="rounded-xl border border-border bg-card text-card-foreground shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left">
+            <thead>
+              <tr className="border-b border-border bg-muted/50 transition-colors">
+                <th className="h-12 px-4 align-middle font-semibold text-muted-foreground w-[80px]">
                   ID
                 </th>
-                <th className="h-12 px-4 align-middle font-medium text-muted-foreground">
-                  Megnevezés
+                <th className="h-12 px-4 align-middle font-semibold text-muted-foreground">
+                  Osztály jelölés
                 </th>
-                <th className="h-12 px-4 align-middle font-medium text-muted-foreground text-right">
+                <th className="h-12 px-4 align-middle font-semibold text-muted-foreground">
+                  Évfolyam
+                </th>
+                <th className="h-12 px-4 align-middle font-semibold text-muted-foreground">
+                  Tagozat
+                </th>
+                <th className="h-12 px-4 align-middle font-semibold text-muted-foreground text-right w-[120px]">
                   Műveletek
                 </th>
               </tr>
             </thead>
-            <tbody className="[&_tr:last-child]:border-0 divide-y divide-border">
+            <tbody className="divide-y divide-border">
               {classes.map((item) => (
                 <tr
                   key={item.id}
-                  className="transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                  className="transition-colors hover:bg-muted/30"
                 >
                   <td className="p-4 align-middle text-foreground">
                     {item.id}
                   </td>
                   <td className="p-4 align-middle font-medium text-foreground">
-                    {item.nev}
+                    {item.osztaly_jeloles}
+                  </td>
+                  <td className="p-4 align-middle text-foreground">
+                    {item.evfolyam}. évfolyam
+                  </td>
+                  <td className="p-4 align-middle text-foreground">
+                    <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary border border-primary/20">
+                      {item.tagozat || "Nincs megadva"}
+                    </span>
                   </td>
                   <td className="p-4 align-middle text-right">
-                    <div className="flex justify-end gap-2">
+                    <div className="flex justify-end gap-1">
                       <button
                         onClick={() => handleEdit(item)}
-                        className="p-2 hover:bg-muted rounded-full text-muted-foreground hover:text-primary transition-colors"
-                        title="Módosítás"
+                        className="p-2 hover:bg-muted rounded-md text-muted-foreground hover:text-primary transition-all active:scale-95"
+                        title="Szerkesztés"
                       >
-                        <Eye size={18} />
+                        <Pencil size={18} />
                       </button>
                       <button
                         onClick={() => handleDelete(item.id)}
-                        className="p-2 hover:bg-muted rounded-full text-muted-foreground hover:text-red-600 transition-colors"
-                        title="Archiválás/Törlés"
+                        className="p-2 hover:bg-muted rounded-md text-muted-foreground hover:text-red-600 transition-all active:scale-95"
+                        title="Törlés"
                       >
                         <Trash2 size={18} />
                       </button>
@@ -116,12 +131,12 @@ const AdminClasses = () => {
               ))}
             </tbody>
           </table>
-          {classes.length === 0 && (
-            <div className="p-4 text-center text-muted-foreground">
-              Nincs megjeleníthető adat.
-            </div>
-          )}
         </div>
+        {classes.length === 0 && (
+          <div className="p-12 text-center">
+            <p className="text-muted-foreground italic">Nincs megjeleníthető osztály.</p>
+          </div>
+        )}
       </div>
 
       {isAddModalOpen && (
@@ -134,4 +149,5 @@ const AdminClasses = () => {
     </div>
   );
 };
+
 export default AdminClasses;

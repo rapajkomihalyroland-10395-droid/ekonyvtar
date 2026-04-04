@@ -28,8 +28,8 @@ export const Login = async (req, res) => {
         .json({ message: "Nincs elérhető eszköz azonosító" });
     }
 
-    let device = await prisma.login_attempts.findFirst({
-      where: { device_id },
+    let device = await prisma.bejelentkezesi_probalkozasok.findFirst({
+      where: { eszkozt_azonosito: device_id },
     });
 
     if (!device) {
@@ -39,21 +39,21 @@ export const Login = async (req, res) => {
     if (IsLockedOut(device)) {
       return res.status(429).json({
         message: "Túl sok sikertelen próbálkozás. Kérjük, próbálja meg később.",
-        attempts: device.attempts_count,
+        attempts: device.probalkozasok_szama,
         maxAttempts: LOGIN_MAX_ATTEMPTS,
       });
     }
 
-    const user = await prisma.felhasznalo.findFirst({ where: { email } });
+    const user = await prisma.felhasznalok.findFirst({ where: { email } });
 
     if (!user || !user.belepesi_azonosito_hash) {
       const updatedDevice = await UpdateAttempts(device_id);
-      if (updatedDevice.attempts_count >= LOGIN_MAX_ATTEMPTS)
+      if (updatedDevice.probalkozasok_szama >= LOGIN_MAX_ATTEMPTS)
         await LockDevice(device_id);
 
       return res.status(401).json({
         message: "Helytelen felhasználónév vagy jelszó",
-        attempts: updatedDevice.attempts_count,
+        attempts: updatedDevice.probalkozasok_szama,
         maxAttempts: LOGIN_MAX_ATTEMPTS,
       });
     }
@@ -65,12 +65,12 @@ export const Login = async (req, res) => {
 
     if (!passwordMatch) {
       const updatedDevice = await UpdateAttempts(device_id);
-      if (updatedDevice.attempts_count >= LOGIN_MAX_ATTEMPTS)
+      if (updatedDevice.probalkozasok_szama >= LOGIN_MAX_ATTEMPTS)
         await LockDevice(device_id);
 
       return res.status(401).json({
         message: "Helytelen felhasználónév vagy jelszó",
-        attempts: updatedDevice.attempts_count,
+        attempts: updatedDevice.probalkozasok_szama,
         maxAttempts: LOGIN_MAX_ATTEMPTS,
       });
     }

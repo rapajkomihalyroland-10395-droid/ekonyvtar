@@ -59,7 +59,7 @@ export const AuthMiddleware = async (req, res, next) => {
 
     try {
       const accessTokenPayload = await verifyAccessToken(accessToken);
-      const user = await prisma.felhasznalo.findFirst({
+      const user = await prisma.felhasznalok.findFirst({
         where: { id: accessTokenPayload.id },
       });
 
@@ -91,7 +91,7 @@ export const AuthMiddleware = async (req, res, next) => {
         });
       }
 
-      const user = await prisma.felhasznalo.findFirst({
+      const user = await prisma.felhasznalok.findFirst({
         where: { id: decodedRefresh.id },
       });
 

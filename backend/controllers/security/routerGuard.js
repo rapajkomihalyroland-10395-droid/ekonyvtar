@@ -19,7 +19,7 @@ export const GetAccessToken = async (req, res) => {
           process.env.REFRESH_TOKEN_SECRET,
         );
 
-        user = await prisma.felhasznalo.findUnique({
+        user = await prisma.felhasznalok.findUnique({
           where: { id: decodedRefresh.id },
         });
 

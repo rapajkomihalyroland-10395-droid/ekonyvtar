@@ -3,33 +3,33 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const UpdateAttempts = async (device_id) => {
-  return await prisma.login_attempts.update({
-    where: { device_id },
-    data: { attempts_count: { increment: 1 } },
+  return await prisma.bejelentkezesi_probalkozasok.update({
+    where: { eszkozt_azonosito: device_id },
+    data: { probalkozasok_szama: { increment: 1 } },
   });
 };
 
 export const CreateAttemptsByDeviceId = async (device_id) => {
-  return await prisma.login_attempts.create({
-    data: { device_id, attempts_count: 0, success: false },
+  return await prisma.bejelentkezesi_probalkozasok.create({
+    data: { eszkozt_azonosito: device_id, probalkozasok_szama: 0, sikeres: false },
   });
 };
 
 export const SuccessLoginWithDeviceId = async (device_id) => {
-  return await prisma.login_attempts.update({
-    where: { device_id },
-    data: { attempts_count: 0, success: true, lockout_until: null },
+  return await prisma.bejelentkezesi_probalkozasok.update({
+    where: { eszkozt_azonosito: device_id },
+    data: { probalkozasok_szama: 0, sikeres: true, kizaras_eddig: null },
   });
 };
 
 export const IsLockedOut = (device) => {
-  return device?.lockout_until && new Date() < new Date(device.lockout_until);
+  return device?.kizaras_eddig && new Date() < new Date(device.kizaras_eddig);
 };
 
 export const LockDevice = async (device_id) => {
   const plusTenMinutes = new Date(Date.now() + 10 * 60 * 1000);
-  await prisma.login_attempts.update({
-    where: { device_id },
-    data: { lockout_until: plusTenMinutes },
+  await prisma.bejelentkezesi_probalkozasok.update({
+    where: { eszkozt_azonosito: device_id },
+    data: { kizaras_eddig: plusTenMinutes },
   });
 };

@@ -24,7 +24,7 @@ const BookDetails = () => {
 
         setBookData(data);
 
-        setReviewsData(data.velemeny || []);
+        setReviewsData(data.velemenyek || []);
       } catch (error) {
       } finally {
         setLoading(false);
@@ -257,7 +257,7 @@ const BookDetails = () => {
                       bookId={bookData?.id}
                       reviews={reviewsData}
                       overallRating={Number(bookData?.csillag_ertekeles)}
-                      totalReviews={bookData?.velemeny?.length}
+                      totalReviews={bookData?.velemenyek?.length}
                       onReviewAdded={handleReviewAdded}
                     />
                   </div>
@@ -273,7 +273,7 @@ const BookDetails = () => {
                     bookId={bookData?.id}
                     reviews={reviewsData}
                     overallRating={Number(bookData?.csillag_ertekeles)}
-                    totalReviews={bookData?.velemeny?.length}
+                    totalReviews={bookData?.velemenyek?.length}
                     onReviewAdded={handleReviewAdded}
                   />
                 )}

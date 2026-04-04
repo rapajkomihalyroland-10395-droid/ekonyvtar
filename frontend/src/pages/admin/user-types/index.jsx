@@ -95,7 +95,7 @@ const AdminUserTypes = () => {
                     {item.id}
                   </td>
                   <td className="p-4 align-middle font-medium text-foreground">
-                    {item.megnevezes}
+                    {item.nev}
                   </td>
                   <td className="p-4 align-middle text-muted-foreground">
                     {item.leiras}
