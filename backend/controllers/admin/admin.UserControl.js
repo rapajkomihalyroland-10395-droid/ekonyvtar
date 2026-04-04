@@ -1,4 +1,7 @@
 import { PrismaClient } from "@prisma/client";
+
+import { smtp_transporter } from "../../helper/stmp.config.js";
+
 import bcrypt from "bcrypt";
 import "dotenv/config";
 
@@ -257,6 +260,67 @@ export const DeleteUser = async (req, res) => {
     return res.status(200).json({
       message: `Sikeresen töröltük a ${Username.nev} nevű felhasználót.`,
     });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Szerveroldali hiba történt.",
+      error: error.message,
+    });
+  }
+};
+
+export const SendEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const info = await smtp_transporter.sendMail({
+      from: '"Iskolai Könyvtár" <team@example.com>',
+      to: [email],
+      subject: "Értesítés a könyvtártól",
+      text: "Új üzeneted érkezett a könyvtártól.",
+      html: `
+  <div style="font-family: Arial, sans-serif; background-color: #f4f6f8; padding: 40px 0;">
+    <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+      
+      <!-- Header -->
+      <div style="background-color: #2c3e50; color: #ffffff; padding: 25px 30px;">
+        <h2 style="margin: 0; font-size: 28px;">Iskolai Könyvtár</h2>
+      </div>
+
+      <!-- Content -->
+      <div style="padding: 35px;">
+        <p style="margin-top: 0; color: #333; font-size: 18px;">Kedves Olvasó,</p>
+
+        <p style="color: #555; line-height: 1.8; font-size: 18px;">
+          Ezúton szeretnénk tájékoztatni, hogy új értesítés érkezett a könyvtári rendszerben.
+        </p>
+
+        <div style="background-color: #f1f3f5; padding: 20px; border-radius: 6px; margin: 25px 0;">
+          <p style="margin: 0; color: #333; font-size: 18px;">
+            Példa üzenet: Kérjük, hozd vissza a kölcsönzött könyvet a határidő lejárta előtt.
+          </p>
+        </div>
+
+        <p style="color: #555; line-height: 1.8; font-size: 18px;">
+          Ha kérdésed van, fordulj bizalommal a könyvtár munkatársaihoz.
+        </p>
+
+        <p style="margin-top: 35px; color: #333; font-size: 18px;">
+          Üdvözlettel,<br/>
+          <strong>Iskolai Könyvtár</strong>
+        </p>
+      </div>
+
+      <!-- Footer -->
+      <div style="background-color: #f4f6f8; padding: 18px 30px; font-size: 14px; color: #888; text-align: center;">
+        Ez egy automatikus üzenet, kérjük ne válaszolj rá.
+      </div>
+
+    </div>
+  </div>
+  `,
+    });
+
+    return res.json({ info: info.messageId });
   } catch (error) {
     return res.status(500).json({
       message: "Szerveroldali hiba történt.",

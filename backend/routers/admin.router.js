@@ -7,6 +7,7 @@ import {
   CreateUser,
   ModifyUser,
   DeleteUser,
+  SendEmail,
 } from "../controllers/admin/admin.UserControl.js";
 
 import {
@@ -66,7 +67,11 @@ adminRouter.use(AuthMiddleware, AdminMiddleware);
 
 //FELHASZNÁLOK
 adminRouter.route("/users").get(GetAllUsers).post(CreateUser);
-adminRouter.route("/users/:id").get(GetUserByID).delete(DeleteUser).patch(ModifyUser);
+adminRouter
+  .route("/users/:id")
+  .get(GetUserByID)
+  .delete(DeleteUser)
+  .patch(ModifyUser);
 
 // Referencia táblák kezelése
 
@@ -125,5 +130,8 @@ adminRouter.route("/return-loan/:id").put(ReturnLoan);
 
 //TOPLISTA BÉRLÉS SZERINT
 adminRouter.route("/top-books-by-rental").get(TopBooks);
+
+//EMAIL KÜLDÉSE
+adminRouter.route("/send-mail").post(SendEmail);
 
 export default adminRouter;
