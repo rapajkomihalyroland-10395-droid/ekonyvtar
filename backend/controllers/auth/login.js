@@ -105,7 +105,6 @@ export const Login = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       error: "Belépési hiba",
-      details: process.env.NODE_ENV === "development" ? err.message : undefined,
     });
   }
 };

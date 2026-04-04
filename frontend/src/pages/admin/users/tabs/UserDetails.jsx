@@ -220,7 +220,9 @@ const UserDetails = () => {
             />
           )}
 
-          {activeTab === "messages" && <UserDetailsMessagesTab />}
+          {activeTab === "messages" && (
+            <UserDetailsMessagesTab email={user.email} />
+          )}
         </div>
       </div>
     </>

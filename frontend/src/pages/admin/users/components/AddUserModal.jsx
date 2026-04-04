@@ -54,9 +54,9 @@ const AddUserModal = ({ isOpen, onClose }) => {
           api.get("/get-user-types"),
         ]);
 
-        setOsztaly(classes.data);
-        setIskola(schools.data);
-        setFelhasznaloTipus(userTypes.data);
+        setOsztaly(classesRes.data);
+        setIskola(schoolsRes.data);
+        setFelhasznaloTipus(typesRes.data);
       } catch (error) {
         return error;
       }
@@ -268,13 +268,13 @@ const AddUserModal = ({ isOpen, onClose }) => {
             )}
           </div>
 
-          <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <div className="flex items-center gap-3 p-4 bg-muted/30 rounded-lg border border-border">
             <div className="flex items-center h-5">
               <input
                 id="isAdmin"
                 name="isAdmin"
                 type="checkbox"
-                className="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary"
+                className="h-4 w-4 text-primary border-border bg-background rounded focus:ring-primary"
                 checked={formData.isAdmin}
                 onChange={handleChange}
               />
@@ -282,25 +282,25 @@ const AddUserModal = ({ isOpen, onClose }) => {
             <div className="text-sm">
               <label
                 htmlFor="isAdmin"
-                className="font-medium text-gray-700 flex items-center gap-2"
+                className="font-medium text-foreground flex items-center gap-2"
               >
                 <Shield className="h-4 w-4 text-primary" />
                 Adminisztrátor jogosultság
               </label>
-              <p className="text-gray-500">
+              <p className="text-muted-foreground">
                 A felhasználó hozzáférhet az adminisztrációs felülethez.
               </p>
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Jelszó</label>
+            <label className="text-sm font-medium text-foreground">Jelszó</label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input
                 type="password"
                 name="password"
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors outline-none"
+                className="w-full pl-10 pr-4 py-2 border border-border bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors outline-none placeholder:text-muted-foreground"
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={handleChange}
@@ -308,11 +308,11 @@ const AddUserModal = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          <div className="pt-4 flex items-center justify-end gap-3 border-t border-gray-100">
+          <div className="pt-4 flex items-center justify-end gap-3 border-t border-border">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200 transition-colors"
+              className="px-4 py-2 text-sm font-medium text-foreground bg-background border border-border rounded-lg hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-muted transition-colors"
             >
               Mégse
             </button>

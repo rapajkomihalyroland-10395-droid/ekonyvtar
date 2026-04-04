@@ -149,7 +149,7 @@ const AddBookModal = ({ isOpen, onClose }) => {
                     type="text"
                     name="publisher"
                     required
-                    className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors outline-none"
+                    className="w-full pl-10 pr-4 py-2 border border-border bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors outline-none placeholder:text-muted-foreground"
                     placeholder="pl. Animus Kiadó"
                     value={formData.publisher}
                     onChange={handleChange}
@@ -158,14 +158,14 @@ const AddBookModal = ({ isOpen, onClose }) => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">
+                <label className="text-sm font-medium text-foreground">
                   Kategória
                 </label>
                 <div className="relative">
-                  <List className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <List className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <select
                     name="category"
-                    className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors outline-none appearance-none bg-white"
+                    className="w-full pl-10 pr-4 py-2 border border-border bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors outline-none appearance-none"
                     value={formData.category}
                     onChange={handleChange}
                   >
@@ -181,16 +181,16 @@ const AddBookModal = ({ isOpen, onClose }) => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">
+                <label className="text-sm font-medium text-foreground">
                   Kiadási év
                 </label>
                 <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <input
                     type="number"
                     name="publicationYear"
                     max={new Date().getFullYear()}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors outline-none"
+                    className="w-full pl-10 pr-4 py-2 border border-border bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors outline-none placeholder:text-muted-foreground"
                     placeholder="pl. 2024"
                     value={formData.publicationYear}
                     onChange={handleChange}
@@ -200,21 +200,21 @@ const AddBookModal = ({ isOpen, onClose }) => {
             </div>
 
             <div className="space-y-6">
-              <h3 className="font-semibold text-gray-900 border-b pb-2">
+              <h3 className="font-semibold text-foreground border-b border-border pb-2">
                 Technikai adatok
               </h3>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">
+                <label className="text-sm font-medium text-foreground">
                   ISBN szám
                 </label>
                 <div className="relative">
-                  <Hash className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Hash className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <input
                     type="text"
                     name="isbn"
                     required
-                    className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors outline-none"
+                    className="w-full pl-10 pr-4 py-2 border border-border bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors outline-none placeholder:text-muted-foreground"
                     placeholder="pl. 978-963-..."
                     value={formData.isbn}
                     onChange={handleChange}
@@ -223,16 +223,16 @@ const AddBookModal = ({ isOpen, onClose }) => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">
+                <label className="text-sm font-medium text-foreground">
                   Könyvtári nyilvántartási szám
                 </label>
                 <div className="relative">
-                  <Barcode className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Barcode className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <input
                     type="text"
                     name="inventoryNumber"
                     required
-                    className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors outline-none"
+                    className="w-full pl-10 pr-4 py-2 border border-border bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors outline-none placeholder:text-muted-foreground"
                     placeholder="Egyedi azonosító"
                     value={formData.inventoryNumber}
                     onChange={handleChange}
@@ -242,17 +242,17 @@ const AddBookModal = ({ isOpen, onClose }) => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
+                  <label className="text-sm font-medium text-foreground">
                     Készlet (db)
                   </label>
                   <div className="relative">
-                    <Layers className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Layers className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <input
                       type="number"
                       name="stock"
                       min="0"
                       required
-                      className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors outline-none"
+                      className="w-full pl-10 pr-4 py-2 border border-border bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors outline-none"
                       value={formData.stock}
                       onChange={handleChange}
                     />
@@ -260,17 +260,17 @@ const AddBookModal = ({ isOpen, onClose }) => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
+                  <label className="text-sm font-medium text-foreground">
                     Magasság (cm)
                   </label>
                   <div className="relative">
-                    <Ruler className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Ruler className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <input
                       type="number"
                       name="height"
                       min="0"
                       step="0.1"
-                      className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors outline-none"
+                      className="w-full pl-10 pr-4 py-2 border border-border bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors outline-none placeholder:text-muted-foreground"
                       placeholder="pl. 21.5"
                       value={formData.height}
                       onChange={handleChange}
@@ -280,16 +280,16 @@ const AddBookModal = ({ isOpen, onClose }) => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">
+                <label className="text-sm font-medium text-foreground">
                   Beszerzési ár (Ft)
                 </label>
                 <div className="relative">
-                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <input
                     type="number"
                     name="price"
                     min="0"
-                    className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors outline-none"
+                    className="w-full pl-10 pr-4 py-2 border border-border bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors outline-none placeholder:text-muted-foreground"
                     placeholder="pl. 3500"
                     value={formData.price}
                     onChange={handleChange}
@@ -298,10 +298,10 @@ const AddBookModal = ({ isOpen, onClose }) => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">
+                <label className="text-sm font-medium text-foreground">
                   Borítókép feltöltése
                 </label>
-                <div className="relative border-2 border-dashed border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors text-center cursor-pointer">
+                <div className="relative border-2 border-dashed border-border rounded-lg p-4 hover:bg-muted/50 transition-colors text-center cursor-pointer">
                   <input
                     type="file"
                     name="coverImage"
@@ -313,7 +313,7 @@ const AddBookModal = ({ isOpen, onClose }) => {
                     <div className="p-2 bg-primary/10 rounded-full">
                       <Upload className="h-6 w-6 text-primary" />
                     </div>
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-muted-foreground">
                       {formData.coverImage
                         ? formData.coverImage.name
                         : "Kattints vagy húzd ide a képet"}
@@ -322,14 +322,14 @@ const AddBookModal = ({ isOpen, onClose }) => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg bg-gray-50">
+              <div className="flex items-center gap-3 p-3 border border-border rounded-lg bg-muted/30">
                 <div className="relative flex items-start">
                   <div className="flex items-center h-5">
                     <input
                       id="loanable"
                       name="loanable"
                       type="checkbox"
-                      className="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary"
+                      className="h-4 w-4 text-primary border-border bg-background rounded focus:ring-primary"
                       checked={formData.loanable}
                       onChange={handleChange}
                     />
@@ -337,11 +337,11 @@ const AddBookModal = ({ isOpen, onClose }) => {
                   <div className="ml-3 text-sm">
                     <label
                       htmlFor="loanable"
-                      className="font-medium text-gray-700"
+                      className="font-medium text-foreground"
                     >
                       Kölcsönözhető
                     </label>
-                    <p className="text-gray-500 text-xs">
+                    <p className="text-muted-foreground text-xs">
                       A könyv kivihető a könyvtárból
                     </p>
                   </div>
@@ -351,22 +351,22 @@ const AddBookModal = ({ isOpen, onClose }) => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Leírás</label>
+            <label className="text-sm font-medium text-foreground">Leírás</label>
             <textarea
               name="description"
               rows="4"
-              className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors outline-none resize-none"
+              className="w-full p-3 border border-border bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors outline-none resize-none placeholder:text-muted-foreground"
               placeholder="Rövid leírás a könyvről..."
               value={formData.description}
               onChange={handleChange}
             />
           </div>
 
-          <div className="pt-4 flex items-center justify-end gap-3 border-t border-gray-100">
+          <div className="pt-4 flex items-center justify-end gap-3 border-t border-border">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200 transition-colors"
+              className="px-4 py-2 text-sm font-medium text-foreground bg-background border border-border rounded-lg hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-muted transition-colors"
             >
               Mégse
             </button>

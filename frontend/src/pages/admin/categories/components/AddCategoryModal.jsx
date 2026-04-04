@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { X, Save, Tag } from "lucide-react";
+import { X, Save, Tags } from "lucide-react";
 import api from "../../../../axios_url/baseURL.js";
 
 const AddCategoryModal = ({ isOpen, onClose, initialData = null }) => {

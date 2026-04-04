@@ -4,57 +4,57 @@ const UserDetailsLoansTab = ({ currentLoanPage, previousPage, nextPage }) => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-medium">Aktív kölcsönzések</h3>
+        <h3 className="text-lg font-medium text-foreground">
+          Aktív kölcsönzések
+        </h3>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-gray-200">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="overflow-hidden rounded-lg border border-border">
+        <table className="min-w-full divide-y divide-border">
+          <thead className="bg-muted/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 Könyv címe
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 Kölcsönzés dátuma
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 Határidő
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 Státusz
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-background divide-y divide-border">
             {currentLoanPage.map((loan) => (
-              <tr key={loan.id}>
-                <td className="px-6 py-4 text-sm font-medium text-gray-900">
+              <tr key={loan.id} className="hover:bg-muted/30 transition-colors">
+                <td className="px-6 py-4 text-sm font-medium text-foreground">
                   {loan.konyv}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                   {new Date(loan.berles_kezdete).toLocaleDateString()}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                   {new Date(loan.berles_vege).toLocaleDateString()}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
                   <span
                     className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
                       !loan.visszahozva
-                        ? "bg-green-100 text-green-800"
-                        : "bg-gray-100 text-gray-800"
+                        ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+                        : "bg-muted text-muted-foreground"
                     }`}
                   >
-                    {!loan.visszahozva
-                      ? "Aktív kölcsönzés"
-                      : "Visszahozva"}
+                    {!loan.visszahozva ? "Aktív kölcsönzés" : "Visszahozva"}
                   </span>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <div className="flex items-center justify-between gap-3 p-4 border-t border-gray-200">
+        <div className="flex items-center justify-between gap-3 p-4 border-t border-border bg-muted/20">
           <button
             type="button"
             onClick={previousPage}

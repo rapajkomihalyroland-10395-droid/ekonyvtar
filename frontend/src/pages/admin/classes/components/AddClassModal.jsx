@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { X, Save, Users } from "lucide-react";
+import { X, Save, GraduationCap } from "lucide-react";
 import api from "../../../../axios_url/baseURL.js";
 
 const AddClassModal = ({ isOpen, onClose, initialData = null }) => {
@@ -18,8 +18,7 @@ const AddClassModal = ({ isOpen, onClose, initialData = null }) => {
       try {
         const response = await api.get("/schools");
         setSchools(response.data);
-      } catch (error) {
-      }
+      } catch (error) {}
     };
     fetchSchools();
   }, []);

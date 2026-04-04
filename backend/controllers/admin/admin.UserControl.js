@@ -270,7 +270,7 @@ export const DeleteUser = async (req, res) => {
 
 export const SendEmail = async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email, message } = req.body;
 
     const info = await smtp_transporter.sendMail({
       from: '"Iskolai Könyvtár" <team@example.com>',
@@ -296,7 +296,7 @@ export const SendEmail = async (req, res) => {
 
         <div style="background-color: #f1f3f5; padding: 20px; border-radius: 6px; margin: 25px 0;">
           <p style="margin: 0; color: #333; font-size: 18px;">
-            Példa üzenet: Kérjük, hozd vissza a kölcsönzött könyvet a határidő lejárta előtt.
+            ${message}
           </p>
         </div>
 
