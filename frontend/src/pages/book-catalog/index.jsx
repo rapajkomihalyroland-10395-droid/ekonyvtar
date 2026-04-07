@@ -8,8 +8,6 @@ import RentalModal from "./components/RentalModal";
 import api from "../../axios_url/baseURL.js";
 
 const BookCatalog = () => {
-  const navigate = useNavigate();
-
   const [loading, setLoading] = useState(true);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
@@ -20,7 +18,7 @@ const BookCatalog = () => {
 
   const [filters, setFilters] = useState({
     category: "all",
-    yearFrom: "",
+    kiadas_ev: "",
     inStockOnly: false,
     preOrderOnly: false,
     minRating: "",
@@ -45,7 +43,7 @@ const BookCatalog = () => {
           return {
             id: b.id,
             title: b.cim,
-            author: b.szerzo?.nev || "Ismeretlen szerző",
+            author: b.szerzok?.nev || "Ismeretlen szerző",
             coverImage: b.kep,
             coverImageAlt: b.cim,
             rating:
@@ -54,9 +52,9 @@ const BookCatalog = () => {
               ) || 0,
             reviewCount: popularity,
             status,
-            category: b.kategoria?.nev || "Ismeretlen kategória",
+            category: b.kategoriak?.nev || "Ismeretlen kategória",
             categoryId: b.kategoria_id,
-            publicationYear: b.kiadas_ev,
+            kiadas_ev: b.kiadas_ev,
           };
         });
 
@@ -97,9 +95,9 @@ const BookCatalog = () => {
       result = result.filter((b) => b.categoryId === Number(filters.category));
     }
 
-    const yearFrom = filters.yearFrom ? Number(filters.yearFrom) : null;
-    if (Number.isFinite(yearFrom)) {
-      result = result.filter((b) => Number(b.publicationYear) === yearFrom);
+    const kiadasEv = filters.kiadas_ev ? Number(filters.kiadas_ev) : null;
+    if (Number.isFinite(kiadasEv)) {
+      result = result.filter((b) => Number(b.kiadas_ev) === kiadasEv);
     }
 
     if (filters.inStockOnly && !filters.preOrderOnly) {
@@ -132,7 +130,7 @@ const BookCatalog = () => {
   const handleClearFilters = () => {
     setFilters({
       category: "all",
-      yearFrom: "",
+      kiadas_ev: "",
       inStockOnly: false,
       preOrderOnly: false,
       minRating: "",
@@ -144,10 +142,6 @@ const BookCatalog = () => {
   const handleRentNow = (book) => {
     setSelectedBook(book);
     setShowRentalModal(true);
-  };
-
-  const handleConfirmRental = (book) => {
-    navigate("/rental-checkout", { state: { book } });
   };
 
   return (
@@ -233,7 +227,6 @@ const BookCatalog = () => {
         <RentalModal
           book={selectedBook}
           onClose={() => setShowRentalModal(false)}
-          onConfirm={handleConfirmRental}
         />
       )}
     </div>

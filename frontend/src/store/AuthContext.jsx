@@ -20,6 +20,17 @@ const AuthContext = () => {
     setLogin(Boolean(user));
   };
 
+  const logout = async () => {
+    try {
+      await api.post("/logout");
+    } catch (err) {
+      console.error("Hiba a kijelentkezéskor", err);
+    } finally {
+      handleAuthData({ accessToken: null, user: null });
+      window.location.href = "/login";
+    }
+  };
+
   const initAuth = async () => {
     setAuthLoading(true);
     try {
@@ -56,6 +67,7 @@ const AuthContext = () => {
         setLogin,
         login,
         authLoading,
+        logout,
       }}
     >
       <Outlet />

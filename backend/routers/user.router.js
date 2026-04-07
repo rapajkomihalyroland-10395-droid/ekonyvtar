@@ -30,6 +30,8 @@ import { SearchUserNameByCharacters } from "../controllers/user/user.search.js";
 
 import { SearchBookByCharacters } from "../controllers/books/book.search.js";
 
+import { BookLoan } from "../controllers/admin/admin.RentalControl.js";
+
 const userRouter = Router();
 
 //ÖSSZ KÖNYV LEKÉRÉSE
@@ -58,6 +60,8 @@ userRouter.route("/get-all-categories").get(AuthMiddleware, GetAllCategories);
 userRouter
   .route("/get-a-rental/:felhasznalo_id")
   .get(AuthMiddleware, GetARentalByID);
+
+userRouter.route("/book-loan").post(AuthMiddleware, BookLoan);
 
 //Felhasználó Micro Queries
 userRouter.route("/get-classes").get(AuthMiddleware, Query_Classes);

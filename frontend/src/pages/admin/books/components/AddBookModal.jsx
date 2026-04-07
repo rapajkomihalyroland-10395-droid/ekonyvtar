@@ -31,7 +31,7 @@ const AddBookModal = ({ isOpen, onClose }) => {
     inventoryNumber: "",
     stock: 1,
     loanable: true,
-    publicationYear: "",
+    kiadas_ev: "",
     height: "",
     price: "",
   });
@@ -58,7 +58,7 @@ const AddBookModal = ({ isOpen, onClose }) => {
       data.append("keszlet", formData.stock);
       data.append("kolcsonozheto", formData.loanable);
       data.append("beszerzesi_ar", formData.price || 0);
-      data.append("kiadas_ev", formData.publicationYear);
+      data.append("kiadas_ev", formData.kiadas_ev);
       data.append("magassag_cm", formData.height);
       data.append("leiras", formData.description);
 
@@ -188,11 +188,11 @@ const AddBookModal = ({ isOpen, onClose }) => {
                   <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <input
                     type="number"
-                    name="publicationYear"
+                    name="kiadas_ev"
                     max={new Date().getFullYear()}
                     className="w-full pl-10 pr-4 py-2 border border-border bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors outline-none placeholder:text-muted-foreground"
                     placeholder="pl. 2024"
-                    value={formData.publicationYear}
+                    value={formData.kiadas_ev}
                     onChange={handleChange}
                   />
                 </div>
@@ -351,7 +351,9 @@ const AddBookModal = ({ isOpen, onClose }) => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground">Leírás</label>
+            <label className="text-sm font-medium text-foreground">
+              Leírás
+            </label>
             <textarea
               name="description"
               rows="4"

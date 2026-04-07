@@ -8,7 +8,6 @@ import NotFound from "pages/NotFound";
 import MainPage from "./pages/main-page/index.jsx";
 import BookCatalog from "./pages/book-catalog/index.jsx";
 import BookDetails from "./pages/book-details/index.jsx";
-import RentalCheckout from "./pages/rental-checkout/index.jsx";
 import StudentDashboard from "./pages/student-dashboard/index.jsx";
 import StudentLogin from "./pages/student-login/index.jsx";
 
@@ -53,10 +52,6 @@ const router = createBrowserRouter([
           {
             path: "/book-details/:id",
             element: <BookDetails />,
-          },
-          {
-            path: "/rental-checkout",
-            element: <RentalCheckout />,
           },
           {
             path: "/student-dashboard",

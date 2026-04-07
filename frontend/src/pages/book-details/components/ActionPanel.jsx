@@ -1,158 +1,128 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import api from "../../../axios_url/baseURL.js";
 import { useAuth } from "../../../store/AuthContext";
+import { Calendar, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
 const ActionPanel = ({ book }) => {
-  const navigate = useNavigate();
   const [rentalDuration, setRentalDuration] = useState("14");
-  const [IsSentTheRequest, setIsSentTheRequest] = useState(false);
-  const [isTheRequestinProccess, setisTheRequestinProccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState(null);
   const { user } = useAuth();
 
   const rentalOptions = [
-    { value: "7", label: "7 days" },
-    { value: "14", label: "14 days (Recommended)" },
-    { value: "21", label: "21 days" },
-    { value: "30", label: "30 days" },
+    { value: "7", label: "7 nap" },
+    { value: "14", label: "14 nap (Ajánlott)" },
+    { value: "21", label: "21 nap" },
+    { value: "30", label: "30 nap" },
   ];
 
   const calculateDueDate = (days) => {
     const date = new Date();
-    date?.setDate(date?.getDate() + parseInt(days));
-    return date?.toLocaleDateString("hu-HU", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
+    date.setDate(date.getDate() + parseInt(days));
+    return date;
   };
 
-  const handleRentBook = () => {
-    navigate("/rental-checkout", { state: { book, rentalDuration } });
-  };
+  const handleRent = async () => {
+    if (!user) {
+      setStatus({ type: "error", message: "A bérléshez be kell jelentkeznie!" });
+      return;
+    }
 
-  const SendBookRequest = async () => {
-    setIsSentTheRequest(!IsSentTheRequest);
+    setIsSubmitting(true);
+    setStatus(null);
 
     try {
-      const response = await api.post("/loan-signal", {
-        book_id: book.id,
+      const dueDate = calculateDueDate(rentalDuration);
+      
+      await api.post("/book-loan", {
         user_id: user.id,
+        book_id: book.id,
+        end_loan: dueDate.toISOString(),
       });
+
+      setStatus({ type: "success", message: "Sikeres kölcsönzés!" });
     } catch (error) {
-      if (error.response && error.response.status === 409) {
-        setisTheRequestinProccess(true);
-        setIsSentTheRequest(true);
-      }
+      console.error("Bérlési hiba:", error);
+      setStatus({ 
+        type: "error", 
+        message: error.response?.data?.message || "Hiba történt a bérlés során." 
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
+  const isUnavailable = book?.keszlet === 0;
+
   return (
-    <div className="bg-card rounded-lg shadow-card border border-border p-6 sticky top-20">
-      <h3 className="text-lg font-heading font-semibold text-foreground mb-4">
-        Bérleti lehetőségek
+    <div className="bg-card rounded-xl shadow-sm border border-border p-6 sticky top-24">
+      <h3 className="text-lg font-semibold text-foreground mb-6 flex items-center gap-2">
+        <Calendar className="h-5 w-5 text-primary" />
+        Kölcsönzés
       </h3>
-      <div className="mb-4">
-        <div className="flex flex-col mb-2">
-          <label className="text-sm font-medium text-foreground mb-1">
-            Bérleti időtartam
+
+      <div className="space-y-4">
+        <div>
+          <label className="text-sm font-medium text-muted-foreground mb-2 block">
+            Időtartam kiválasztása
           </label>
-          <div className="relative">
-            <select
-              value={rentalDuration}
-              onChange={(e) => setRentalDuration(e.target.value)}
-              className="w-full h-10 px-3 py-2 bg-background border border-border rounded-md text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent appearance-none"
-            >
-              {rentalOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+          <div className="grid grid-cols-1 gap-2">
+            {rentalOptions.map((option) => (
+              <button
+                key={option.value}
+                onClick={() => setRentalDuration(option.value)}
+                disabled={isSubmitting || status?.type === "success"}
+                className={`text-left px-4 py-3 rounded-lg border text-sm transition-all ${
+                  rentalDuration === option.value
+                    ? "border-primary bg-primary/5 text-primary ring-1 ring-primary"
+                    : "border-border bg-background text-foreground hover:border-primary/50"
+                } disabled:opacity-50 disabled:cursor-not-allowed`}
               >
-                <path d="m6 9 6 6 6-6" />
-              </svg>
-            </div>
+                {option.label}
+              </button>
+            ))}
           </div>
         </div>
-        <p className="text-sm text-muted-foreground">
-          Esedékességi dátum: {calculateDueDate(rentalDuration)}
-        </p>
-      </div>
-      <button
-        onClick={handleRentBook}
-        disabled={book?.keszlet === 0}
-        className={`w-full h-12 inline-flex items-center justify-center px-6 rounded-md text-base font-medium transition-colors mb-3 ${
-          book?.keszlet === 0
-            ? "bg-muted text-muted-foreground cursor-not-allowed"
-            : "bg-primary text-primary-foreground hover:bg-primary/90"
-        }`}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="mr-2"
-        >
-          <circle cx="8" cy="21" r="1" />
-          <circle cx="19" cy="21" r="1" />
-          <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
-        </svg>
-        {book?.keszlet > 0 ? "Rent This Book" : "Currently Unavailable"}
-      </button>
-      {book?.keszlet === 0 && (
-        <div className="grid grid-cols-1 gap-2 mb-4">
+
+        <div className="pt-2">
+          <p className="text-xs text-muted-foreground mb-4">
+            Visszahozatali határidő: <span className="font-semibold text-foreground">
+              {calculateDueDate(rentalDuration).toLocaleDateString("hu-HU", {
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+              })}
+            </span>
+          </p>
+
+          {status && (
+            <div className={`p-3 rounded-lg flex items-start gap-3 mb-4 text-sm ${
+              status.type === "success" 
+                ? "bg-green-500/10 text-green-600 border border-green-500/20" 
+                : "bg-red-500/10 text-red-600 border border-red-500/20"
+            }`}>
+              {status.type === "success" ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
+              <p>{status.message}</p>
+            </div>
+          )}
+
           <button
-            onClick={SendBookRequest}
-            disabled={isTheRequestinProccess}
-            className={`w-full h-10 inline-flex items-center justify-center px-4 rounded-md text-sm font-medium transition-colors border ${
-              isTheRequestinProccess
-                ? "bg-muted text-muted-foreground cursor-not-allowed border-border"
-                : IsSentTheRequest
-                  ? "bg-background text-primary border-primary hover:bg-accent"
-                  : "bg-background text-foreground border-border hover:bg-accent hover:text-accent-foreground"
-            }`}
+            onClick={handleRent}
+            disabled={isSubmitting || isUnavailable || status?.type === "success"}
+            className="w-full h-12 inline-flex items-center justify-center rounded-xl bg-primary text-primary-foreground font-semibold transition-all hover:bg-primary/90 disabled:opacity-50 disabled:bg-muted disabled:text-muted-foreground shadow-sm active:scale-[0.98]"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="mr-2"
-            >
-              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-            </svg>
-            {isTheRequestinProccess
-              ? "Ez a könyv már elküldésre került"
-              : IsSentTheRequest
-                ? "Kérelem elküldve"
-                : "Könyv kérelem"}
+            {isSubmitting ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : isUnavailable ? (
+              "Jelenleg nem elérhető"
+            ) : status?.type === "success" ? (
+              "Sikeres bérlés"
+            ) : (
+              "Kölcsönzés indítása"
+            )}
           </button>
         </div>
-      )}
+      </div>
     </div>
   );
 };

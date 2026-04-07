@@ -187,11 +187,11 @@ const FilterPanel = ({
                 type="text"
                 inputMode="numeric"
                 pattern="\d*"
-                value={filters?.yearFrom || ""}
+                value={filters?.kiadas_ev || ""}
                 onChange={(e) =>
-                  onFilterChange("yearFrom", cleanYear(e.target.value))
+                  onFilterChange("kiadas_ev", cleanYear(e.target.value))
                 }
-                placeholder="tól"
+                placeholder="Év"
                 className={inputClass}
               />
             </div>

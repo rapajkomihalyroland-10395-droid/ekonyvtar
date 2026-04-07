@@ -9,7 +9,7 @@ const RouterGuard = () => {
 
   if (!user && window.location.pathname !== "/login") {
     window.location.href = "/login";
-    return null; // Nem engedjük tovább a renderelést az átirányítás alatt
+    return null;
   }
 
   return <Outlet />;
