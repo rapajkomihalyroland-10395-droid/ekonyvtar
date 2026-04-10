@@ -4,7 +4,7 @@ import { AlertCircle, Eye, EyeOff, Loader2 } from "lucide-react";
 import api, { setAxiosToken } from "../../../axios_url/baseURL.js";
 import { useAuth } from "../../../store/AuthContext.jsx";
 
-const LoginForm = () => {
+const LoginForm = ({ onForgotPassword }) => {
   const navigate = useNavigate();
   const { setUser, setAccessToken, setLogin } = useAuth();
 
@@ -64,10 +64,31 @@ const LoginForm = () => {
     }
   };
 
-  const handleForgotPassword = () => {
-    alert(
-      "A jelszó-visszaállítási funkció hamarosan elérhető lesz. Kérjük, forduljon az iskola könyvtárosához segítségért.",
-    );
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    if (!formData.email.trim() || !emailRegex.test(formData.email)) {
+      setFormErrors({
+        email:
+          "A jelszó visszaállításához kérjük, adjon meg egy érvényes e-mail címet",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    setFormErrors({});
+
+    try {
+      await api.post("/forgot-password", { email: formData.email });
+      onForgotPassword(formData.email);
+    } catch (error) {
+      setFormErrors({
+        submit:
+          error.response?.data?.message ||
+          "Hiba történt a kérés feldolgozása során.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const getErrorMessage = (error) => {

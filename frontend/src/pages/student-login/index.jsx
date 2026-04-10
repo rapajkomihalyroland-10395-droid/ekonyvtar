@@ -1,19 +1,33 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/ui/Header";
 import LoginForm from "./components/LoginForm";
-import { BookMarked } from "lucide-react";
+import OTPForm from "./components/OTPForm";
+import { BookMarked, KeyRound } from "lucide-react";
 import { useAuth } from "../../store/AuthContext";
 
 const StudentLogin = () => {
   const { user, authLoading } = useAuth();
   const navigate = useNavigate();
 
+  const [showOTP, setShowOTP] = useState(false);
+  const [otpEmail, setOtpEmail] = useState("");
+
   useEffect(() => {
     if (!authLoading && user) {
       navigate("/");
     }
   }, [user, authLoading, navigate]);
+
+  const handleForgotPassword = (email) => {
+    setOtpEmail(email);
+    setShowOTP(true);
+  };
+
+  const handleBackToLogin = () => {
+    setShowOTP(false);
+    setOtpEmail("");
+  };
 
   return (
     <div className="min-h-screen bg-background flex flex-col justify-center">
@@ -36,12 +50,16 @@ const StudentLogin = () => {
                   </p>
                 </div>
 
-                <LoginForm />
+                <LoginForm onForgotPassword={handleForgotPassword} />
               </div>
             </div>
           </div>
         </div>
       </main>
+
+      {showOTP && (
+        <OTPForm email={otpEmail} onBackToLogin={handleBackToLogin} />
+      )}
     </div>
   );
 };
