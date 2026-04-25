@@ -1,0 +1,139 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model berlesek {
+  id             Int          @id @default(autoincrement())
+  felhasznalo_id Int
+  konyv_id       Int
+  berles_kezdete DateTime?    @db.Date
+  berles_vege    DateTime?    @db.Date
+  visszahozva    Boolean?
+  felhasznalok   felhasznalok @relation(fields: [felhasznalo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "berlesek_ibfk_1")
+  konyvek        konyvek      @relation(fields: [konyv_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "berlesek_ibfk_2")
+
+  @@index([felhasznalo_id], map: "felhasznalo_id")
+  @@index([konyv_id], map: "konyv_id")
+}
+
+model felhasznalok {
+  id                      Int                 @id @default(autoincrement())
+  nev                     String              @db.VarChar(100)
+  belepesi_azonosito_hash String              @db.VarChar(255)
+  telefonszam             String?             @db.VarChar(20)
+  szuletesi_datum         DateTime?           @db.Date
+  lakcim                  String?             @db.VarChar(255)
+  admin                   Boolean             @default(false)
+  iskola_id               Int?
+  osztaly_id              Int?
+  felhasznalo_tipus_id    Int?
+  email                   String              @db.VarChar(255)
+  otp_jelszo              String?             @db.VarChar(255)
+  otp_lejarati_ido        DateTime?           @db.DateTime(0)
+  berlesek                berlesek[]
+  iskolak                 iskolak?            @relation(fields: [iskola_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "felhasznalok_ibfk_1")
+  osztalyok               osztalyok?          @relation(fields: [osztaly_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "felhasznalok_ibfk_2")
+  felhasznalotipusok      felhasznalotipusok? @relation(fields: [felhasznalo_tipus_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "felhasznalok_ibfk_3")
+  velemenyek              velemenyek[]
+
+  @@index([felhasznalo_tipus_id], map: "felhasznalo_tipus_id")
+  @@index([iskola_id], map: "iskola_id")
+  @@index([osztaly_id], map: "osztaly_id")
+}
+
+model felhasznalotipusok {
+  id           Int            @id @default(autoincrement())
+  nev          String         @db.VarChar(100)
+  felhasznalok felhasznalok[]
+}
+
+model iskolak {
+  id           Int            @id @default(autoincrement())
+  nev          String         @db.VarChar(255)
+  felhasznalok felhasznalok[]
+  osztalyok    osztalyok[]
+}
+
+model kategoriak {
+  id      Int       @id @default(autoincrement())
+  nev     String    @db.VarChar(100)
+  konyvek konyvek[]
+}
+
+model kiadok {
+  id       Int       @id @default(autoincrement())
+  nev      String    @db.VarChar(255)
+  szekhely String?   @db.VarChar(255)
+  konyvek  konyvek[]
+}
+
+model konyvek {
+  id                           Int          @id @default(autoincrement())
+  cim                          String       @db.VarChar(255)
+  kep                          String?      @db.VarChar(255)
+  leiras                       String?      @db.Text
+  szerzo_id                    Int?
+  kiado_id                     Int?
+  kategoria_id                 Int?
+  ISBN                         String?      @db.VarChar(13)
+  konyvtar_nyilvantartasi_szam String?      @db.VarChar(255)
+  keszlet                      Int          @default(1)
+  kolcsonozheto                Boolean      @default(true)
+  beszerzesi_ar                Decimal?     @db.Decimal(10, 2)
+  kiadas_ev                    Int?         @db.SmallInt
+  magassag_cm                  Decimal?     @db.Decimal(5, 2)
+  csillag_ertekeles            Decimal      @default(0.0) @db.Decimal(2, 1)
+  berlesek                     berlesek[]
+  szerzok                      szerzok?     @relation(fields: [szerzo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "konyvek_ibfk_1")
+  kiadok                       kiadok?      @relation(fields: [kiado_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "konyvek_ibfk_2")
+  kategoriak                   kategoriak?  @relation(fields: [kategoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "konyvek_ibfk_3")
+  velemenyek                   velemenyek[]
+
+  @@index([kategoria_id], map: "kategoria_id")
+  @@index([kiado_id], map: "kiado_id")
+  @@index([szerzo_id], map: "szerzo_id")
+}
+
+model osztalyok {
+  id              Int            @id @default(autoincrement())
+  osztaly_jeloles String         @db.VarChar(50)
+  evfolyam        Int?
+  tagozat         String?        @db.VarChar(100)
+  iskola_id       Int?
+  felhasznalok    felhasznalok[]
+  iskolak         iskolak?       @relation(fields: [iskola_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "osztalyok_ibfk_1")
+
+  @@index([iskola_id], map: "iskola_id")
+}
+
+model szerzok {
+  id      Int       @id @default(autoincrement())
+  nev     String    @db.VarChar(255)
+  konyvek konyvek[]
+}
+
+model velemenyek {
+  id             Int          @id @default(autoincrement())
+  ertekeles      Int?
+  szoveg         String?      @db.Text
+  felhasznalo_id Int
+  konyv_id       Int
+  felhasznalok   felhasznalok @relation(fields: [felhasznalo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "velemenyek_ibfk_1")
+  konyvek        konyvek      @relation(fields: [konyv_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "velemenyek_ibfk_2")
+
+  @@index([felhasznalo_id], map: "felhasznalo_id")
+  @@index([konyv_id], map: "konyv_id")
+}
+
+model bejelentkezesi_probalkozasok {
+  id                  Int       @id @default(autoincrement())
+  eszkozt_azonosito   String    @db.VarChar(255)
+  sikeres             Boolean   @default(false)
+  kizaras_eddig       DateTime? @db.DateTime(0)
+  probalkozasok_szama Int       @default(0)
+}
