@@ -42,11 +42,6 @@ const FilterPanel = ({
 
   const categories = buildCategories();
 
-  const cleanYear = (value) => {
-    const cleaned = String(value || "").replace(/[^\d]/g, "");
-    return cleaned.slice(0, 4);
-  };
-
   const cleanRating = (value) => {
     let cleaned = String(value || "").replace(/[^\d]/g, "");
 
@@ -177,23 +172,6 @@ const FilterPanel = ({
                   </option>
                 ))}
               </select>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">
-                Kiadás éve
-              </label>
-              <input
-                type="text"
-                inputMode="numeric"
-                pattern="\d*"
-                value={filters?.kiadas_ev || ""}
-                onChange={(e) =>
-                  onFilterChange("kiadas_ev", cleanYear(e.target.value))
-                }
-                placeholder="Év"
-                className={inputClass}
-              />
             </div>
 
             <div className="space-y-3">

@@ -18,7 +18,6 @@ const BookCatalog = () => {
 
   const [filters, setFilters] = useState({
     category: "all",
-    kiadas_ev: "",
     inStockOnly: false,
     preOrderOnly: false,
     minRating: "",
@@ -95,11 +94,6 @@ const BookCatalog = () => {
       result = result.filter((b) => b.categoryId === Number(filters.category));
     }
 
-    const kiadasEv = filters.kiadas_ev ? Number(filters.kiadas_ev) : null;
-    if (Number.isFinite(kiadasEv)) {
-      result = result.filter((b) => Number(b.kiadas_ev) === kiadasEv);
-    }
-
     if (filters.inStockOnly && !filters.preOrderOnly) {
       result = result.filter((b) => b.status === "elérhető");
     }
@@ -130,7 +124,6 @@ const BookCatalog = () => {
   const handleClearFilters = () => {
     setFilters({
       category: "all",
-      kiadas_ev: "",
       inStockOnly: false,
       preOrderOnly: false,
       minRating: "",

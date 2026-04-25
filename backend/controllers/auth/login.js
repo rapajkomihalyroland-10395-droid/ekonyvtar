@@ -103,8 +103,10 @@ export const Login = async (req, res) => {
       user: user,
     });
   } catch (err) {
+    console.error("Login error:", err);
     res.status(500).json({
       error: "Belépési hiba",
+      message: err.message,
     });
   }
 };

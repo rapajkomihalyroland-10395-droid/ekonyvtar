@@ -32,7 +32,9 @@ model felhasznalok {
   iskola_id               Int?
   osztaly_id              Int?
   felhasznalo_tipus_id    Int?
-  email                   String              @unique(map: "email") @db.VarChar(255)
+  email                   String              @db.VarChar(255)
+  otp_jelszo              String?             @db.VarChar(255)
+  otp_lejarati_ido        DateTime?           @db.DateTime(0)
   berlesek                berlesek[]
   iskolak                 iskolak?            @relation(fields: [iskola_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "felhasznalok_ibfk_1")
   osztalyok               osztalyok?          @relation(fields: [osztaly_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "felhasznalok_ibfk_2")
@@ -78,7 +80,7 @@ model konyvek {
   szerzo_id                    Int?
   kiado_id                     Int?
   kategoria_id                 Int?
-  ISBN                         String?      @unique(map: "ISBN") @db.VarChar(13)
+  ISBN                         String?      @db.VarChar(13)
   konyvtar_nyilvantartasi_szam String?      @db.VarChar(255)
   keszlet                      Int          @default(1)
   kolcsonozheto                Boolean      @default(true)
@@ -106,7 +108,7 @@ model osztalyok {
   felhasznalok    felhasznalok[]
   iskolak         iskolak?       @relation(fields: [iskola_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "osztalyok_ibfk_1")
 
-  @@unique([iskola_id, osztaly_jeloles], map: "uniq_iskola_osztaly_jeloles")
+  @@index([iskola_id], map: "iskola_id")
 }
 
 model szerzok {
@@ -130,7 +132,7 @@ model velemenyek {
 
 model bejelentkezesi_probalkozasok {
   id                  Int       @id @default(autoincrement())
-  eszkozt_azonosito   String    @unique(map: "eszkozt_azonosito") @db.VarChar(255)
+  eszkozt_azonosito   String    @db.VarChar(255)
   sikeres             Boolean   @default(false)
   kizaras_eddig       DateTime? @db.DateTime(0)
   probalkozasok_szama Int       @default(0)
