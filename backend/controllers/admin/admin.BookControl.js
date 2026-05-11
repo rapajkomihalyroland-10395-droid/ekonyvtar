@@ -321,17 +321,34 @@ export const GetAllBook = async (req, res) => {
       include: {
         szerzok: true,
         kategoriak: true,
+        berlesek: {
+          where: { visszahozva: false },
+          include: {
+            felhasznalok: {
+              include: {
+                felhasznalotipusok: true,
+              },
+            },
+          },
+        },
       },
     });
     if (result) {
-      books = result.map((r) => ({
-        id: r.id,
-        cim: r.cim,
-        ISBN: r.ISBN,
-        author: r.szerzok.nev,
-        category: r.kategoriak.nev,
-        keszlet: r.keszlet,
-      }));
+      books = result.map((r) => {
+        const activeLoan = r.berlesek[0];
+        return {
+          id: r.id,
+          cim: r.cim,
+          ISBN: r.ISBN,
+          author: r.szerzok?.nev || "Ismeretlen",
+          category: r.kategoriak?.nev || "Nincs kategorizálva",
+          keszlet: r.keszlet,
+          current_borrower: activeLoan ? activeLoan.felhasznalok.nev : null,
+          current_borrower_type: activeLoan
+            ? activeLoan.felhasznalok.felhasznalotipusok.nev
+            : null,
+        };
+      });
     }
 
     if (books.length === 0) {
@@ -339,7 +356,7 @@ export const GetAllBook = async (req, res) => {
     }
     return res.status(200).json(books);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt." });
   }
 };
 

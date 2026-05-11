@@ -77,7 +77,14 @@ export const Login = async (req, res) => {
 
     await SuccessLoginWithDeviceId(device_id);
 
-    const newRefreshToken = await createRefreshToken(user);
+    const {
+      belepesi_azonosito_hash,
+      otp_jelszo,
+      otp_lejarati_ido,
+      ...safeUser
+    } = user;
+
+    const newRefreshToken = await createRefreshToken(safeUser);
 
     res.cookie("refreshToken", newRefreshToken.RefreshToken, {
       httpOnly: true,
@@ -86,27 +93,18 @@ export const Login = async (req, res) => {
       expires: newRefreshToken.RefreshTokenExpiresAt,
     });
 
-    const newAccessToken = await createAccessToken(user);
-
-    /**
-     * api.get("https://api.example.com/protected", {
-  method: "GET",
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
-});
-     */
+    const newAccessToken = await createAccessToken(safeUser);
 
     return res.status(200).json({
       message: "Sikeres bejelentkezés",
       accessToken: newAccessToken.AccessToken,
-      user: user,
+      user: safeUser,
     });
   } catch (err) {
     console.error("Login error:", err);
     res.status(500).json({
       error: "Belépési hiba",
-      message: err.message,
+      message: "Belső szerverhiba történt.",
     });
   }
 };

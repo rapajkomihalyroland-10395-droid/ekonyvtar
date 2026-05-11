@@ -2,14 +2,13 @@ import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
-const REFRESH_TOKEN_LIFETIME_MS = 7 * 24 * 60 * 60 * 1000; // 7 nap
-//const ACCESS_TOKEN_LIFETIME_MS = 15 * 60 * 1000; // 15 perc (ajánlott)
+const REFRESH_TOKEN_LIFETIME_MS = 7 * 24 * 60 * 60 * 1000;
 
 const verifyRefreshToken = async (token) => {
   try {
     return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
   } catch (err) {
-    throw new Error("Érvénytelen vagy lejárt refresh token");
+    throw new Error("Érvénytelen munkamenet.");
   }
 };
 
@@ -18,7 +17,7 @@ const verifyAccessToken = async (token) => {
     const cleanToken = token.replace("Bearer ", "");
     return jwt.verify(cleanToken, process.env.ACCESS_TOKEN_SECRET);
   } catch (err) {
-    throw err;
+    throw new Error("Érvénytelen munkamenet.");
   }
 };
 
@@ -51,7 +50,7 @@ export const AuthMiddleware = async (req, res, next) => {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({
-        message: "Nincs érvényes hozzáférési token. Bearer token szükséges.",
+        message: "Hitelesítés szükséges.",
       });
     }
 
@@ -64,7 +63,7 @@ export const AuthMiddleware = async (req, res, next) => {
       });
 
       if (!user) {
-        return res.status(401).json({ message: "Felhasználó nem található" });
+        return res.status(401).json({ message: "Érvénytelen munkamenet." });
       }
 
       req.user = user;
@@ -74,8 +73,8 @@ export const AuthMiddleware = async (req, res, next) => {
       const refreshToken = req.cookies.refreshToken;
       if (!refreshToken) {
         return res.status(401).json({
-          message: "Munkamenet lejárt. Kérjük, jelentkezzen be újra.",
-          code: "NO_REFRESH_TOKEN",
+          message: "A munkamenet lejárt.",
+          code: "UNAUTHORIZED",
           requiresLogin: true,
         });
       }
@@ -85,8 +84,8 @@ export const AuthMiddleware = async (req, res, next) => {
         decodedRefresh = await verifyRefreshToken(refreshToken);
       } catch (refreshTokenError) {
         return res.status(401).json({
-          message: "Munkamenet lejárt. Kérjük, jelentkezzen be újra.",
-          code: "REFRESH_TOKEN_INVALID",
+          message: "A munkamenet lejárt.",
+          code: "UNAUTHORIZED",
           requiresLogin: true,
         });
       }
@@ -97,7 +96,7 @@ export const AuthMiddleware = async (req, res, next) => {
 
       if (!user) {
         return res.status(401).json({
-          message: "Felhasználó nem található",
+          message: "Érvénytelen munkamenet.",
         });
       }
 
@@ -108,10 +107,8 @@ export const AuthMiddleware = async (req, res, next) => {
       return next();
     }
   } catch (err) {
-
     return res.status(500).json({
-      error: "Hitelesítési hiba",
-      details: process.env.NODE_ENV === "development" ? err.message : undefined,
+      message: "Belső szerverhiba történt a hitelesítés során.",
     });
   }
 };

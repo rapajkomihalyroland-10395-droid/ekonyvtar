@@ -86,43 +86,25 @@ export const UserLoanIntention = async (req, res) => {
         .status(404)
         .json({ message: "Nem található ilyen felhasználó" });
 
-    const hasPending = await userHasPendingLoanRequest(user.id, book.id);
-    if (hasPending) return res.status(409).json({ inProcess: true });
+    if (!book.kolcsonozheto) {
+      return res.status(200).json({
+        message: "Ez a könyv jelenleg nem kölcsönözhető.",
+        inProcess: false,
+      });
+    }
 
     if (book.keszlet === 0) {
-      // Megjegyzés: A konyv_kerelem tábla az új sémában nincs definiálva, 
-      // de a felhasználó kérése alapján a backendet javítom ahol lehet.
-      // Ha a konyv_kerelem tábla mégis létezik de nincs a sémában, az hiba lesz.
-      // Feltételezem, hogy a konyv_kerelem tábla neve nem változott vagy kikerült.
-      // A felhasználó azt írta: "a prisma / schema.prisma fájlban is már az új adatbázis van lehúzva és le generálva"
-      // és a schema.prisma-ban NEM látok konyv_kerelem-et. 
-      // Ezért ezt a részt kommentelem vagy jelzem, hogy hiányzik a modell.
-      /*
-      await prisma.konyv_kerelem.create({
-        data: {
-          felhasznalo_id: user.id,
-          konyv_id: book.id,
-          cim: book.cim,
-          szerzo: book.szerzok.nev,
-          kiado: book.kiadok.nev,
-          ISBN: book.ISBN,
-          allapot: "Folyamatban",
-          letrehozva: new Date(),
-        },
-      });
-      */
-
       return res.status(200).json({
-        message: "A könyvkérés funkció jelenleg nem elérhető",
+        message: "A könyv jelenleg nincs készleten.",
         inProcess: false,
       });
     }
 
     return res.status(200).json({
-      message: "A könyv elérhető, nem szükséges kérelem",
+      message: "A könyv elérhető.",
     });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a művelet során." });
   }
 };
 
@@ -155,13 +137,8 @@ export const GetBookDetails = async (req, res) => {
 
     return res.status(200).json(result);
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a részletek lekérése során." });
   }
-};
-
-const userHasPendingLoanRequest = async (user_id, book_id) => {
-  // A konyv_kerelem hiányzik a sémából, így ez mindig false-t ad vissza
-  return false;
 };
 
 // /user-get-books?take=10&skip=20
@@ -183,6 +160,6 @@ export const GetBooksForBookCatalog = async (req, res) => {
 
     return res.status(200).json(formattedBooks);
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a könyvek lekérése során." });
   }
 };

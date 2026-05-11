@@ -55,7 +55,7 @@ export const TopBooks = async (req, res) => {
 
     return res.json(sortedBooks);
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a toplista lekérése során." });
   }
 };
 
@@ -100,7 +100,7 @@ export const TopAuthor = async (req, res) => {
 
     return res.json(sortedBooks);
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a toplista lekérése során." });
   }
 };
 
@@ -138,7 +138,7 @@ export const TopByStars = async (req, res) => {
 
     return res.status(200).json(formattedBooks);
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a toplista lekérése során." });
   }
 };
 
@@ -187,6 +187,6 @@ export const TopByCategory = async (req, res) => {
       .slice(0, 10);
     return res.status(200).json(sortedBooks);
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a toplista lekérése során." });
   }
 };

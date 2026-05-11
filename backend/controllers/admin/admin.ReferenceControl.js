@@ -5,9 +5,10 @@ const prisma = new PrismaClient();
 export const GetAllUserTypes = async (req, res) => {
   try {
     const result = await prisma.felhasznalotipusok.findMany();
+    if (!result || result.length === 0) return res.status(404).json({ message: "Sikertelen lekérdezés." });
     return res.status(200).json(result);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a lekérdezés során." });
   }
 };
 
@@ -21,7 +22,7 @@ export const CreateUserType = async (req, res) => {
     });
     return res.status(201).json(result);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a létrehozás során." });
   }
 };
 
@@ -37,7 +38,7 @@ export const UpdateUserType = async (req, res) => {
     });
     return res.status(200).json(result);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a módosítás során." });
   }
 };
 
@@ -54,16 +55,17 @@ export const DeleteUserType = async (req, res) => {
         .status(409)
         .json({ message: "Nem törölhető, mert használatban van." });
     }
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a törlés során." });
   }
 };
 
 export const GetAllSchools = async (req, res) => {
   try {
     const result = await prisma.iskolak.findMany();
+    if (!result || result.length === 0) return res.status(404).json({ message: "Sikertelen lekérdezés." });
     return res.status(200).json(result);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a lekérdezés során." });
   }
 };
 
@@ -75,7 +77,7 @@ export const CreateSchool = async (req, res) => {
     });
     return res.status(201).json(result);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a létrehozás során." });
   }
 };
 
@@ -89,7 +91,7 @@ export const UpdateSchool = async (req, res) => {
     });
     return res.status(200).json(result);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a módosítás során." });
   }
 };
 
@@ -106,16 +108,17 @@ export const DeleteSchool = async (req, res) => {
         .status(409)
         .json({ message: "Nem törölhető, mert használatban van." });
     }
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a törlés során." });
   }
 };
 
 export const GetAllCategories = async (req, res) => {
   try {
     const result = await prisma.kategoriak.findMany();
+    if (!result || result.length === 0) return res.status(404).json({ message: "Sikertelen lekérdezés." });
     return res.status(200).json(result);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a lekérdezés során." });
   }
 };
 
@@ -127,7 +130,7 @@ export const CreateCategory = async (req, res) => {
     });
     return res.status(201).json(result);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a létrehozás során." });
   }
 };
 
@@ -141,7 +144,7 @@ export const UpdateCategory = async (req, res) => {
     });
     return res.status(200).json(result);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a módosítás során." });
   }
 };
 
@@ -158,16 +161,17 @@ export const DeleteCategory = async (req, res) => {
         .status(409)
         .json({ message: "Nem törölhető, mert használatban van." });
     }
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a törlés során." });
   }
 };
 
 export const GetAllPublishers = async (req, res) => {
   try {
     const result = await prisma.kiadok.findMany();
+    if (!result || result.length === 0) return res.status(404).json({ message: "Sikertelen lekérdezés." });
     return res.status(200).json(result);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a lekérdezés során." });
   }
 };
 
@@ -179,7 +183,7 @@ export const CreatePublisher = async (req, res) => {
     });
     return res.status(201).json(result);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a létrehozás során." });
   }
 };
 
@@ -193,7 +197,7 @@ export const UpdatePublisher = async (req, res) => {
     });
     return res.status(200).json(result);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a módosítás során." });
   }
 };
 
@@ -210,16 +214,17 @@ export const DeletePublisher = async (req, res) => {
         .status(409)
         .json({ message: "Nem törölhető, mert használatban van." });
     }
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a törlés során." });
   }
 };
 
 export const GetAllClasses = async (req, res) => {
   try {
     const result = await prisma.osztalyok.findMany();
+    if (!result || result.length === 0) return res.status(404).json({ message: "Sikertelen lekérdezés." });
     return res.status(200).json(result);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a lekérdezés során." });
   }
 };
 
@@ -236,7 +241,7 @@ export const CreateClass = async (req, res) => {
     });
     return res.status(201).json(result);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a létrehozás során." });
   }
 };
 
@@ -255,7 +260,7 @@ export const UpdateClass = async (req, res) => {
     });
     return res.status(200).json(result);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a módosítás során." });
   }
 };
 
@@ -272,16 +277,17 @@ export const DeleteClass = async (req, res) => {
         .status(409)
         .json({ message: "Nem törölhető, mert használatban van." });
     }
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a törlés során." });
   }
 };
 
 export const GetAllAuthors = async (req, res) => {
   try {
     const result = await prisma.szerzok.findMany();
+    if (!result || result.length === 0) return res.status(404).json({ message: "Sikertelen lekérdezés." });
     return res.status(200).json(result);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a lekérdezés során." });
   }
 };
 
@@ -293,7 +299,7 @@ export const CreateAuthor = async (req, res) => {
     });
     return res.status(201).json(result);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a létrehozás során." });
   }
 };
 
@@ -307,7 +313,7 @@ export const UpdateAuthor = async (req, res) => {
     });
     return res.status(200).json(result);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a módosítás során." });
   }
 };
 
@@ -317,15 +323,13 @@ export const DeleteAuthor = async (req, res) => {
     await prisma.szerzok.delete({
       where: { id: Number(id) },
     });
-    console.log("Sikeres szerző törlés!");
-
-    return res.status(200);
+    return res.status(200).json({ message: "Sikeres szerző törlés!" });
   } catch (error) {
     if (error.code === "P2003") {
       return res
         .status(409)
         .json({ message: "Nem törölhető, mert használatban van." });
     }
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Belső szerverhiba történt a törlés során." });
   }
 };

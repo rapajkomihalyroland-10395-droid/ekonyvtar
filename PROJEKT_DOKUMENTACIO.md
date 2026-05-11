@@ -1,525 +1,378 @@
 # E-könyvtár (ekonyvtar) — Szakdolgozat dokumentáció
 
-**Dokumentum típusa:** felhasználói dokumentáció + fejlesztői dokumentáció (külön az adatmodell/DB leírás)
-\
-**Verzió:** 1.1
-\
-**Dátum:** 2026. március
-\
-**Megjegyzés:** A kötelező fejezetstruktúrát a mellékelt PDF követelményei szerint igazítottam. A nyomtatáshoz készített PDF-oldalszám a formázástól függ.
+**Verzió:** 2.0
+**Dátum:** 2026. május
 
 ---
 
-## Fedőlap (kitöltendő)
+## Fedőlap
 
-Az intézmény adatai:
-
-- oktatási intézmény megnevezése: `<INTÉZMÉNY_NÉV>`
-- szakképesítés neve és OKJ száma: `<OKJ>`
-- dolgozat címe: `E-könyvtár alkalmazás (backend és adatbázis)`
-- szakdolgozat készítő neve és osztálya: `<NÉV>, <OSZTÁLY>`
-- témavezető (konzulens) neve: `<KONZULENS_NÉV>`
-- benyújtás helye: Budapest
-- benyújtás éve: `<ÉV>`
+- **Oktatási intézmény:** **\*\***\*\*\*\***\*\***\_\_\_\_**\*\***\*\*\*\***\*\***
+- **Szakképesítés neve és OKJ száma:** Szoftverfejlesztő (54 481 02 0010 54 04)
+- **SZAKDOLGOZAT**
+- **A dolgozat címe:** E-könyvtár alkalmazás (Full-stack webalkalmazás)
+- **A szakdolgozat készítőinek neve, osztálya és projektbeli szerepe:**
+  - **Kruzslicz Balázs Zoltán** – Frontend fejlesztés
+  - **Bálint Zoltán Richárd** – Backend fejlesztés
+  - **Rapajkó Mihály Roland** – Adatbázis-architektúra tervezése és a projekt átfogó menedzsmentje
+- **A témavezető (konzulens) neve:** **\*\***\*\*\*\***\*\***\_\_\_\_**\*\***\*\*\*\***\*\***
+- **A benyújtás helye:** Budapest
+- **A benyújtás éve:** 2026
 
 ---
 
 ## Tartalomjegyzék
 
-1. [I. Általános követelmények](#i-általános-követelmények)
-2. [II. A dokumentáció tartalmi követelményei](#ii-a-dokumentáció-tartalmi-követelményei)
-3. [A. A felhasználói dokumentáció](#a-a-felhasználói-dokumentáció)
-4. [B. A fejlesztői dokumentáció](#b-a-fejlesztői-dokumentáció)
-5. [III. Formai követelmények](#iii-formai-követelmények)
-6. [IV. Hivatkozások](#iv-hivatkozások)
+I. Felhasználói dokumentáció
+
+1. A program általános specifikációja
+2. Rendszerkövetelmények
+3. A program telepítése
+4. A program használatának részletes leírása
+   II. Fejlesztői dokumentáció
+5. Témaválasztás indoklása
+6. Az alkalmazott fejlesztői eszközök
+7. Adatmodell leírása
+8. Részletes feladatspecifikáció, algoritmusok
+9. Forráskód
+10. Tesztelési dokumentáció
+11. Továbbfejlesztési lehetőségek
+12. Irodalomjegyzék, forrásmegjelölés
 
 ---
 
-## I. Általános követelmények
+# I. Felhasználói dokumentáció
 
-A szakirányon a szakdolgozathoz **felhasználói** és **fejlesztői dokumentáció** mellékelése kötelező. A PDF követelményeinek megfelelően a dokumentációban szerepel:
+## 1. A program általános specifikációja
 
-- a program telepítéséhez szükséges lépések,
-- a program használatának részletes leírása,
-- az elkészített alkalmazás fejlesztői szintű megértését segítő részek (indoklás, eszközök, adatmodell, algoritmusok, tesztek, továbbfejlesztés, irodalomjegyzék).
+Az **E-könyvtár** egy modern, böngészőből elérhető, teljes körű (full-stack) webalkalmazás, amely iskolai és kisebb közkönyvtárak napi folyamatainak digitalizálására, nyilvántartására készült. Célja, hogy mind a diákok, mind a könyvtárosok számára átlátható és könnyen kezelhető felületet biztosítson.
 
----
+A program két fő részből áll:
 
-## II. A dokumentáció tartalmi követelményei
+- **Felhasználói felület:** Itt a regisztrált tagok (diákok, tanárok) böngészhetnek a könyvek között, megtekinthetik az adatlapokat, láthatják az aktuális bérléseiket és azok határidejét.
+- **Adminisztrációs felület (Admin Panel):** Ezt a felületet kizárólag a könyvtárosok (adminisztrátorok) érhetik el. Itt történik a teljes adatbázis menedzselése: új könyvek rögzítése, bérlések kiadása és visszavétele, felhasználók kezelése, valamint az alapvető törzsadatok (kategóriák, kiadók, szerzők, iskolák, osztályok) karbantartása.
 
-### A. A felhasználói dokumentáció
+## 2. Rendszerkövetelmények
 
-#### 1. A program általános specifikációja (1-2 oldal)
+**Hardver követelmények:**
+A program szerver oldali futtatásához szükséges minimális hardver:
 
-A projekt egy **iskolai e-könyvtár** háttérrendszerének (backend) megvalósítása. A backend feladatai:
+- Processzor: 2 magos CPU (ajánlott 4 magos)
+- Memória: 4 GB RAM (ajánlott 8 GB RAM)
+- Tárhely: 1 GB szabad lemezterület (a könyvborítók számától függően bővülhet)
+- Hálózat: Stabil internetkapcsolat vagy helyi hálózati (LAN) elérés.
 
-- felhasználók **regisztrációja** és **bejelentkezése**,
-- a felhasználókhoz kapcsolódó könyvtári nyilvántartás adataihoz való hozzáférés,
-- adminisztrátori műveletek a könyvekkel és kölcsönzésekkel kapcsolatban.
+A kliens (felhasználó) gépekre vonatkozó követelmény:
 
-Jelen verzióban a működés a kliensoldali alkalmazáson keresztül érhető el (a frontend jellemzően `http://localhost:5173`), a backend pedig a `server.js` alapján az **`/api`** útvonalon szolgáltat adatot.
-
-**Fő funkciók a gyakorlatban:**
-
-- Regisztráció: új felhasználó létrehozása és refresh token beállítása `refresh_token` HTTP-only sütiben.
-- Bejelentkezés: jelszó ellenőrzés bcrypt-tel; eszközazonosító (`device_id`) alapján lockout mechanizmus.
-- Könyv műveletek (admin):
-  - új könyv felvétele tranzakcióban (szerző/kiadó/kategória feloldás).
-  - készlet növelése ISBN alapján.
-  - könyv részletes lekérdezése (kapcsolt szerző/kiadó/kategória és bérlések).
-  - könyv adatainak frissítése.
-- Felhasználó és bérlés:
-  - felhasználók listázása,
-  - bérlések lekérdezése.
-
-#### 2. Rendszerkövetelmények (½ - 1 oldal, felsorolásszerűen)
-
-**Hardver követelmények (minimum / ajánlott, sablon jelleggel):**
-
-- Minimum: 2 mag CPU, 4 GB RAM, 1 GB szabad lemezterület.
-- Ajánlott: 4 mag CPU, 8 GB RAM, 5 GB szabad lemezterület.
+- Bármilyen eszköz (PC, laptop, tablet, okostelefon), amely képes modern webböngésző futtatására.
 
 **Szoftver követelmények:**
 
-- Operációs rendszer: Windows 10/11 (fejlesztéshez és futtatáshoz).
-- Node.js: LTS verzió ajánlott.
-- MySQL: MySQL kiszolgáló, amelyen a `konyvtar` adatbázis fut.
-- Prisma: a projektben a Prisma migráció kezelése a `backend/prisma` mappában található.
-- Böngésző vagy webes kliens:
-  - Postman (ajánlott a dokumentáció szerinti teszteléshez),
-  - vagy parancssori `curl`.
+- **Operációs rendszer (Szerver):** Windows, Linux vagy macOS.
+- **Szükséges szoftverek (Szerver):**
+  - Node.js (LTS verzió)
+  - MySQL 8.0 vagy újabb adatbázis-szerver
+- **Kliens:** Modern webböngésző (Google Chrome, Mozilla Firefox, Microsoft Edge, Safari).
 
-> A beadandó CD-n a dokumentáció szerint szerepeljen a forráskód, és az adatbázis felépítéséhez szükséges fájlok (például a Prisma migráció SQL-je vagy a `konyvtar.sql` dump, a beállítástól függően).
+## 3. A program telepítése
 
-#### 3. A program telepítése (2 - 4 oldal, képekkel illusztrált)
+A rendszer teljes forráskódja, a telepítéshez szükséges állományok és a tesztadatok az alábbi hivatalos GitHub repozitóriban találhatók meg:
+**[https://github.com/rapajkomihalyroland-10395-droid/ekonyvtar](https://github.com/rapajkomihalyroland-10395-droid/ekonyvtar)**
 
-Ez a fejezet a backend telepítését és futtatását írja le.
+**1. lépés: Adatbázis létrehozása**
+Telepítse a MySQL szervert, majd hozzon létre egy üres adatbázist (pl. `ekonyvtar` néven).
 
-**3.1 Projekt fájlok előkészítése**
+**2. lépés: Környezeti változók beállítása**
+A `backend` mappában már megtalálható egy előre konfigurált `.env` fájl. Nyissa meg egy szövegszerkesztővel, és ellenőrizze, illetve szükség esetén módosítsa a `DATABASE_URL` sort a saját adatbázis-kapcsolatának (felhasználónév, jelszó) megfelelően:
+`DATABASE_URL="mysql://felhasznalo:jelszo@localhost:3306/ekonyvtar"`
 
-1. Másold a projektet a számítógépre.
-2. A backend mappa tipikusan: `backend/`.
-
-*(1. ábra: projektmappák struktúrája)*  
-
-**3.2 Függőségek telepítése**
-
-1. Nyiss egy terminált a `backend` mappában.
-2. Futtasd:
+**3. lépés: Függőségek telepítése**
+Nyisson egy parancssort, és navigáljon a projekt `backend`, majd `frontend` mappájába. Mindkét helyen futtassa a következő parancsot:
 
 ```bash
-cd backend
 npm install
 ```
 
-*(2. ábra: `npm install` parancs futtatása)*
-
-**3.3 Környezeti változók beállítása (`.env`)**
-
-1. Készíts egy `.env` fájlt a `backend/` mappába.
-2. Kötelező változók:
-   - `DATABASE_URL` (MySQL kapcsolati URL)
-   - `REFRESH_TOKEN_SECRET` (JWT refresh token aláírási titok)
-3. További opcionális:
-   - `PORT`, `SALT`, `LOGIN_MAX_ATTEMPTS`, `NODE_ENV`.
-
-*(3. ábra: `.env` példa beállítása)*
-
-**3.4 Adatbázis létrehozása**
-
-Két út közül választható.
-
-**A) Prisma migrációval**
+**4. lépés: Adatbázis migráció és tesztadatok importálása**
+A táblák és az adatbázis szerkezetének létrehozásához navigáljon a `backend` mappába, és futtassa az alábbi parancsot:
 
 ```bash
-npx prisma migrate deploy
+npx prisma migrate dev
 ```
 
-**B) A `konyvtar.sql` importálásával**
+Ezután a projekt főkönyvtárában található `konyvtar.sql` fájlt importálja a létrehozott MySQL adatbázisba (például phpMyAdmin, MySQL Workbench vagy parancssor segítségével). Ez az állomány tartalmazza a teljes körű tesztadatokat (mock data). Ezeknek az adatoknak a betöltése elengedhetetlen a projekt valós működésének és funkcióinak átfogó megítéléséhez, emellett azonnal egy valósághű, gazdag felhasználói élményt biztosít a rendszer kipróbálása során.
 
-1. Nyisd meg a MySQL klienssel / phpMyAdminnal.
-2. Hozd létre a `konyvtar` adatbázist.
-3. Importáld a gyökérben található `konyvtar.sql` dumpot.
+**5. lépés: A szerverek elindítása**
+Fejlesztői környezetben a `backend` és `frontend` mappában is futtassa az `npm run dev` parancsot. Az alkalmazás ezután a `http://localhost:5173` címen lesz elérhető a böngészőben.
 
-*(4. ábra: adatbázis import képernyő)*
+![Sikeresen elindított parancssorok](./dokumentacio_kepek/git_bash_start_command_lines.jpg)
+_1. ábra: A frontend és backend szerverek sikeres indítása parancssorból._
 
-**3.5 Backend indítása**
+![Kezdőlap és bejelentkezés](./dokumentacio_kepek/login_page.jpg)
+_2. ábra: A betöltődő bejelentkezési képernyő (kezdőlap)._
 
-Fejlesztői indításhoz:
+## 4. A program használatának a részletes leírása
 
-```bash
-npm run dev
-```
+### Belépés és regisztráció
 
-Vagy produkciós jelleggel:
+Az oldal megnyitásakor a felhasználót a bejelentkezési képernyő fogadja. A regisztráció során a diákok megadhatják adataikat (email, jelszó). A rendszer biztonsági okokból monitorozza a bejelentkezési kísérleteket. Ha valaki többször rontja el a jelszót, a rendszer időszakosan zárolja az eszközt.
 
-```bash
-npm start
-```
+### Elfelejtett jelszó (OTP azonosítás)
 
-*(5. ábra: szerver indulási log)*
+A rendszer lehetőséget biztosít az elfelejtett jelszavak biztonságos visszaállítására. Amennyiben a diák elfelejtette a jelszavát, a bejelentkezési képernyőn kérheti annak visszaállítását. A rendszer egy egyszer használatos, időkorlátos jelszót (OTP - One Time Password) küld ki a felhasználó e-mail címére az SMTP szerveren keresztül.
+**Fontos feltétel:** Ez a funkció kizárólag akkor működik, ha a felhasználóhoz a rendszerben (az adatbázisban vagy az Admin panelen keresztül) egy valós, élő és fogadóképes e-mail cím van rögzítve. Sikeres OTP azonosítás után a felhasználó megadhatja az új jelszavát.
 
-#### 4. A program használatának részletes leírása (10-15 oldal, ábrákkal/screenshotokkal)
+![OTP panel felület](./dokumentacio_kepek/otp_panel.jpg)
+_3. ábra: Az OTP azonosítási felület._
 
-Mivel a jelen projekt a kiszolgáló oldali működést tartalmazza, a használat a kiszolgáló oldali webes hívásokon keresztül írható le. A kliens oldalon ettől eltérő megjelenés lehet, de a logika ugyanaz.
+![Kiküldött OTP email](./dokumentacio_kepek/otp_email.jpg)
+_4. ábra: Az SMTP szerveren keresztül megérkező egyszer használatos jelszó._
 
-> **Alap URL:** `http://localhost:<PORT>/api`
+### Keresés és Böngészés
 
-##### 4.1 Regisztráció (`POST /api/register`)
+A főoldalon található egy intelligens keresőmező, ahol cím, szerző, vagy kategória alapján szűrhetjük a könyveket. Minden könyv rendelkezik egy adatlappal, amely tartalmazza a borítóképet, a leírást, a készleten lévő darabszámot és az értékeléseket.
 
-**Kérés törzs (JSON):**
+### Adminisztrációs felület (Admin Panel) sajátosságai
 
-- `nev` (név)
-- `email` (egyedi)
-- `password` (jelszó, amelyet a szerver bcrypt-tel hash-el)
-- `telefonszam` (opcionális)
-- `szuletesi_datum`
-- `lakcim`
-- `admin` (logikai jelző)
-- `iskola_id`
-- `felhasznalo_tipus` (a `felhasznalotipus` azonosítója)
+Az adminisztrátori jogosultsággal rendelkező felhasználók (könyvtárosok) számára a felső menüsorban megjelenik az **"Admin Panel"** gomb. Ez a modul a rendszer szíve, ahol minden folyamat vezérelhető.
 
-**Példa:**
+**1. Dashboard (Vezérlőpult)**
+Belépés után az adminisztrátor azonnal áttekintést kap a könyvtár állapotáról.
 
-```json
-{
-  "nev": "Nagy Anna",
-  "email": "nagy.anna@pelda.hu",
-  "password": "BiztonsagosJelszo1",
-  "telefonszam": "+36301112222",
-  "szuletesi_datum": "2007-04-15",
-  "lakcim": "Budapest, Példa utca 1.",
-  "admin": false,
-  "iskola_id": 1,
-  "felhasznalo_tipus": 2
-}
-```
+- **Statisztikák:** Összes könyv, aktív bérlések száma.
+- **Napi visszahozatalok:** Listázza azokat a könyveket, amiket aznap kell visszahozniuk a diákoknak.
+- **Legnépszerűbb könyvek:** Lista a legtöbbet kölcsönzött művekről.
 
-**Siker válasz:**
+![Admin Dashboard](./dokumentacio_kepek/admin_dashboard.jpg)
+_5. ábra: Az adminisztrációs felület áttekintő nézete (Dashboard)._
 
-- HTTP státusz: `201`
-- válasz JSON: `{ "token": "<JWT string>" }`
-- valamint a szerver `refresh_token` sütit is beállít (HTTP-only).
+**2. Könyvkezelés**
+Itt vihetők fel az új könyvek a rendszerbe. A felületen megadható a könyv címe, kategóriája, szerzője, kiadója, vonalkódja (ISBN), és készletszáma.
 
-##### 4.2 Bejelentkezés (`POST /api/login`)
+- **Borítókép feltöltése:** Külön fájlfeltöltő mező áll rendelkezésre, amely biztosítja, hogy a könyv vizuálisan is megjelenjen a katalógusban.
 
-**Kérés törzs:**
+![Új könyv rögzítése](./dokumentacio_kepek/save_a_new_book_with_image.jpg)
+_6. ábra: Új könyv rögzítése a rendszerben, képfeltöltési lehetőséggel._
 
-- `email`
-- `password`
-- `device_id` (eszközazonosító, a lockout mechanizmus miatt kötelező)
+**3. Kölcsönzési modul (Bérlések)**
+A könyvtáros ezen a fülön tudja rögzíteni, ha egy diák kikölcsönöz egy könyvet.
 
-**Siker válasz:**
+- Ki kell választani a diákot és a könyvet.
+- A rendszer automatikusan rögzíti a bérlés kezdetét.
+- Amikor a diák visszahozza a könyvet, az adminisztrátor egy gombnyomással lezárja a bérlést, ezzel a könyv újra elérhetővé válik a készletben.
 
-- HTTP státusz: `200`
-- JSON: `{ "message": "Sikeres bejelentkezés" }`
-- és friss refresh token cookie.
+![Bérlés rögzítése](./dokumentacio_kepek/save_a_new_rental.jpg)
+_7. ábra: Új bérlés (kölcsönzés) kiadása a diák számára._
 
-**Hiba esetek (példák):**
+**4. Felhasználókezelés és Törzsadatok**
+Az adminisztrátor módosíthatja a felhasználók adatait, adminisztrátori jogot adhat másoknak, valamint itt kezelheti a legördülő menük tartalmát (Kategóriák, Szerzők, Kiadók, Iskolák és Osztályok felvitele, módosítása).
 
-- `401` ha a felhasználó nincs vagy rossz a jelszó.
-- `429` ha a `device_id` zárolt (túl sok sikertelen próbálkozás).
+**5. Email küldés (Értesítések)**
+Az adminisztrációs felület beépített üzenetküldő modullal rendelkezik. A könyvtáros közvetlenül a felületről képes formázott, hivatalos e-mailt küldeni bármelyik regisztrált felhasználónak (pl. emlékeztető a lejárt kölcsönzésről, egyedi tájékoztatás). A rendszer a háttérben SMTP protokollon keresztül kézbesíti az üzeneteket a címzett valós e-mail fiókjába.
 
-##### 4.3 Könyv felvétele (admin) (`POST /api/new-book`)
-
-**Kérés példa (JSON):**
-
-```json
-{
-  "cim": "A kék hold legendája",
-  "kep": "https://example.com/kepek/kek_hold.jpg",
-  "leiras": "Rövid leírás szövege.",
-  "szerzo": "Mikszáth Kálmán",
-  "kiado": "Móra Könyvkiadó",
-  "kategoria": "Fantasy",
-  "ISBN": "9786151234567",
-  "konyvtar_nyilvantartasi_szam": "LIB-2025-00123",
-  "keszlet": 12,
-  "kolcsonozheto": true,
-  "beszerzesi_ar": 3490,
-  "kiadas_ev": 2021,
-  "magassag_cm": 21
-}
-```
-
-**Siker válasz:**
-
-- HTTP státusz: `200`
-- JSON: `{ "message": "Sikeres könyvfelvitel", "result": ... }`
-
-**Megjegyzés:** egyedi ütközések esetén a szerver hibát jelez (jelen kódban hibakód `404` is előfordulhat).
-
-##### 4.4 Készlet növelése (`POST /api/increase-stock`)
-
-**Kérés példa:**
-
-```json
-{
-  "ISBN": "9789631196655",
-  "ertek": 3
-}
-```
-
-**Siker válasz:**
-
-- HTTP státusz: `200`
-- JSON: `{ "message": "Siker", "result": ... }`
-
-##### 4.5 Könyv lekérdezése (`GET /api/get-a-book/:id`)
-
-**Útvonal paraméter:**
-
-- `:id` = könyv azonosító (numerikus)
-
-**Siker válasz:**
-
-- JSON objektum `book` kulccsal, amely tartalmazza a szerző, kiadó, kategória nevét, és a bérléseket is.
-
-##### 4.6 Könyv adatainak frissítése (`PATCH /api/update-a-book/:id`)
-
-**Megjegyzés a dokumentációban:** a visszaküldött mezők és a frissített mezők a vezérlő implementációja szerint működnek. Hibák esetén a szerver `500`-at ad.
-
-##### 4.7 Felhasználók listázása (`GET /api/users`, `GET /api/users/:name`)
-
-- `GET /api/users` visszaadja az összes felhasználót.
-- `GET /api/users/:name` a `nev` mező részszöveg egyezése alapján szűr.
-
-> A dokumentáció szerint a válasz tartalmazhat érzékeny mezőket (például jelszóhash); éles környezetben ez módosítandó.
-
-##### 4.8 Bérlések lekérdezése (`GET /api/get-all-rentals`, `GET /api/get-a-rental/:felhasznalo_id`)
-
-- `GET /api/get-all-rentals` összesített listát ad.
-- `GET /api/get-a-rental/:felhasznalo_id` adott felhasználó bérléseit adja vissza.
-
-##### 4.9 Gyakori hibák / hibaelhárítás
-
-1. **Szerver nem indul**
-   - ok: hiányzó környezeti változók (`DATABASE_URL`, `REFRESH_TOKEN_SECRET`)
-   - megoldás: ellenőrizd a `.env` tartalmát.
-2. **Adatbázis hiba**
-   - ok: migráció nem futott le / nincs a `konyvtar` séma
-   - megoldás: futtasd a migrációt (`npx prisma migrate deploy`) vagy importáld a `konyvtar.sql` fájlt.
-3. **Belépés hibák**
-   - `429` eset: rossz jelszó miatt lockout aktív; várj a zárolás megszűnéséig, vagy használj új `device_id`-t dokumentációs teszthez.
+![E-mail küldése](./dokumentacio_kepek/send_an_email.jpg)
+_8. ábra: Közvetlen üzenetküldés a diákok számára az Admin panelből._
 
 ---
 
-### B. A fejlesztői dokumentáció
+# II. Fejlesztői dokumentáció
 
-#### 1. Témaválasztás indoklása (½ - 1 oldal)
+## 1. Témaválasztás indoklása
 
-A választott téma egy könyvtári folyamatokhoz kapcsolódó informatikai rendszer: felhasználók kezelése, könyvek nyilvántartása, valamint kölcsönzések követése. Az iskolai környezetben különösen fontos a strukturált adatok kezelése és a hozzáférési jogosultságok rendszerszintű támogatása. A projekt célja, hogy a backend oldali logika és az adatmodell átlátható, bővíthető formában legyen megvalósítva, Prisma ORM-mel és MySQL adatbázissal.
+A témát azért választottuk, mert az oktatási intézményekben a könyvtári adminisztráció sok helyen még mindig elavult, papír alapú, vagy elszigetelt asztali alkalmazásokra épül. Egy modern, böngészőből elérhető, robusztus adatbázissal rendelkező webalkalmazás sokkal rugalmasabb megoldást kínál. A projekt során lehetőségünk nyílt elmélyülni a React alapú frontend fejlesztésben, a Node.js API készítésben és a relációs adatbázisok tervezésében, így a szoftverfejlesztő képzés minden területét (full-stack) lefedtük.
 
-#### 2. Az alkalmazott fejlesztői eszközök (½ - 1 oldal)
+## 2. Az alkalmazott fejlesztői eszközök
 
-A megvalósításhoz használt technológiák:
+- **Frontend:** React, React Router, Tailwind CSS, Axios.
+- **Backend:** Node.js, Express.js.
+- **Adatbázis kezelés:** MySQL adatbázis, Prisma ORM.
+- **Biztonság:** JSON Web Token (JWT) az authentikációhoz, bcrypt a jelszavak hasheléséhez.
+- **Fájlkezelés és Kommunikáció:** Multer (multipart/form-data feldolgozásához), Nodemailer (SMTP alapú e-mail küldéshez).
+- **Fejlesztői környezet:** Visual Studio Code.
+- **Verziókövetés:** Git és GitHub.
+- **API Tesztelés:** Postman.
 
-- Programozási nyelv: JavaScript (Node.js), ES modulok.
-- Futási környezet: Node.js.
-- Web keretrendszer: Express.
-- Adatbázis: MySQL.
-- ORM: Prisma (`@prisma/client`, `prisma`).
-- Autentikáció: `jsonwebtoken` (refresh token JWT-vel).
-- Jelszóvédelem: `bcrypt`.
-- HTTP beállítások: `cors`, `cookie-parser`.
-- Konfiguráció: `dotenv`.
-- Fejlesztői indítás: `nodemon`.
+## 3. Adatmodell leírása
 
-#### 3. Adatmodell leírása (2 - 5 oldal)
+A rendszer alapját egy megfelelően normalizált MySQL relációs adatbázis adja, melyet a Prisma ORM segítségével modelleztünk. Főbb entitások:
 
-Az adatmodell részletes táblaleírása a külön dokumentumban található: `docs/ADATBAZIS_DOKUMENTACIO.md`.
+- `felhasznalok`: Tárolja a diákok és adminok adatait (név, email, jelszó hash, iskola/osztály hivatkozások, admin flag).
+- `konyvek`: A könyvtári állomány alapja (cím, leírás, készlet, ISBN, kategória/szerző/kiadó külső kulcsok, borítókép elérési útja).
+- `berlesek`: Kapcsolótábla a felhasználók és könyvek között, amely rögzíti a tranzakciót (bérlés kezdete, vége, visszahozva státusz).
+- **Törzsadatok:** `szerzok`, `kiadok`, `kategoriak`, `iskolak`, `osztalyok`, `felhasznalotipusok`.
+- `bejelentkezesi_probalkozasok`: Biztonsági tábla az eszközök (IP/böngésző) azonosítására és a brute-force támadások megelőzésére.
 
-Rövid összefoglaló:
+## 4. Részletes feladatspecifikáció, algoritmusok
 
-- `felhasznalo`: felhasználók, admin flag, kapcsolatok iskola/osztály/felhasználótípus felé.
-- `konyv`: könyvek metaadatai (szerző/kiadó/kategória, ISBN, készlet).
-- `berles`: kölcsönzési rekordok (felhasználó + könyv).
-- `kivansaglista`, `velemeny`: kiegészítő felhasználói tartalmak.
-- `login_attempts`: eszköz alapú bejelentkezési próbálkozás és lockout.
+A projekt számos komplex logikai megoldást tartalmaz a biztonság és a felhasználói élmény érdekében.
 
-*(Adatmodell diagram: a DB dokumentációban szerepel; javasolt az ábrát a végleges PDF-be is beilleszteni.)*
+**1. Kliens oldali útvonalvédelem (Router Guard)**
+A React frontend alkalmazásban kiemelt fontosságú, hogy a jogosulatlan felhasználók ne férjenek hozzá bizonyos oldalakhoz (pl. profil, admin panel). Ezt a `RouterGuard.jsx` komponens és az `AuthContext.jsx` állapotkezelő együttesen biztosítja.
 
-#### 4. Részletes feladatspecifikáció és algoritmusok (2 - 5 oldal)
+- Az `AuthContext` az alkalmazás betöltésekor egy végpont meghívásával (`/token-details`) ellenőrzi a felhasználó hitelesítési státuszát (Access Token meglétét és érvényességét).
+- Az adatokat egy globális állapotba (`Context`) menti.
+- A `RouterGuard` körbeöleli a védett útvonalakat. Ha az `AuthContext` szerint a felhasználó nincs bejelentkezve, a Guard megakadályozza a komponens betöltését, és azonnal átirányítja a felhasználót a `/login` oldalra.
 
-Ebben a fejezetben a rendszer fő műveleteinek logikája kerül leírásra.
+**2. Fájlfeltöltés, Multipart/Form-Data átvitel (Multer)**
+Amikor az adminisztrátor új könyvet rögzít borítóképpel együtt, az adatokat nem egyszerű JSON formátumban, hanem `multipart/form-data` kódolással küldjük a szervernek.
+Ezt a backend oldalon a `multer` csomag és a hozzá írt `image.middleware.js` dolgozza fel.
 
-**4.1 Regisztráció algoritmus (`POST /api/register`)**
+- A middleware meghatározza a célmappát (`storage`).
+- Az érkező fájlt átnevezi a könyv címe alapján (a speciális karakterek eltávolításával), és hozzáad egy egyedi időbélyeget (`Date.now() + random`), így elkerülhető a névütközés.
+- A fájlt elmenti a lemezre, az adatbázisba pedig csak a fájl generált neve kerül.
 
-1. Beolvasott mezők alapján ellenőrzés:
-   - email egyediség ellenőrzése a `felhasznalo` táblában.
-2. Jelszó hash-elése:
-   - bcrypt hash készül a `SALT` paraméter alapján.
-3. Felhasználó rekord létrehozása:
-   - `felhasznalo` bejegyzés beszúrása.
-4. Refresh token generálása:
-   - JWT aláírás a `REFRESH_TOKEN_SECRET`-tel.
-5. Cookie beállítása:
-   - `refresh_token` HTTP-only süti beállítása.
+**3. Bejelentkezési kísérletek korlátozása (Lockout algoritmus)**
+A backend nyilvántartja a bejelentkezési próbálkozásokat eszközazonosító alapján. Ha az azonosítóról meghatározott számú sikertelen kísérlet érkezik, az algoritmus beállít egy `kizaras_eddig` időbélyeget. Amíg ez az idő le nem jár, a szerver minden újabb bejelentkezési kísérletet elutasít az adott eszközről, megakadályozva ezzel a szótár alapú vagy brute-force támadásokat.
 
-**4.2 Bejelentkezés algoritmus (`POST /api/login`)**
+**4. E-mail küldés (SMTP integráció)**
+A rendszer adminisztrátori oldalán megvalósítottunk egy direkt üzenetküldő funkciót, amely a Node.js `nodemailer` könyvtárára épül.
 
-1. `device_id` kötelező kezelése.
-2. `login_attempts` rekord:
-   - ha nincs eszköz, létrejön.
-3. Lockout ellenőrzés:
-   - ha aktív zárolás van, a szerver `429`-et ad.
-4. Felhasználó betöltése email alapján.
-5. Jelszó ellenőrzés:
-   - bcrypt `compare`.
-6. Sikertelen próbák számlálása:
-   - eléri a limitet → zárolás.
-7. Siker esetén:
-   - refresh token cookie frissítése.
-   - próbálkozások nullázása.
+- A rendszer egy előre beállított Gmail SMTP szervert használ biztonságos (TLS) kapcsolaton keresztül.
+- Amikor a könyvtáros elküld egy üzenetet, a backend a bejövő szöveget beilleszti egy elegáns, reszponzív HTML sablonba, így a felhasználó egy vizuálisan formázott, hivatalos küllemű "Iskolai Könyvtár" értesítést kap a saját e-mail fiókjába.
+- Ugyanez a TLS/SMTP csatorna felelős az elfelejtett jelszó (OTP) funkció biztonságos kiküldéséért is.
 
-**4.3 Új könyv felvitele algoritmus (`POST /api/new-book`)**
+## 5. Forráskód
 
-1. Tranzakció indítása.
-2. Egyediség-ellenőrzések:
-   - `kep` egyedi (a Prisma séma alapján),
-   - `ISBN` egyedi,
-   - `konyvtar_nyilvantartasi_szam` egyedi.
-3. Kapcsolt entitások feloldása:
-   - szerző/kiadó/kategória név alapján keresés,
-   - ha nem létezik, új rekord létrehozás.
-4. Könyv rekord létrehozása `konyv.create`.
-5. Tranzakció lezárása → siker válasz.
+Az alábbiakban a projekt legfontosabb kódrészleteit mutatjuk be magyarázattal.
 
-**4.4 Készlet növelése (`POST /api/increase-stock`)**
+**AuthContext inicializálása (frontend/src/store/AuthContext.jsx):**
 
-1. ISBN alapján könyv lekérése.
-2. Ha nincs könyv: hiba.
-3. Ha van könyv: `keszlet` növelése az `ertek` értékkel.
+```javascript
+const initAuth = async () => {
+  setAuthLoading(true); // Töltőképernyő aktív amíg ellenőrizzük a tokent
+  try {
+    // HttpOnly cookie-ban utazó Refresh Token ellenőrzése
+    const { data } = await api.get("/token-details", {
+      withCredentials: true,
+    });
 
-**4.5 Könyv lekérdezése (`GET /api/get-a-book/:id`)**
+    if (!data?.user || !data?.accessToken) {
+      handleAuthData({ accessToken: null, user: null });
+    } else {
+      handleAuthData({
+        accessToken: data.accessToken,
+        user: data.user,
+      });
+    }
+  } catch (err) {
+    handleAuthData({ accessToken: null, user: null });
+  } finally {
+    setAuthLoading(false);
+  }
+};
+```
 
-1. Könyv betöltése `id` alapján.
-2. Kapcsolt adatok beemelése (`include`):
-   - szerző, kiadó, kategória,
-   - bérlések és a bérlésekben a felhasználó (osztály).
-3. Válasz DTO jellegű objektummá alakítás.
+_Magyarázat: A függvény az alkalmazás indulásakor lefut, ellenőrzi a szerver felé a hitelesítést. Siker esetén beállítja a felhasználót és az Access Tokent, hiba esetén kinullázza azokat, biztosítva, hogy a frontend állapota szinkronban legyen a backenddel._
 
-**4.6 Könyv frissítése (`PATCH /api/update-a-book/:id`)**
+**Képfeltöltés middleware (backend/middlewares/image.middleware.js):**
 
-1. Könyv betöltése implicit módon az update során.
-2. A törzs mezői alapján frissítés.
+```javascript
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const folder = path.join(__dirname, "../storage");
+    cb(null, folder);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
 
-**4.7 Felhasználó törlés logika (`GET /api/user/:id`)**
+    const safeName = req.body.cim
+      ? req.body.cim.replace(/[^a-z0-9]/gi, "_").toLowerCase()
+      : "book";
 
-1. Aktív (nem visszahozott) kölcsönzések ellenőrzése.
-2. Ha van aktív kölcsönzés → `409` hiba.
-3. Jelen implementációban a tényleges törlés ki van kommentezve; a művelet csak ellenőrzést végez.
+    cb(null, `${safeName}-${uniqueSuffix}${ext}`); // Egyedi, biztonságos fájlnév
+  },
+});
+export const upload = multer({ storage });
+```
 
-**4.8 Bérlések lekérdezése**
+_Magyarázat: Ez a konfiguráció határozza meg, hogy hova és milyen néven mentsük a feltöltött könyvborítókat. A `safeName` generálása megakadályozza, hogy érvénytelen karakterek kerüljenek a fájlnévbe._
 
-- `GET /api/get-all-rentals`: összes bérlés összefoglaló válasszal.
-- `GET /api/get-a-rental/:felhasznalo_id`: adott felhasználó bérlései.
+**Router Guard működése (frontend/src/security/RouterGuard.jsx):**
 
-**4.9 Refresh token middleware (`middlewares/auth.middleware.js`)**
+```javascript
+const RouterGuard = () => {
+  const { user, authLoading } = useAuth();
 
-1. Cookie-ból `refresh_token` olvasás.
-2. JWT verifikáció.
-3. Felhasználó betöltése email alapján.
-4. Ha a szerver oldali lejárat közel van vagy lejárt → új token generálás.
-5. Cookie frissítés, majd `next()`.
+  if (authLoading) return null; // Várunk, amíg az ellenőrzés befejeződik
 
-#### 5. Forráskód (fontos kódrészek hivatkozással)
+  if (!user && window.location.pathname !== "/login") {
+    window.location.href = "/login"; // Átirányítás
+    return null;
+  }
 
-A teljes forráskódot a nyomtatott dokumentációba nem kell bemásolni, de a fontos helyek:
+  return <Outlet />; // Ha minden rendben, betölti a kért komponenst
+};
+```
 
-- `backend/server.js`: Express app és alap beállítások (CORS, cookie-parser, `/api` útvonal).
-- `backend/routers/`:
-  - `main.router.js`: auth + admin összekötés.
-  - `auth.router.js`: `/register`, `/login`.
-  - `admin.router.js`: könyv/felhasználó/bérlés végpontok.
-- `backend/controllers/auth/`:
-  - `regist.js`, `login.js`.
-- `backend/controllers/admin/`:
-  - `admin.BookControl.js`, `admin.UserControl.js`, `admin.RentalControl.js`.
-- `backend/middlewares/auth.middleware.js`: refresh token validáció és megújítás.
-- `backend/helper/login.attemp.js`: lockout logika.
-- `backend/prisma/schema.prisma`: adatmodell.
+_Magyarázat: Ez a komponens védi a belső oldalakat. Ha a felhasználó nincs bejelentkezve, nem engedi a tartalom megjelenítését (az `<Outlet />` renderelését), hanem a bejelentkezési oldalra irányít._
 
-#### 6. Tesztelési dokumentáció (legalább 3 teszteset, részletesen)
+**E-mail küldés vezérlője (backend/controllers/admin/admin.UserControl.js):**
 
-A tesztelés módja: az alkalmazás kritikus útvonalainál **fekete doboz** megközelítést használok (API bemenet → elvárt válasz), illetve ahol szükséges, **fehér doboz** szemléletet a vezérlő logika alapján.
+```javascript
+export const SendEmail = async (req, res) => {
+  try {
+    const { email, message } = req.body;
 
-**Teszteset 1: Regisztráció sikeres és duplikált email**
+    const info = await smtp_transporter.sendMail({
+      from: '"Iskolai Könyvtár" <team@example.com>',
+      to: [email],
+      subject: "Értesítés a könyvtártól",
+      text: "Új üzeneted érkezett a könyvtártól.",
+      html: `
+        <!-- ... HTML Sablon ... -->
+        <p>Kedves Olvasó,</p>
+        <p>${message}</p>
+        <p>Üdvözlettel,<br/><strong>Iskolai Könyvtár</strong></p>
+        <!-- ... -->
+      `,
+    });
 
-- Cél: ellenőrizni, hogy az email egyedi, illetve siker esetén refresh token beállítás történik.
-- Előkészítés: üres email (nincs a DB-ben).
-- Lépések:
-  1. Küldd el a `POST /api/register` kérést új emaillel.
-  2. Ismételd meg ugyanazzal az emaillel.
-- Várt eredmény:
-  1. `201` és `{ "token": ... }`, illetve `refresh_token` HTTP-only cookie.
-  2. `409` és hibaüzenet („Ez az email már foglalt”).
+    return res.json({ info: info.messageId });
+  } catch (error) {
+    return res.status(500).json({ message: "Szerveroldali hiba történt." });
+  }
+};
+```
 
-**Teszteset 2: Bejelentkezési lockout device_id alapján**
+_Magyarázat: Ez a backend végpont felel az adminisztrátor által beírt szöveg (`message`) HTML sablonba ágyazásáért, majd a levél továbbításáért az előre konfigurált `smtp_transporter` objektumon keresztül._
 
-- Cél: ellenőrizni, hogy a rendszer a sikertelen próbálkozásokat számlálja és zárol.
-- Előkészítés: létező felhasználó (ismert email, ismeretlen vagy rossz jelszó).
-- Lépések:
-  1. Válassz egy fix `device_id`-t.
-  2. Küldd el 3 alkalommal rossz jelszóval a `POST /api/login`-t.
-  3. Küldd el a 4. alkalommal is.
-- Várt eredmény:
-  1. Első 3 alkalommal `401`.
-  2. A limit elérése után a következő kérés `429` üzenettel a lockoutról.
+## 6. Tesztelési dokumentáció
 
-**Teszteset 3: Új könyv felvétele duplikált ISBN-lel**
+A rendszer minőségbiztosítása több szinten történt:
 
-- Cél: ellenőrizni, hogy az `ISBN` egyedi constrainttel rendelkezik.
-- Előkészítés: legyen legalább egy könyv az adott ISBN-sel a DB-ben.
-- Lépések:
-  1. Küldd el `POST /api/new-book` kérést olyan `ISBN`-nel, amely már szerepel.
-- Várt eredmény:
-  - hiba válasz (jelen implementációban hibakód `404` is előfordulhat), hibaüzenet az ISBN foglaltságáról.
+**1. API Tesztelés Postmannel (Fekete doboz tesztelés)**
 
-**Teszteset 4: Felhasználó törlés ellenőrzés aktív kölcsönzéssel**
+- **Teszteset:** Bejelentkezés érvényes, majd érvénytelen adatokkal.
+- **Elvárt működés:** Érvényes adatnál 200 OK és egy Access Token visszatérése. Érvénytelen adatnál 401 Unauthorized hiba.
+- **Tapasztalat:** A szerver megfelelően generálja a tokeneket és hibás jelszó esetén elrejti a konkrét hiba okát (nem árulja el, hogy a felhasználónév vagy a jelszó volt-e hibás).
 
-- Cél: a rendszer ne engedje az aktív kölcsönzésben lévő felhasználó „törlését”.
-- Előkészítés: olyan felhasználó ID, akihez van `berles` rekord `visszahozva = false`.
-- Lépések:
-  1. Küldd el `GET /api/user/:id`.
-- Várt eredmény:
-  - `409` hibaüzenet, amely felsorolja az aktív könyveket.
+**2. Biztonsági modul (Brute-force) tesztelése**
 
-**Tesztelés során tapasztalt hibák**
+- **Teszteset:** 6 egymást követő hibás jelszó megadása ugyanazon felhasználónévvel.
+- **Elvárt működés:** Az 5. kísérlet után a rendszer nem dolgozza fel a bejelentkezést, hanem 429 Too Many Requests hibát és egy zárolási üzenetet ad vissza.
+- **Tapasztalat:** A `bejelentkezesi_probalkozasok` táblában a számláló elérte az 5-öt, a zárolási időpont beállításra került, az eszköz blokkolva lett a megadott ideig.
 
-Jelen dokumentáció jelenleg is jelez néhány technikai adósságot a fejlesztői résznél, például:
+**3. Kliens oldali védelem tesztelése (Fehér doboz tesztelés)**
 
-- egyes mapping/logikai problémák előfordulhatnak (pl. `IncreaseStock` feltétel és `UpdateBookDetail` mezőkezelés),
-- `user.TopBooks` funkció jelenleg nincs bekötve.
+- **Teszteset:** Az `/admin` útvonal direkt megnyitása a böngésző URL sorából bejelentkezés nélkül.
+- **Elvárt működés:** A `RouterGuard` észleli a munkamenet hiányát és a `/login` oldalra irányít.
+- **Tapasztalat:** A védett komponensek egy pillanatra sem villantak fel, az átirányítás azonnal, sikeresen megtörtént.
 
-#### 7. Továbbfejlesztési lehetőségek (1-2 oldal)
+## 7. Továbbfejlesztési lehetőségek
 
-Tervezett fejlesztések a következő irányokban:
+Az időkeret szűkössége miatt néhány funkció későbbre maradt:
 
-- Admin végpontok védelme:
-  - `AuthMiddleware` alkalmazása az `admin.router.js` útvonalaira,
-  - szerepkör (`admin` flag) ellenőrzése.
-- API szerződés és hibakezelés konzisztenciája:
-  - egységes hibastátusz kódok,
-  - egységes hibaobjektum formátum.
-- Modell és validáció:
-  - bemeneti adatok validálása (pl. Zod/Joi),
-  - DTO-k használata érzékeny mezők elrejtésére (pl. jelszóhash).
-- Funkcionális bővítések:
-  - `TopBooks` implementáció stabil bekötéssel és megfelelő aggregációval.
-- Javítások technikai adósságokra:
-  - `IncreaseStock` feltétel helyes logikája,
-  - `UpdateBookDetail` mezőmap hibáinak javítása,
-  - `GetARentalByID` hibakezelés javítása.
+- **Automatizált Email és SMS értesítések:** Jelenleg a rendszerből csak manuálisan lehet e-mailt küldeni. Későbbi fejlesztésként egy cron job (pl. `node-cron`) segítségével automatizálható lenne, hogy a lejárt határidejű könyvekről a rendszer minden nap automatikusan küldjön felszólító e-mailt vagy SMS-t a diákoknak.
+- **Vonalkód / QR kód olvasó integráció:** A kölcsönzés meggyorsítása érdekében a könyvek hátulján lévő ISBN kódokat fizikai olvasóval is rögzíteni lehessen az Admin panelen.
+- **Mesterséges intelligencia:** A diákok korábbi olvasmányai alapján egy Python alapú mikroszerviz ajánlhatna új könyveket (HuggingFace, kollaboratív szűrés).
 
-#### 8. Irodalomjegyzék, forrásmegjelölés
+## 8. Irodalomjegyzék, forrásmegjelölés
 
-Felhasznált források (példák):
+A fejlesztés során az alábbi forrásokra és dokumentációkra támaszkodtunk:
 
-- Express.js documentation. Express.js csapat. [Online] Elérhetőség: https://expressjs.com/ (Letöltve: 2026-03-24)
-- Prisma documentation. Prisma csapat. [Online] Elérhetőség: https://www.prisma.io/docs (Letöltve: 2026-03-24)
-- MySQL Reference Manual. Oracle (vagy MySQL fejlesztők). [Online] Elérhetőség: https://dev.mysql.com/doc/ (Letöltve: 2026-03-24)
-- jsonwebtoken (Node.js). Auth0 közösség. [Online] Elérhetőség: https://github.com/auth0/node-jsonwebtoken (Letöltve: 2026-03-24)
-- bcrypt (Node.js). npm közösség / bcrypt karbantartók. [Online] Elérhetőség: https://www.npmjs.com/package/bcrypt (Letöltve: 2026-03-24)
-
----
+- **React hivatalos dokumentáció:** Kliens oldali állapotkezelés és komponens architektúra. [https://react.dev/](https://react.dev/)
+- **Prisma ORM dokumentáció:** Adatbázis sématervezés, relációk és migrációk kezelése. [https://www.prisma.io/docs](https://www.prisma.io/docs)
+- **Express.js API referenciák:** Backend útvonalak és middleware-ek írása. [https://expressjs.com/](https://expressjs.com/)
+- **Multer Middleware:** Fájlfeltöltési stratégiák implementálása. [https://www.npmjs.com/package/multer](https://www.npmjs.com/package/multer)
+- **MDN Web Docs:** Általános JavaScript, HTML, CSS tudásbázis. [https://developer.mozilla.org/](https://developer.mozilla.org/)

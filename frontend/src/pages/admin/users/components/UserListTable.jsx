@@ -44,7 +44,7 @@ const UserListTable = ({ users, isLoading }) => {
       const { default: api } = await import("../../../../axios_url/baseURL.js");
       await api.delete(`/users/${userId}`);
       alert("Sikeres törlés!");
-
+      window.location.reload();
     } catch (error) {
       alert("Hiba: " + (error.response?.data?.message || error.message));
     }

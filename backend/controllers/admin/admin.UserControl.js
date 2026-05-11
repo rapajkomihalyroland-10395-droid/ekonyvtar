@@ -131,9 +131,16 @@ export const CreateUser = async (req, res) => {
       return NewUser;
     });
 
+    const {
+      belepesi_azonosito_hash,
+      otp_jelszo,
+      otp_lejarati_ido,
+      ...safeUser
+    } = result;
+
     return res.status(200).json({
       message: "Sikeres felhasználó felvitel",
-      result: result,
+      result: safeUser,
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -194,7 +201,14 @@ export const ModifyUser = async (req, res) => {
       });
     });
 
-    return res.status(200).json(result);
+    const {
+      belepesi_azonosito_hash,
+      otp_jelszo,
+      otp_lejarati_ido,
+      ...safeUser
+    } = result;
+
+    return res.status(200).json(safeUser);
   } catch (error) {
     if (error.message === "USER_NOT_FOUND") {
       return res.status(404);

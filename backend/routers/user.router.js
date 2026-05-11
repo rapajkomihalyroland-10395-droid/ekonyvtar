@@ -18,13 +18,12 @@ import {
 
 import { GetARentalByID } from "../controllers/user/user.Details.js";
 
-import { GetAllCategories } from "../controllers/books/get.all.categories.js";
-
 import {
-  Query_Classes,
-  Query_Schools,
-  Query_UserTypes,
-} from "../controllers/user/user.detailQuery.js";
+  GetAllClasses,
+  GetAllSchools,
+  GetAllUserTypes,
+  GetAllCategories,
+} from "../controllers/admin/admin.ReferenceControl.js";
 
 import { SearchUserNameByCharacters } from "../controllers/user/user.search.js";
 
@@ -64,9 +63,9 @@ userRouter
 userRouter.route("/book-loan").post(AuthMiddleware, BookLoan);
 
 //Felhasználó Micro Queries
-userRouter.route("/get-classes").get(AuthMiddleware, Query_Classes);
-userRouter.route("/get-schools").get(AuthMiddleware, Query_Schools);
-userRouter.route("/get-user-types").get(AuthMiddleware, Query_UserTypes);
+userRouter.route("/get-classes").get(AuthMiddleware, GetAllClasses);
+userRouter.route("/get-schools").get(AuthMiddleware, GetAllSchools);
+userRouter.route("/get-user-types").get(AuthMiddleware, GetAllUserTypes);
 
 //Könyv és Felhasználó keresés (kölcsönzés)
 userRouter

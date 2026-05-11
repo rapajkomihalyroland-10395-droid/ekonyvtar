@@ -61,6 +61,7 @@ const BookListTable = ({ books, isLoading }) => {
               <th className="px-6 py-4">Cím / ISBN</th>
               <th className="px-6 py-4">Szerző</th>
               <th className="px-6 py-4">Kategória</th>
+              <th className="px-6 py-4">Aktuális kölcsönző</th>
               <th className="px-6 py-4">Státusz</th>
               <th className="px-6 py-4 text-center">Példányok</th>
               <th className="px-6 py-4 text-right">Műveletek</th>
@@ -86,6 +87,22 @@ const BookListTable = ({ books, isLoading }) => {
                   <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-muted text-foreground">
                     {book.category}
                   </span>
+                </td>
+                <td className="px-6 py-4">
+                  {book.current_borrower ? (
+                    <div>
+                      <div className="font-medium text-foreground">
+                        {book.current_borrower}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {book.current_borrower_type}
+                      </div>
+                    </div>
+                  ) : (
+                    <span className="text-muted-foreground italic text-xs">
+                      -
+                    </span>
+                  )}
                 </td>
 
                 <td className="px-6 py-4 text-center">

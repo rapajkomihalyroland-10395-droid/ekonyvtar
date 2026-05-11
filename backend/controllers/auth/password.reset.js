@@ -66,7 +66,7 @@ export const VerifyOTP = async (req, res) => {
 
     const user = await prisma.felhasznalok.findFirst({ where: { email } });
 
-    if (!user || user.otp_jelszo !== otp) {
+    if (!user || !user.otp_jelszo || user.otp_jelszo !== otp) {
       return res.status(401).json({ message: "Érvénytelen ellenőrző kód." });
     }
 

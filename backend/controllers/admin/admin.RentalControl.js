@@ -101,21 +101,30 @@ export const GetLoanById = async (req, res) => {
     const { id } = req.params;
 
     const result = await prisma.berlesek.findMany({
-      where: { felhasznalo_id: Number(id) },
+      where: {
+        OR: [{ felhasznalo_id: Number(id) }, { konyv_id: Number(id) }],
+      },
       include: {
         konyvek: true,
+        felhasznalok: {
+          include: {
+            felhasznalotipusok: true,
+          },
+        },
       },
     });
 
     const loan = result.map((r) => ({
       id: r.id,
       konyv: r.konyvek.cim,
+      felhasznalo: r.felhasznalok.nev,
+      felhasznalo_tipus: r.felhasznalok.felhasznalotipusok.nev,
       berles_kezdete: r.berles_kezdete,
       berles_vege: r.berles_vege,
       visszahozva: r.visszahozva,
     }));
 
-    return !result ? res.status(404) : res.status(200).json(loan);
+    return res.status(200).json(loan);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -132,10 +141,9 @@ export const GetTodaysReturns = async (req, res) => {
     const result = await prisma.berlesek.findMany({
       where: {
         berles_vege: {
-          gte: today,
-          lt: tomorrow,
+          lt: tomorrow, 
         },
-        visszahozva: true,
+        visszahozva: false, 
       },
       include: {
         felhasznalok: {
