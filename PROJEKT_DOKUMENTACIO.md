@@ -7,16 +7,15 @@
 
 ## Fedőlap
 
-- **Oktatási intézmény:** **\*\***\*\*\*\***\*\***\_\_\_\_**\*\***\*\*\*\***\*\***
-- **Szakképesítés neve és OKJ száma:** Szoftverfejlesztő (54 481 02 0010 54 04)
+- **Oktatási intézmény:** `Trefort Ágoston Technikum, Szakképző Iskola és Kollégium`
+- **Szakképesítés neve:**`Szoftverfejlesztő és -tesztelő`
 - **SZAKDOLGOZAT**
 - **A dolgozat címe:** E-könyvtár alkalmazás (Full-stack webalkalmazás)
 - **A szakdolgozat készítőinek neve, osztálya és projektbeli szerepe:**
   - **Kruzslicz Balázs Zoltán** – Frontend fejlesztés
   - **Bálint Zoltán Richárd** – Backend fejlesztés
-  - **Rapajkó Mihály Roland** – Adatbázis-architektúra tervezése és a projekt átfogó menedzsmentje
-- **A témavezető (konzulens) neve:** **\*\***\*\*\*\***\*\***\_\_\_\_**\*\***\*\*\*\***\*\***
-- **A benyújtás helye:** Budapest
+  - **Rapajkó Mihály Roland** – Adatbázis-architektúra tervezése és a projekt
+- **A benyújtás helye:** Békéscsaba
 - **A benyújtás éve:** 2026
 
 ---
@@ -276,8 +275,9 @@ const storage = multer.diskStorage({
     const ext = path.extname(file.originalname);
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
 
-    const safeName = req.body.cim
-      ? req.body.cim.replace(/[^a-z0-9]/gi, "_").toLowerCase()
+    const safeName =
+      req.body.cim ?
+        req.body.cim.replace(/[^a-z0-9]/gi, "_").toLowerCase()
       : "book";
 
     cb(null, `${safeName}-${uniqueSuffix}${ext}`); // Egyedi, biztonságos fájlnév
