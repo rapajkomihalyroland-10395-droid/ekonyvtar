@@ -118,22 +118,6 @@ export const CreateNewBook = async (req, res) => {
   }
 };
 
-/*{
-  "cim": "A kék hold legendája",
-  "kep": "https://example.com/kepek/kek_hold.jpg",
-  "leiras": "Egy misztikus kalandregény, amelyben egy fiatal hős egy elveszett civilizáció titkát kutatja.",
-  "szerzo": "Mikszáth Kálmán",
-  "kiado": "Móra Könyvkiadó",
-  "kategoria": "Fantasy",
-  "ISBN": "9786151234567", 
-  "konyvtar_nyilvantartasi_szam": "LIB-2025-00123",
-  "keszlet": 12,
-  "kolcsonozheto": true,
-  "beszerzesi_ar": 3490,
-  "kiadas_ev": 2021,
-  "magassag_cm": 21
-}*/
-
 export const IncreaseStock = async (req, res) => {
   try {
     const { ISBN, ertek } = req.body;
@@ -184,13 +168,7 @@ export const GetBookByID = async (req, res) => {
         kategoriak: true,
       },
     });
-    /*berles: result.berlesek.map((x) => ({
-        nev: x.felhasznalok.nev,
-        lakcim: x.felhasznalok.lakcim,
-        osztaly: x.felhasznalok.osztalyok.nev,
-        kikolcsozes_stat:
-          x.visszahozva != false ? x.berles_kezdete : "Visszahozott",
-      })), */
+
     book = {
       cim: result.cim,
       szerzo: result.szerzok.nev,

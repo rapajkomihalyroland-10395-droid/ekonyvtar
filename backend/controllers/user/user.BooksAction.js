@@ -104,7 +104,9 @@ export const UserLoanIntention = async (req, res) => {
       message: "A könyv elérhető.",
     });
   } catch (error) {
-    return res.status(500).json({ message: "Belső szerverhiba történt a művelet során." });
+    return res
+      .status(500)
+      .json({ message: "Belső szerverhiba történt a művelet során." });
   }
 };
 
@@ -137,7 +139,11 @@ export const GetBookDetails = async (req, res) => {
 
     return res.status(200).json(result);
   } catch (error) {
-    return res.status(500).json({ message: "Belső szerverhiba történt a részletek lekérése során." });
+    return res
+      .status(500)
+      .json({
+        message: "Belső szerverhiba történt a részletek lekérése során.",
+      });
   }
 };
 
@@ -160,6 +166,8 @@ export const GetBooksForBookCatalog = async (req, res) => {
 
     return res.status(200).json(formattedBooks);
   } catch (error) {
-    return res.status(500).json({ message: "Belső szerverhiba történt a könyvek lekérése során." });
+    return res
+      .status(500)
+      .json({ message: "Belső szerverhiba történt a könyvek lekérése során." });
   }
 };

@@ -395,7 +395,7 @@ INSERT INTO `konyvek` (`id`, `cim`, `kep`, `leiras`, `szerzo_id`, `kiado_id`, `k
 
 
 INSERT INTO `felhasznalok` (`id`, `nev`, `belepesi_azonosito_hash`, `telefonszam`, `szuletesi_datum`, `lakcim`, `admin`, `iskola_id`, `osztaly_id`, `felhasznalo_tipus_id`, `email`, `otp_jelszo`, `otp_lejarati_ido`) VALUES
-(1, 'Kovács Rendszer Tamás', '$2b$10$blIlQsVEJ2Rdws4Cz9axAOEl4tFFcKm.301XxT3tAMxnEGmCjv0pe', '+36 30 123 4567', '1980-05-15', 'Budapest, Kossuth u. 1.', 1, NULL, NULL, 1, 'probaemail2023@gmail.com', '96157', '2026-05-11 12:11:54'),
+(1, 'Kovács Rendszer Tamás', '$2b$10$blIlQsVEJ2Rdws4Cz9axAOEl4tFFcKm.301XxT3tAMxnEGmCjv0pe', '+36 30 123 4567', '1980-05-15', 'Budapest, Kossuth u. 1.', 1, NULL, NULL, 1, 'bekezoltanrichard-20604@taszi.hu', '96157', '2026-05-11 12:11:54'),
 (2, 'Dr. Nagy Béla', '$2y$10$XRxqZQ7YpRqZxY9xZxZxZu', '+36 20 234 5678', '1970-03-20', 'Budapest, Petőfi u. 5.', 0, 1, NULL, 2, 'igazgato@fazekas.hu', NULL, NULL),
 (3, 'Dr. Szabó Mária', '$2y$10$XRxqZQ7YpRqZxY9xZxZxZu', '+36 30 345 6789', '1972-07-12', 'Debrecen, Arany J. u. 8.', 0, 4, NULL, 2, 'igazgato@debrecenireformatus.hu', NULL, NULL),
 (4, 'Kiss Péter', '$2y$10$XRxqZQ7YpRqZxY9xZxZxZu', '+36 20 456 7890', '1968-11-03', 'Szeged, Tisza L. krt. 12.', 0, 5, NULL, 2, 'igazgato@radnoti-szeged.hu', NULL, NULL),

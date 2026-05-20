@@ -24,9 +24,7 @@ api.interceptors.response.use(
   },
   (error) => {
     if (error.response?.data?.requiresLogin) window.location.href = "/login";
-    //A window.location.href a React "eldobja" az összes állapotának értékét!!!!
-    //Ezért nem jó a useNavigate mivel az meghagyná az állapotok értékét!
-    return Promise.reject(error); //Továbbítja a hibát ahol axios meghívás került sor
+    return Promise.reject(error);
   },
 );
 

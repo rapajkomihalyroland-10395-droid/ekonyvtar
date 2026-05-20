@@ -27,7 +27,7 @@ import AdminLoans from "./pages/admin/loans/index.jsx";
 import CreateLoan from "./pages/admin/loans/CreateLoan.jsx";
 
 import AuthContext from "store/AuthContext";
-import RouterGuard from "security/RouterGuard";
+import RouterGuard from "pages/security/RouterGuard";
 
 const RouteErrorElement = () => {
   return <NotFound />;
