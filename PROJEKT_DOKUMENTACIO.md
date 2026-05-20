@@ -343,6 +343,8 @@ A rendszer minőségbiztosítása több szinten történt:
 
 **1. API Tesztelés Postmannel (Fekete doboz tesztelés)**
 
+- **Postman collection (megosztás):** [https://ricsi-2894461.postman.co/workspace/allat_korhaz~ba6811d5-19b2-49b2-ad30-115f414b54a6/collection/46752084-4a1b26af-4ea3-46c9-8ccc-e6f5f1260971?action=share&source=copy-link&creator=46752084](https://ricsi-2894461.postman.co/workspace/allat_korhaz~ba6811d5-19b2-49b2-ad30-115f414b54a6/collection/46752084-4a1b26af-4ea3-46c9-8ccc-e6f5f1260971?action=share&source=copy-link&creator=46752084)
+
 - **Teszteset:** Bejelentkezés érvényes, majd érvénytelen adatokkal.
 - **Elvárt működés:** Érvényes adatnál 200 OK és egy Access Token visszatérése. Érvénytelen adatnál 401 Unauthorized hiba.
 - **Tapasztalat:** A szerver megfelelően generálja a tokeneket és hibás jelszó esetén elrejti a konkrét hiba okát (nem árulja el, hogy a felhasználónév vagy a jelszó volt-e hibás).
