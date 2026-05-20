@@ -116,6 +116,11 @@ _2. ábra: A betöltődő bejelentkezési képernyő (kezdőlap)._
 
 Az oldal megnyitásakor a felhasználót a bejelentkezési képernyő fogadja. A regisztráció során a diákok megadhatják adataikat (email, jelszó). A rendszer biztonsági okokból monitorozza a bejelentkezési kísérleteket. Ha valaki többször rontja el a jelszót, a rendszer időszakosan zárolja az eszközt.
 
+A teljes felhasználói élmény bemutatásához egy teszt fiókot biztosítunk:
+
+- **Email:** bekezoltanrichard-20604@taszi.hu
+- **Jelszó:** test123
+
 ### Elfelejtett jelszó (OTP azonosítás)
 
 A rendszer lehetőséget biztosít az elfelejtett jelszavak biztonságos visszaállítására. Amennyiben a diák elfelejtette a jelszavát, a bejelentkezési képernyőn kérheti annak visszaállítását. A rendszer egy egyszer használatos, időkorlátos jelszót (OTP - One Time Password) küld ki a felhasználó e-mail címére az SMTP szerveren keresztül.
@@ -275,9 +280,8 @@ const storage = multer.diskStorage({
     const ext = path.extname(file.originalname);
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
 
-    const safeName =
-      req.body.cim ?
-        req.body.cim.replace(/[^a-z0-9]/gi, "_").toLowerCase()
+    const safeName = req.body.cim
+      ? req.body.cim.replace(/[^a-z0-9]/gi, "_").toLowerCase()
       : "book";
 
     cb(null, `${safeName}-${uniqueSuffix}${ext}`); // Egyedi, biztonságos fájlnév
